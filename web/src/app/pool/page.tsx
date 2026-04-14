@@ -220,13 +220,21 @@ export default function PoolPage() {
   return (
     <div className="mx-auto max-w-xl space-y-8 pb-12">
       <header className="space-y-2">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Liquidity</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Pool</h1>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Liquidity</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-white">Liquidity pool</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          Add liquidity for <span className="text-zinc-200">WETH</span> + a property share. Wrap native OG to WETH in
-          your wallet first, then approve both tokens for the router. Removing liquidity uses the same pair.
+          Supply both sides of the market (wrapped OG + property shares). You earn a share of trading fees — similar to
+          being a market maker, simplified for this demo.
         </p>
       </header>
+      <div className="glass-card border border-brand/20 bg-brand/[0.04] p-4 text-sm text-zinc-300">
+        <p className="font-medium text-white">Simple summary</p>
+        <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-zinc-400">
+          <li>Wrap native OG to WETH, then deposit WETH + shares together.</li>
+          <li>You receive LP tokens representing your share of the pool.</li>
+          <li>Remove liquidity anytime to get your tokens back (plus fees earned).</li>
+        </ul>
+      </div>
       <ComplianceStatus />
 
       {router === zero || weth === zero ? (

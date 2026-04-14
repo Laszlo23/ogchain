@@ -11,6 +11,13 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        /** Investor UI accent — premium gold */
+        brand: {
+          DEFAULT: "#C6A55C",
+          light: "#d4b87a",
+          muted: "rgba(198, 165, 92, 0.55)",
+          dark: "#9a7d45",
+        },
         gold: {
           50: "#fffbeb",
           100: "#fef3c7",

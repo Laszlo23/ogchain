@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { formatEther, zeroAddress } from "viem";
 import { useAccount, useBalance, useReadContracts } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
+import { InvestorJourney } from "@/components/InvestorJourney";
 import { TrustStrip } from "@/components/TrustStrip";
 import { addresses, erc20Abi, ogStakingAbi } from "@/lib/contracts";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
@@ -119,12 +120,14 @@ export default function InvestPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">One place</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">One place</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Investor hub</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          Snapshot of balances, property exposure, and shortcuts to stake native OG, pool liquidity, and lending.
+          Your dashboard: balances, property exposure, and shortcuts to stake OG, provide liquidity, and trade — like
+          a neobank for on-chain real estate.
         </p>
       </header>
+      <InvestorJourney />
       <ComplianceStatus />
       <TrustStrip />
 

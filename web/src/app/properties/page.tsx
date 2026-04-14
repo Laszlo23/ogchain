@@ -21,11 +21,11 @@ function PropertiesPageContent() {
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <header className="space-y-2">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Listings</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Listings</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Properties</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
           Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; the grid below
-          layers in a <span className="text-zinc-300">demo narrative</span> (imagery + EUR facility copy) for up to
+          layers in a <span className="text-zinc-300">demo narrative</span> (imagery + standardized metrics: rent, m², units, yield) for up to
           seven seeded properties when tokens exist on-chain — not investment advice.{" "}
           <Link href="/guide#how-it-works" className="text-gold-400 hover:underline">
             How tokenization and buying shares work →
@@ -86,11 +86,11 @@ export default function PropertiesPage() {
     return (
       <div className="mx-auto max-w-6xl space-y-8">
         <header className="space-y-2">
-          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Listings</p>
+          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Listings</p>
           <h1 className="text-3xl font-semibold tracking-tight text-white">Properties</h1>
           <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
             Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; the grid below
-            layers in a <span className="text-zinc-300">demo narrative</span> (imagery + EUR facility copy) for up to
+            layers in a <span className="text-zinc-300">demo narrative</span> (imagery + standardized metrics: rent, m², units, yield) for up to
             seven seeded properties when tokens exist on-chain — not investment advice.{" "}
             <Link href="/guide#how-it-works" className="text-gold-400 hover:underline">
               How tokenization and buying shares work →

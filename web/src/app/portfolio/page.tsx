@@ -101,7 +101,7 @@ export default function PortfolioPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Holdings</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Holdings</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Portfolio</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
           Wrapped OG (WETH) and property share balances. USD estimates use illustrative per-share references from{" "}

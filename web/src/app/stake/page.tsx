@@ -181,11 +181,11 @@ export default function StakePage() {
   return (
     <div className="mx-auto max-w-2xl space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Native OG</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Native OG</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Stake OG</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          Stake native OG to earn emission rewards when an admin funds the reward schedule. Unstaking uses a cooldown
-          before you can withdraw principal.
+          Lock OG to earn rewards. See estimated APY, total staked, and pending rewards — unstaking uses a cooldown
+          before principal is released.
         </p>
       </header>
       <ComplianceStatus />

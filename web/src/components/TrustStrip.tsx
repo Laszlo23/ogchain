@@ -2,9 +2,10 @@ import Link from "next/link";
 import { explorerBase } from "@/lib/contracts";
 
 const items = [
-  { label: "Smart contracts", hint: "Verified on-chain logic" },
-  { label: "Compliance", hint: "Registry + restricted transfers" },
-  { label: "Explorer", hint: "Audit every transaction" },
+  { label: "Verified contracts", hint: "On-chain property & share logic" },
+  { label: "Transparent explorer", hint: "Audit every transaction" },
+  { label: "Compliance-ready", hint: "Registry + transfer rules" },
+  { label: "Audit-ready stack", hint: "Open architecture for review" },
 ];
 
 export function TrustStrip() {

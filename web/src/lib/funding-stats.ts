@@ -50,3 +50,20 @@ export function getGlobalFundingMeter(goalUsd = 10_000_000): FundingStats {
     countries,
   };
 }
+
+export type GlobalPlatformStats = FundingStats & {
+  /** Demo: properties with meaningful funding in the narrative */
+  propertiesFunded: number;
+  /** Demo: days left in community funding window */
+  daysRemaining: number;
+};
+
+export function getGlobalPlatformStats(goalUsd = 10_000_000): GlobalPlatformStats {
+  const base = getGlobalFundingMeter(goalUsd);
+  const h = hashSeed(0x0cedbeefn);
+  return {
+    ...base,
+    propertiesFunded: 4 + (h % 4),
+    daysRemaining: 18 + (h % 14),
+  };
+}

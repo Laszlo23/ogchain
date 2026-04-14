@@ -9,8 +9,16 @@ import { FundingMeter } from "@/components/FundingMeter";
 import { TrustStrip } from "@/components/TrustStrip";
 import { addresses, explorerBase } from "@/lib/contracts";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
-import { formatIllustrativeEconomics, getDemoImageSlides } from "@/lib/demo-properties";
+import { PropertyShareButton } from "@/components/PropertyShareButton";
+import {
+  formatAnnualRentEur,
+  formatIllustrativeEconomics,
+  formatSquareMeters,
+  getDemoImageSlides,
+  getEstimatedYieldPercent,
+} from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
+import { PropertyInvestmentCalculator } from "@/components/PropertyInvestmentCalculator";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 export default function PropertyDetailPage() {
@@ -72,6 +80,7 @@ export default function PropertyDetailPage() {
 
   const economics = demo ? formatIllustrativeEconomics(demo) : null;
   const explorerToken = `${explorerBase}/address/${row.tokenAddress}`;
+  const proofConfigured = addresses.proofNft !== zeroAddress;
 
   return (
     <div className="space-y-10 pb-16">
@@ -79,6 +88,9 @@ export default function PropertyDetailPage() {
         <div className="relative w-full bg-zinc-900">
           {demo ? (
             <>
+              <div className="absolute right-4 top-4 z-30 sm:right-8 sm:top-8">
+                <PropertyShareButton propertyId={idStr} title={demo.headline} />
+              </div>
               <PropertyImageCarousel
                 slides={getDemoImageSlides(demo)}
                 priorityFirst
@@ -93,6 +105,7 @@ export default function PropertyDetailPage() {
                   {demo.headline ?? row.name}
                 </h1>
                 <p className="mt-2 text-sm text-zinc-300">{demo.location ?? row.symbol}</p>
+                <p className="mt-1 text-xs uppercase tracking-wide text-zinc-500">{demo.propertyType}</p>
               </div>
             </>
           ) : (
@@ -121,12 +134,40 @@ export default function PropertyDetailPage() {
             )}
           </section>
 
+          {demo && (
+            <section className="glass-card p-6">
+              <h2 className="text-lg font-semibold text-white">Property facts (illustrative)</h2>
+              <dl className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Type</dt>
+                  <dd className="mt-1 text-sm text-zinc-200">{demo.propertyType}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Floor area</dt>
+                  <dd className="mt-1 font-mono text-sm text-zinc-200">{formatSquareMeters(demo.squareMeters)}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Units</dt>
+                  <dd className="mt-1 font-mono text-sm text-zinc-200">{demo.units.toLocaleString("en-US")}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Annual gross rent</dt>
+                  <dd className="mt-1 font-mono text-sm text-zinc-200">{formatAnnualRentEur(demo.annualRentalIncomeEur)}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs uppercase tracking-wide text-zinc-500">Est. gross yield</dt>
+                  <dd className="mt-1 text-sm text-brand">{getEstimatedYieldPercent(demo).toFixed(1)}%</dd>
+                </div>
+              </dl>
+            </section>
+          )}
+
           <section className="glass-card p-6">
             <h2 className="text-lg font-semibold text-white">Financials (illustrative)</h2>
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               <div className={demo?.creditLines?.length ? "sm:col-span-2" : ""}>
                 <dt className="text-xs uppercase tracking-wide text-zinc-500">
-                  {demo?.creditLines?.length ? "Kreditbetrag / Facility (Illustrativ)" : "Asset value (demo)"}
+                  {demo?.creditLines?.length ? "Loan / facility (illustrative)" : "Asset value (demo)"}
                 </dt>
                 <dd className="mt-1 text-sm text-zinc-100">
                   {demo?.creditLines?.length ? (
@@ -159,6 +200,34 @@ export default function PropertyDetailPage() {
             </dl>
             {economics && <p className="mt-4 text-xs text-zinc-500">{economics}</p>}
           </section>
+
+          <PropertyInvestmentCalculator
+            propertyId={propertyId}
+            demo={demo}
+            symbol={row.symbol}
+            tradeHref={`/trade?property=${idStr}`}
+          />
+
+          {proofConfigured && (
+            <section className="glass-card border border-brand/25 bg-brand/[0.06] p-6">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand">Investor proof</p>
+                  <h2 className="mt-2 text-lg font-semibold text-white">Real estate certificate NFT</h2>
+                  <p className="mt-2 max-w-xl text-sm text-zinc-400">
+                    After you hold shares, mint a soulbound proof NFT on the Trade page — a verifiable on-chain record
+                    tied to this property (testnet demo).
+                  </p>
+                </div>
+                <Link
+                  href={`/trade?property=${idStr}`}
+                  className="shrink-0 rounded-full border border-brand/40 bg-brand/15 px-4 py-2 text-xs font-semibold text-brand hover:bg-brand/25"
+                >
+                  Mint after you buy →
+                </Link>
+              </div>
+            </section>
+          )}
 
           <section className="glass-card p-6">
             <h2 className="text-lg font-semibold text-white">Ownership structure</h2>
@@ -194,7 +263,10 @@ export default function PropertyDetailPage() {
           <FundingMeter stats={funding} label="Live funding (demo)" currency={fundingCurrency} />
 
           <div className="glass-card-strong sticky top-24 space-y-4 p-6">
-            <h2 className="text-sm font-medium uppercase tracking-wider text-zinc-400">Buy widget</h2>
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="text-sm font-medium uppercase tracking-wider text-zinc-400">Buy widget</h2>
+              {demo && <PropertyShareButton propertyId={idStr} title={demo.headline} variant="compact" />}
+            </div>
             <p className="text-sm text-zinc-400">
               Enter OG on the Buy page for a live AMM quote. Slippage and pool depth apply.
             </p>
@@ -206,9 +278,10 @@ export default function PropertyDetailPage() {
             </div>
             <Link
               href={`/trade?property=${idStr}`}
-              className="block w-full rounded-full bg-gradient-to-r from-gold-600 to-gold-500 py-3 text-center text-sm font-semibold text-black shadow-lg hover:from-gold-500 hover:to-gold-400"
+              className="block w-full rounded-full py-3 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
+              style={{ background: "linear-gradient(to right, #9a7d45, #C6A55C)" }}
             >
-              Buy shares
+              Invest now
             </Link>
             <Link
               href={explorerToken}
