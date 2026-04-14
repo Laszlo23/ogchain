@@ -1,0 +1,12 @@
+out/
+cache/
+broadcast/
+.env
+.env.*
+web/.next/
+web/node_modules/
+node_modules/
+deployments/testnet.json
+.DS_Store
+*.log
+web/tsconfig.tsbuildinfo
