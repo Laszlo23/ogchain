@@ -10,7 +10,7 @@ const steps = [
   },
   {
     title: "Deploy contracts",
-    body: "From the repo root run DeployAll, then SeedThreeProperties with PROPERTY_REGISTRY and PROPERTY_SHARE_FACTORY set. See deployments/README.md.",
+    body: "From the repo root run DeployAll, then SeedSevenProperties (or SeedThreeProperties + SeedFourMoreProperties) with PROPERTY_REGISTRY and PROPERTY_SHARE_FACTORY set. See deployments/README.md.",
     href: "/",
   },
   {
@@ -36,8 +36,9 @@ export default function GuidePage() {
       <div>
         <h1 className="text-2xl font-semibold">Demo guide</h1>
         <p className="mt-2 max-w-2xl text-sm text-zinc-400">
-          This walkthrough matches the three demo parcels <code className="text-emerald-400">DEMO-US-CA-001</code>{" "}
-          … <code className="text-emerald-400">003</code>. Tokens are testnet demo assets, not legal title; read{" "}
+          This walkthrough matches up to seven seeded demo properties (e.g. Gesellschaft Berggasse / vier Häuser, 1130
+          Wien, Keutschach, Reifnitz, LandMark Weinviertel, 1210 and 1010 Wien) when deployed on-chain. Tokens are
+          testnet demo assets, not legal title; read{" "}
           <code className="text-zinc-400">docs/compliance.md</code> in the repository.
         </p>
       </div>
@@ -54,7 +55,7 @@ export default function GuidePage() {
               <code className="text-zinc-500">propertyId</code> in <code className="text-zinc-500">PropertyRegistry</code>.
               That is <strong className="text-zinc-300">fractional exposure as a crypto asset</strong>, not an automatic
               replacement for land title or securities compliance — real offerings need legal structure, disclosures,
-              and often KYC (see repo <code className="text-zinc-500">docs/compliance.md</code>).
+              and often KYC (see repo <code className="text-zinc-500">docs/compliance.md</code>). On testnet, provider KYC is often paused — use registry bypass or admin verification instead.
             </p>
           </div>
 

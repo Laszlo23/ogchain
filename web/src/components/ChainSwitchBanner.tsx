@@ -1,12 +1,15 @@
 "use client";
 
 import { ogGalileo } from "@/lib/chain";
+import { useHydrated } from "@/lib/use-hydrated";
 import { useChainId, useSwitchChain } from "wagmi";
 
 export function ChainSwitchBanner() {
+  const hydrated = useHydrated();
   const chainId = useChainId();
   const { switchChain, isPending, error } = useSwitchChain();
 
+  if (!hydrated) return null;
   if (chainId === ogGalileo.id) return null;
 
   return (

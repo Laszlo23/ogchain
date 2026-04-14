@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { formatIllustrativeEconomics, type DemoPropertyDetail } from "@/lib/demo-properties";
+import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
+import { formatIllustrativeEconomics, getDemoImageSlides, type DemoPropertyDetail } from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
 import { explorerBase } from "@/lib/contracts";
 import { FundingMeter } from "@/components/FundingMeter";
@@ -27,34 +27,34 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
   const economicsLine = demo ? formatIllustrativeEconomics(demo) : null;
   const goalUsd = demo?.illustrativePropertyValueUsd ?? 10_000_000;
   const funding = getFundingStats(propertyId, goalUsd);
+  const fundingCurrency = demo?.creditLines?.length ? "EUR" : "USD";
   const y = demo ? yieldHint(demo) : null;
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl shadow-black/50 backdrop-blur-xl transition hover:border-gold-500/20">
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-900">
+      <div className="relative w-full overflow-hidden bg-zinc-900">
         {demo ? (
-          <Image
-            src={demo.imageSrc}
-            alt={demo.imageAlt}
-            fill
-            className="object-cover transition duration-700 group-hover:scale-[1.03]"
-            sizes="(max-width: 768px) 100vw, 33vw"
-            priority={propertyId <= 2n}
-          />
+          <>
+            <PropertyImageCarousel
+              slides={getDemoImageSlides(demo)}
+              priorityFirst={propertyId <= 2n}
+              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 400px"
+            />
+            <div className="pointer-events-none absolute inset-0 z-[14] bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-[15] p-4">
+              <h2 className="text-lg font-semibold tracking-tight text-white">{demo.headline ?? name}</h2>
+              <p className="text-xs text-gold-400/90">{demo.location ?? "Registered property"}</p>
+            </div>
+          </>
         ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-zinc-900 to-black p-6 text-center">
+          <div className="relative flex aspect-[16/10] w-full items-center justify-center bg-gradient-to-br from-zinc-900 to-black p-6 text-center">
             <p className="text-sm text-zinc-500">On-chain property — add demo metadata for imagery.</p>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h2 className="text-lg font-semibold tracking-tight text-white">{demo?.headline ?? name}</h2>
-          <p className="text-xs text-gold-400/90">{demo?.location ?? "Registered property"}</p>
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-5">
-        <FundingMeter stats={funding} variant="compact" label="Funding" />
+        <FundingMeter stats={funding} variant="compact" label="Funding" currency={fundingCurrency} />
 
         <div className="flex flex-wrap items-center gap-2 text-[11px] text-zinc-500">
           <span className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-zinc-300">

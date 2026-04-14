@@ -1,4 +1,4 @@
-# OGChain — Real estate on 0G
+# Building Culture — Real estate on 0G
 
 Solidity (Foundry) + Next.js 15 for a **real-estate-focused** stack on **0G Chain** (EVM): on-chain property registry, compliance-aware share tokens, AMM (OG/WETH ↔ shares), optional lending and prediction markets, **native OG staking** with cooldown, and a production-style web app (WalletConnect, chain switch, investor hub, admin panel).
 
@@ -40,10 +40,10 @@ Large artifacts live in **0G Storage** off-chain; the chain stores hashes and co
 ## Repository layout
 
 ```text
-ogchain/
+./
 ├── src/                    # Solidity contracts (Foundry)
 ├── test/                   # Forge tests
-├── script/                 # Deploy scripts (e.g. DeployAll.s.sol, SeedThreeProperties.s.sol)
+├── script/                 # Deploy scripts (DeployAll, SeedSevenProperties, SeedFourMoreProperties, …)
 ├── deployments/          # testnet.json (gitignored) — copy from testnet.example.json
 ├── docs/                   # Domain model, compliance, grants, token standard
 ├── scripts/                # sync_web_env.py — JSON → web/.env.local lines
@@ -208,7 +208,7 @@ The repo may not have `git` initialized yet. From the project root:
 ```bash
 git init
 git add .
-git commit -m "Initial commit: OGChain 0G real estate stack"
+git commit -m "Initial commit: Building Culture 0G real estate stack"
 ```
 
 Create a **new empty repository** on GitHub (no README/license if you want a clean history), then:

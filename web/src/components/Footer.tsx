@@ -5,10 +5,10 @@ const cols = [
     title: "Product",
     links: [
       { href: "/properties", label: "Properties" },
-      { href: "/trade", label: "Buy shares" },
-      { href: "/market", label: "Market" },
+      { href: "/trade", label: "Trade" },
+      { href: "/invest", label: "Invest" },
+      { href: "/stake", label: "Stake" },
       { href: "/portfolio", label: "Portfolio" },
-      { href: "/pool", label: "Liquidity" },
     ],
   },
   {
@@ -27,7 +27,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-12">
         <div className="flex flex-col gap-10 md:flex-row md:justify-between">
           <div>
-            <p className="text-lg font-semibold tracking-tight text-white">OGChain</p>
+            <p className="text-lg font-semibold tracking-tight text-white">Building Culture</p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-zinc-500">
               Real estate on 0G. Fractional shares, transparent settlement, built for grants and serious pilots — not
               investment advice.
@@ -49,7 +49,7 @@ export function Footer() {
           ))}
         </div>
         <p className="mt-10 border-t border-white/[0.06] pt-8 text-center text-[11px] text-zinc-600">
-          © {new Date().getFullYear()} OGChain demo · Testnet · For grants & hackathon demonstration only
+          © {new Date().getFullYear()} Building Culture demo · Testnet · For grants & hackathon demonstration only
         </p>
       </div>
     </footer>

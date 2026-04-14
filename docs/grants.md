@@ -1,10 +1,10 @@
-# Grant readiness — OGChain on 0G
+# Grant readiness — Building Culture on 0G
 
 This document is for **ecosystem grants**, **hackathon finals**, and **investor due diligence**. It states what is **shipped**, what is **demo / testnet**, and what **production** requires.
 
 ## One-line pitch
 
-**OGChain** is an open, EVM-native stack for **tokenized real-estate exposure** on **0G Chain**: on-chain property registry, compliance-aware share tokens, AMM liquidity (OG/WETH ↔ shares), optional soulbound proof NFTs, and a **production-style web app** (onboarding, buy, pool, portfolio, legal transparency).
+**Building Culture** is an open, EVM-native stack for **tokenized real-estate exposure** on **0G Chain**: on-chain property registry, compliance-aware share tokens, AMM liquidity (OG/WETH ↔ shares), optional soulbound proof NFTs, and a **production-style web app** (onboarding, buy, pool, portfolio, legal transparency).
 
 ## Problem
 

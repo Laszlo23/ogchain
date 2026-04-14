@@ -32,6 +32,13 @@ contract DeployAllScript is Script {
         OgFactory ogFactory = new OgFactory();
         OgRouter router = new OgRouter(address(ogFactory), address(weth));
         compliance.setSystemContract(address(router), true);
+        /// @dev Set `KYC_BYPASS_ON_DEPLOY=1` or `true` so testnet swaps work without per-wallet verification.
+        if (vm.envExists("KYC_BYPASS_ON_DEPLOY")) {
+            string memory v = vm.envString("KYC_BYPASS_ON_DEPLOY");
+            if (keccak256(bytes(v)) == keccak256(bytes("1")) || keccak256(bytes(v)) == keccak256(bytes("true"))) {
+                compliance.setKycBypass(true);
+            }
+        }
         MockPriceOracle oracle = new MockPriceOracle(admin);
         BinaryPredictionMarket markets = new BinaryPredictionMarket(admin);
         string memory nftBase = "http://127.0.0.1:3000/api/nft/";

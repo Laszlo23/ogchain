@@ -11,6 +11,8 @@ On-chain code does **not** satisfy real-estate, securities, or privacy law by it
 
 - Decide whether buyers/sellers must be **identified** before they can fund escrows or hold registry roles.
 - If yes, implement **off-chain** KYC (or third-party provider) and only store **minimal** on-chain data (e.g. hashed credentials, attestations, or soulbound “verified” flags from a compliant issuer).
+- **Testing:** `ComplianceRegistry` may expose `kycBypass` so pilots can run without per-wallet verification; turn it off before production.
+- **Demo UI:** Illustrative listings may assume ~**$1,000** minimum notional per whole token and seed scripts may cap supply at **110% of property value ÷ $1,000** — the DEX **does not** enforce a per-token dollar floor without oracles.
 
 ## PII and data protection
 

@@ -1,4 +1,4 @@
-# ogchain web app
+# Building Culture web app
 
 Next.js 15 app (App Router) for **0G Galileo**: browse properties, **buy** share tokens with native OG, **investor hub** (`/invest`), **stake** native OG (`/stake`), **market** (AMM + roadmap secondary), **pool** liquidity (WETH + shares), **portfolio**, **onboarding**, **lend**, **admin** (role-gated), KYC-aware flows, optional **WalletConnect**, and optional **proof NFT** certificates.
 

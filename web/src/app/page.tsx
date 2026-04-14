@@ -12,8 +12,8 @@ export default function Home() {
       <HeroBackground />
 
       <div className="stagger-fade relative z-10 mx-auto max-w-4xl pb-16 pt-8 text-center sm:pt-14">
-        <p className="mb-4 inline-flex rounded-full border border-gold-500/20 bg-gold-500/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-gold-400/90">
-          Real estate on 0G
+        <p className="mb-4 inline-flex rounded-full border border-gold-500/20 bg-gold-500/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-gold-400/90">
+          Building Culture · 0G
         </p>
         <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
           Own real estate <span className="text-gradient-gold">on-chain</span>
@@ -47,7 +47,7 @@ export default function Home() {
 
         <div className="stagger-fade-slow grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { href: "/onboarding", title: "Get started", desc: "Wallet → KYC → deposit → invest", accent: "Step-by-step" },
+            { href: "/onboarding", title: "Get started", desc: "Wallet → verification (demo) → deposit → invest", accent: "Step-by-step" },
             { href: "/invest", title: "Investor hub", desc: "Balances, properties, stake & pool links", accent: "Overview" },
             { href: "/stake", title: "Stake OG", desc: "Native staking with cooldown & rewards", accent: "Staking" },
             { href: "/trade", title: "Buy shares", desc: "OG in, shares out — pool-priced", accent: "Primary" },

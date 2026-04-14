@@ -1,4 +1,6 @@
 [profile.default]
+# Load `.env` from repo root so `forge script` sees PRIVATE_KEY, PROPERTY_REGISTRY, etc.
+dotenv = true
 src = "src"
 out = "out"
 libs = ["lib"]

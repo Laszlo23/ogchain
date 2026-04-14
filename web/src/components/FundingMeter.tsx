@@ -2,10 +2,10 @@
 
 import type { FundingStats } from "@/lib/funding-stats";
 
-function fmtUsd(n: number) {
-  return new Intl.NumberFormat("en-US", {
+function fmtMoney(n: number, currency: "USD" | "EUR") {
+  return new Intl.NumberFormat(currency === "EUR" ? "de-AT" : "en-US", {
     style: "currency",
-    currency: "USD",
+    currency,
     maximumFractionDigits: 0,
   }).format(n);
 }
@@ -15,9 +15,12 @@ type Props = {
   /** Compact row for cards */
   variant?: "hero" | "compact";
   label?: string;
+  /** Display currency for funded/goal amounts (stats are still nominal numbers) */
+  currency?: "USD" | "EUR";
 };
 
-export function FundingMeter({ stats, variant = "hero", label = "Community funding" }: Props) {
+export function FundingMeter({ stats, variant = "hero", label = "Community funding", currency = "USD" }: Props) {
+  const fmt = (n: number) => fmtMoney(n, currency);
   const pct = Math.round(stats.progress * 1000) / 10;
 
   if (variant === "compact") {
@@ -34,7 +37,7 @@ export function FundingMeter({ stats, variant = "hero", label = "Community fundi
           />
         </div>
         <p className="text-[10px] text-zinc-500">
-          {fmtUsd(stats.fundedUsd)} / {fmtUsd(stats.goalUsd)} · {stats.investors.toLocaleString()} investors ·{" "}
+          {fmt(stats.fundedUsd)} / {fmt(stats.goalUsd)} · {stats.investors.toLocaleString()} investors ·{" "}
           {stats.countries} countries
         </p>
       </div>
@@ -46,8 +49,8 @@ export function FundingMeter({ stats, variant = "hero", label = "Community fundi
       <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gold-500/10 blur-2xl" />
       <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-500/80">{label}</p>
       <p className="mt-2 font-mono text-2xl text-white sm:text-3xl">
-        <span className="text-gradient-gold">{fmtUsd(stats.fundedUsd)}</span>
-        <span className="text-zinc-500"> / {fmtUsd(stats.goalUsd)}</span>
+        <span className="text-gradient-gold">{fmt(stats.fundedUsd)}</span>
+        <span className="text-zinc-500"> / {fmt(stats.goalUsd)}</span>
       </p>
       <div className="mt-4 h-2 overflow-hidden rounded-full bg-zinc-800/80">
         <div

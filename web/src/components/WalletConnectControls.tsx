@@ -2,12 +2,23 @@
 
 import { useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useHydrated } from "@/lib/use-hydrated";
 
 export function WalletConnectControls() {
+  const hydrated = useHydrated();
   const { address, isConnected } = useAccount();
   const { connect, connectors, isPending, error, reset } = useConnect();
   const { disconnect } = useDisconnect();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  if (!hydrated) {
+    return (
+      <div
+        className="h-9 min-w-[120px] shrink-0 rounded-full bg-white/[0.04] sm:min-w-[200px]"
+        aria-hidden
+      />
+    );
+  }
 
   if (isConnected && address) {
     return (

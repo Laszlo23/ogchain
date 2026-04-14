@@ -7,9 +7,10 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { TrustStrip } from "@/components/TrustStrip";
 import { addresses } from "@/lib/contracts";
 import { getGlobalFundingMeter } from "@/lib/funding-stats";
+import { useHydrated } from "@/lib/use-hydrated";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
-export default function PropertiesPage() {
+function PropertiesPageContent() {
   const registry = addresses.registry;
   const shareFactory = addresses.shareFactory;
   const unset = registry === zeroAddress || shareFactory === zeroAddress;
@@ -23,9 +24,9 @@ export default function PropertiesPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Listings</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Properties</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
-          Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; cards below
-          layer in a <span className="text-zinc-300">demo narrative</span> (imagery + illustrative yields) for the
-          three seeded parcels — not investment advice.{" "}
+          Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; the grid below
+          layers in a <span className="text-zinc-300">demo narrative</span> (imagery + EUR facility copy) for up to
+          seven seeded properties when tokens exist on-chain — not investment advice.{" "}
           <Link href="/guide#how-it-works" className="text-gold-400 hover:underline">
             How tokenization and buying shares work →
           </Link>
@@ -56,11 +57,13 @@ export default function PropertiesPage() {
         <p className="animate-pulse text-zinc-500">Loading on-chain properties…</p>
       ) : enriched.length === 0 ? (
         <p className="text-zinc-400">
-          No properties yet. Run <code className="text-emerald-400">SeedThreeProperties</code> against this registry,
-          then refresh.
+          No properties yet. Run <code className="text-emerald-400">SeedSevenProperties</code> (fresh registry) or{" "}
+          <code className="text-emerald-400">SeedThreeProperties</code> /{" "}
+          <code className="text-emerald-400">SeedFourMoreProperties</code> per{" "}
+          <code className="text-zinc-400">deployments/README.md</code>, then refresh.
         </p>
       ) : (
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <section aria-label="Property listings" className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
           {enriched.map((row) => (
             <PropertyCard
               key={row.tokenAddress}
@@ -71,8 +74,32 @@ export default function PropertiesPage() {
               demo={row.demo}
             />
           ))}
-        </div>
+        </section>
       )}
     </div>
   );
+}
+
+export default function PropertiesPage() {
+  const hydrated = useHydrated();
+  if (!hydrated) {
+    return (
+      <div className="mx-auto max-w-6xl space-y-8">
+        <header className="space-y-2">
+          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Listings</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">Properties</h1>
+          <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
+            Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; the grid below
+            layers in a <span className="text-zinc-300">demo narrative</span> (imagery + EUR facility copy) for up to
+            seven seeded properties when tokens exist on-chain — not investment advice.{" "}
+            <Link href="/guide#how-it-works" className="text-gold-400 hover:underline">
+              How tokenization and buying shares work →
+            </Link>
+          </p>
+        </header>
+        <p className="animate-pulse text-zinc-500">Loading on-chain properties…</p>
+      </div>
+    );
+  }
+  return <PropertiesPageContent />;
 }

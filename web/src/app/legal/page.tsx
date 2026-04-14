@@ -8,7 +8,7 @@ export default function LegalPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold-500/80">Trust & transparency</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">Legal, risks & grant readiness</h1>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          OGChain is designed so teams can present a credible demo to grants and investors while staying honest about
+          Building Culture is designed so teams can present a credible demo to grants and investors while staying honest about
           testnet scope. Replace placeholder copy with counsel-approved documents before any regulated offering.
         </p>
       </header>

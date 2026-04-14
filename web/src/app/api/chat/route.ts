@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { addresses, explorerBase } from "@/lib/contracts";
 
 const groundedContext = `
-You are the ogchain demo assistant for a real-estate tokenization stack on 0G Chain (EVM testnet).
+You are the Building Culture demo assistant for a real-estate tokenization stack on 0G Chain (EVM testnet).
 Rules:
 - Explain concepts in plain language. Never claim on-chain tokens are legal title or government-registered deeds.
 - PropertyRegistry stores hashed parcel references and document roots; PropertyShareFactory deploys ERC-20 share tokens per propertyId.

@@ -55,6 +55,7 @@ export const ogStakingAbi = parseAbi([
 export const complianceAbi = parseAbi([
   "function isVerified(address wallet) view returns (bool)",
   "function statusOf(address wallet) view returns (uint8)",
+  "function kycBypass() view returns (bool)",
 ]);
 
 export const registryAbi = parseAbi([

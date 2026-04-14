@@ -12,8 +12,8 @@ const steps = [
   },
   {
     n: 2,
-    title: "Complete KYC (if required)",
-    body: "Restricted share tokens may require verification. Issuers configure ComplianceRegistry — complete checks when prompted.",
+    title: "Verification (paused for testing in many pilots)",
+    body: "Restricted share tokens use ComplianceRegistry on-chain. During testnet demos, admins often enable a global bypass or verify wallets manually — full provider KYC may be paused.",
     cta: { href: "/issuer", label: "Issuer console" },
   },
   {

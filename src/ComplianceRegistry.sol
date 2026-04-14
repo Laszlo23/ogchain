@@ -11,8 +11,12 @@ contract ComplianceRegistry is AccessControl, IComplianceRegistry {
     mapping(address => IComplianceRegistry.Status) public override statusOf;
     mapping(address => bool) public override isSystemContract;
 
+    /// @notice When true, `isVerified` returns true for every wallet (testing / pilot only).
+    bool public kycBypass;
+
     event WalletStatusChanged(address indexed wallet, IComplianceRegistry.Status status);
     event SystemContractChanged(address indexed account, bool isSystem);
+    event KycBypassChanged(bool enabled);
 
     error ZeroAddress();
 
@@ -37,8 +41,15 @@ contract ComplianceRegistry is AccessControl, IComplianceRegistry {
         emit SystemContractChanged(account, enabled);
     }
 
+    /// @notice Enable or disable global KYC bypass (testing only — turn off before production).
+    function setKycBypass(bool enabled) external onlyRole(COMPLIANCE_ADMIN_ROLE) {
+        kycBypass = enabled;
+        emit KycBypassChanged(enabled);
+    }
+
     /// @inheritdoc IComplianceRegistry
     function isVerified(address wallet) external view returns (bool) {
+        if (kycBypass) return true;
         return statusOf[wallet] == Status.Verified;
     }
 }

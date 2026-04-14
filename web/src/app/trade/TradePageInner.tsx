@@ -217,6 +217,11 @@ export function TradePageInner() {
 
       <ComplianceStatus />
 
+      <p className="text-center text-[11px] leading-relaxed text-zinc-500">
+        Demo economics assume about <span className="text-zinc-400">$1,000</span> minimum notional per whole token;
+        the AMM does not enforce that without price oracles.
+      </p>
+
       {unset ? (
         <p className="text-center text-sm text-amber-400">
           Configure registry and factory in <code className="text-gold-400">.env.local</code> to load listings.

@@ -27,4 +27,21 @@ contract ComplianceRegistryTest is Test {
         reg.setSystemContract(pair, true);
         assertTrue(reg.isSystemContract(pair));
     }
+
+    function testKycBypassMakesEveryoneVerified() public {
+        assertFalse(reg.isVerified(alice));
+        vm.prank(admin);
+        reg.setKycBypass(true);
+        assertTrue(reg.kycBypass());
+        assertTrue(reg.isVerified(alice));
+        vm.prank(admin);
+        reg.setKycBypass(false);
+        assertFalse(reg.isVerified(alice));
+    }
+
+    function testVerifiedStillWorksWhenBypassOff() public {
+        vm.prank(admin);
+        reg.setWalletStatus(alice, IComplianceRegistry.Status.Verified);
+        assertTrue(reg.isVerified(alice));
+    }
 }

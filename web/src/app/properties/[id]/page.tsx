@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
@@ -9,7 +8,8 @@ import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { FundingMeter } from "@/components/FundingMeter";
 import { TrustStrip } from "@/components/TrustStrip";
 import { addresses, explorerBase } from "@/lib/contracts";
-import { formatIllustrativeEconomics } from "@/lib/demo-properties";
+import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
+import { formatIllustrativeEconomics, getDemoImageSlides } from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
@@ -32,6 +32,7 @@ export default function PropertyDetailPage() {
 
   const demo = row?.demo;
   const goalUsd = demo?.illustrativePropertyValueUsd ?? 10_000_000;
+  const fundingCurrency = demo?.creditLines?.length ? "EUR" : "USD";
   const funding = propertyId > 0n ? getFundingStats(propertyId, goalUsd) : getFundingStats(1n, goalUsd);
 
   if (!idStr || propertyId === 0n) {
@@ -74,21 +75,31 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="space-y-10 pb-16">
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08]">
-        <div className="relative aspect-[21/9] w-full min-h-[200px] bg-zinc-900 sm:aspect-[2.4/1]">
+      <div className="group relative overflow-hidden rounded-3xl border border-white/[0.08]">
+        <div className="relative w-full bg-zinc-900">
           {demo ? (
-            <Image src={demo.imageSrc} alt={demo.imageAlt} fill className="object-cover" priority />
+            <>
+              <PropertyImageCarousel
+                slides={getDemoImageSlides(demo)}
+                priorityFirst
+                aspectClassName="aspect-[21/9] min-h-[200px] w-full sm:min-h-0 sm:aspect-[2.4/1]"
+                sizes="100vw"
+                dotsClassName="top-4 sm:top-6"
+              />
+              <div className="pointer-events-none absolute inset-0 z-[14] bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 z-[15] p-6 sm:p-10">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-400/90">Property #{idStr}</p>
+                <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                  {demo.headline ?? row.name}
+                </h1>
+                <p className="mt-2 text-sm text-zinc-300">{demo.location ?? row.symbol}</p>
+              </div>
+            </>
           ) : (
-            <div className="flex h-full items-center justify-center text-zinc-600">No image</div>
+            <div className="flex min-h-[200px] items-center justify-center text-zinc-600 sm:aspect-[2.4/1]">
+              No image
+            </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-400/90">Property #{idStr}</p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              {demo?.headline ?? row.name}
-            </h1>
-            <p className="mt-2 text-sm text-zinc-300">{demo?.location ?? row.symbol}</p>
-          </div>
         </div>
       </div>
 
@@ -113,12 +124,24 @@ export default function PropertyDetailPage() {
           <section className="glass-card p-6">
             <h2 className="text-lg font-semibold text-white">Financials (illustrative)</h2>
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-zinc-500">Asset value (demo)</dt>
-                <dd className="mt-1 font-mono text-zinc-100">
-                  {demo?.illustrativePropertyValueUsd != null
-                    ? `~$${(demo.illustrativePropertyValueUsd / 1e6).toFixed(1)}M`
-                    : "—"}
+              <div className={demo?.creditLines?.length ? "sm:col-span-2" : ""}>
+                <dt className="text-xs uppercase tracking-wide text-zinc-500">
+                  {demo?.creditLines?.length ? "Kreditbetrag / Facility (Illustrativ)" : "Asset value (demo)"}
+                </dt>
+                <dd className="mt-1 text-sm text-zinc-100">
+                  {demo?.creditLines?.length ? (
+                    <ul className="list-inside list-disc space-y-1 font-mono text-sm">
+                      {demo.creditLines.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  ) : demo?.illustrativePropertyValueUsd != null ? (
+                    <span className="font-mono">
+                      ~${(demo.illustrativePropertyValueUsd / 1e6).toFixed(1)}M
+                    </span>
+                  ) : (
+                    "—"
+                  )}
                 </dd>
               </div>
               <div>
@@ -168,7 +191,7 @@ export default function PropertyDetailPage() {
         </div>
 
         <div className="space-y-6">
-          <FundingMeter stats={funding} label="Live funding (demo)" />
+          <FundingMeter stats={funding} label="Live funding (demo)" currency={fundingCurrency} />
 
           <div className="glass-card-strong sticky top-24 space-y-4 p-6">
             <h2 className="text-sm font-medium uppercase tracking-wider text-zinc-400">Buy widget</h2>
