@@ -1,11 +1,11 @@
 # Domain model: on-chain vs 0G Storage
 
-This document defines what lives **on 0G Chain** (this repo’s Solidity contracts) versus **off-chain / 0G Storage**, and how they link.
+**Normative identity and registry rules** for REOC are defined in **[standards/reoc-v1.md](./standards/reoc-v1.md) §2 (L1)**. This document describes how this repository maps those concepts to **0G Chain** contracts and **0G Storage** blobs without repeating L1 MUST rules.
 
 ## Identifiers
 
 | Concept | Representation | Notes |
-|--------|----------------|--------|
+|--------|----------------|-------|
 | **Property ID** | `uint256` from `PropertyRegistry` | Sequential ID; canonical handle for on-chain references. |
 | **External parcel reference** | `bytes32 externalRefHash` | `keccak256` of a jurisdiction-specific string (e.g. county + APN) so the raw string is not stored on-chain. |
 | **0G Storage root** | `bytes32` (Merkle root) | From 0G Storage SDK after upload; stored on-chain as a commitment. |
@@ -60,4 +60,4 @@ Use fixed keccak labels in app code, e.g.:
 - `keccak256("DISCLOSURE")`
 - `keccak256("INSPECTION")`
 
-The contract only stores opaque `bytes32`; human-readable names belong in your app layer.
+The contract only stores opaque `bytes32`; human-readable names belong in your app layer. REOC L3 metadata uses string enums (`DEED`, `DISCLOSURE`, …) in [`schemas/reoc-metadata-v1.json`](./schemas/reoc-metadata-v1.json) for off-chain interchange; map consistently to on-chain `docKind` in your deployment.

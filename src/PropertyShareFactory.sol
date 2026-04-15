@@ -7,7 +7,8 @@ import {IPropertyRegistryMinimal} from "./interfaces/IPropertyRegistryMinimal.so
 import {RestrictedPropertyShareToken} from "./RestrictedPropertyShareToken.sol";
 
 /// @title PropertyShareFactory
-/// @notice Deploys PropertyShareToken for a registered property; caller must be record owner or registrar.
+/// @notice REOC v1 — deploys `RestrictedPropertyShareToken` for a registered property; caller must be record owner or registrar.
+/// @dev Emits `PropertyShareCreated` per REOC v1 §3.4 for subgraph/indexer discovery. Spec: `docs/standards/reoc-v1.md`.
 contract PropertyShareFactory is AccessControl {
     bytes32 public constant REGISTRAR_ROLE = keccak256("REGISTRAR_ROLE");
 
@@ -16,6 +17,7 @@ contract PropertyShareFactory is AccessControl {
 
     mapping(uint256 propertyId => address) public tokenByPropertyId;
 
+    /// @notice REOC v1 §3.4 — Index token deployments: propertyId, token, registry, metadata URI, supply cap.
     event PropertyShareCreated(
         uint256 indexed propertyId,
         address indexed token,

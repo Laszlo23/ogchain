@@ -1,55 +1,26 @@
 # OG Property Share Token (og-RE-share)
 
-This repository defines a **property-backed ERC-20** used for fractional exposure to a single entry in [`PropertyRegistry`](./domain-model.md). It is **not** legal title; see [compliance.md](./compliance.md).
+This repository implements **REOC v1** — the **Real Estate On Chain** standard for a property-backed ERC-20. The **normative specification** is:
 
-## Goals
+**[standards/reoc-v1.md](./standards/reoc-v1.md)**
 
-- **Bind** each share token contract to exactly one `propertyId` and the canonical `PropertyRegistry` address.
-- **Reference** rich metadata (JSON on IPFS, HTTPS, or 0G Storage gateways) via `metadataURI`.
-- Stay **compatible** with ERC-20 wallets, DEX routers, and future **transfer restrictions** (e.g. ERC-3643-style) via wrapper or upgraded token.
+Use that document for layers L1 (registry identity), L2 (token interface and events), L3 (metadata JSON), and L4 (compliance profiles). This page summarizes the implementation name **og-RE-share** and points to source files.
 
-## Required on-chain data
+## Quick reference
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `registry` | `address` | `PropertyRegistry` for this deployment. |
-| `propertyId` | `uint256` | Must exist in `registry` at creation time (enforced by factory). |
-| `metadataURI` | `string` | URI for off-chain JSON (name, geo, SPV docs, 0G root refs). |
-| `supplyCap` | `uint256` | `0` means uncapped; else `totalSupply() <= supplyCap`. |
+- **Not legal title** — see [compliance.md](./compliance.md).
+- **Interface:** [`src/interfaces/IPropertyShareToken.sol`](../src/interfaces/IPropertyShareToken.sol) (REOC v1 §3).
+- **Metadata schema:** [`schemas/reoc-metadata-v1.json`](./schemas/reoc-metadata-v1.json).
+- **Factory event for indexers:** `PropertyShareCreated` — [`PropertyShareFactory.sol`](../src/PropertyShareFactory.sol).
 
-## Interface: `IPropertyShareToken`
+## Implementation notes
 
-Implemented in [`src/interfaces/IPropertyShareToken.sol`](../src/interfaces/IPropertyShareToken.sol). Implementations MUST expose:
+| Topic | Location |
+|--------|----------|
+| ERC-20 + `propertyId` / `REGISTRY` / `metadataURI` / `supplyCap` | `PropertyShareToken.sol`, `RestrictedPropertyShareToken.sol` |
+| Minting | `MINTER_ROLE`; cap enforced when `supplyCap > 0` |
+| KYC-gated transfers | `RestrictedPropertyShareToken` + `ComplianceRegistry` (REOC L4 profile B) |
 
-- ERC-20: `name`, `symbol`, `decimals`, `totalSupply`, `balanceOf`, `transfer`, `approve`, `transferFrom`, `allowance`
-- `function propertyId() external view returns (uint256);`
-- `function REGISTRY() external view returns (address);` (immutable registry)
-- `function metadataURI() external view returns (string memory);`
-- `function supplyCap() external view returns (uint256);`
-- Events as in the interface file, including `PropertyShareDeployed` / indexing-friendly `PropertyShareCreated` from the factory
+## Deprecated duplication
 
-## Minting
-
-- **MINTER_ROLE** (OpenZeppelin `AccessControl`) may mint up to `supplyCap`.
-- Factory typically grants **MINTER** to the property `recordOwner` (or leaves admin to configure).
-
-## Compliance extensions (optional)
-
-- **Permissioned:** replace token with an [ERC-3643](https://eips.ethereum.org/EIPS/eip-3643)-style security token that calls your identity registry on `transfer`.
-- **Wrapper:** keep this ERC-20 as the “underlying” and wrap with a restricted ERC-20 wrapper that checks allowlists.
-
-## Metadata JSON (off-chain, example)
-
-```json
-{
-  "title": "Example parcel",
-  "propertyId": "1",
-  "registry": "0x...",
-  "jurisdiction": "US-CA",
-  "documents": [{ "kind": "DEED", "storageRoot": "0x..." }]
-}
-```
-
-## Factory event (indexing)
-
-`PropertyShareCreated(propertyId, token, registry, metadataURI, supplyCap)` — see `PropertyShareFactory.sol`.
+Older sections of this file that repeated MUST/SHOULD rules have been **consolidated into REOC v1**. If anything here conflicts with `reoc-v1.md`, **reoc-v1.md** wins.

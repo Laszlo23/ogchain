@@ -229,8 +229,9 @@ Use **SSH** if you prefer: `git@github.com:YOUR_USER/YOUR_REPO.git`.
 
 | Doc | Topic |
 |-----|--------|
+| [docs/standards/reoc-v1.md](docs/standards/reoc-v1.md) | **REOC v1** — Real Estate On Chain (normative) |
 | [docs/domain-model.md](docs/domain-model.md) | On-chain vs 0G Storage |
-| [docs/token-standard.md](docs/token-standard.md) | Share token standard |
+| [docs/token-standard.md](docs/token-standard.md) | og-RE-share implementation notes |
 | [docs/0g-network.md](docs/0g-network.md) | 0G network notes |
 | [docs/compliance.md](docs/compliance.md) | Compliance posture |
 | [deployments/README.md](deployments/README.md) | Deploy + seed workflow |

@@ -8,7 +8,8 @@ import {IComplianceRegistry} from "./interfaces/IComplianceRegistry.sol";
 import {IPropertyShareToken} from "./interfaces/IPropertyShareToken.sol";
 
 /// @title RestrictedPropertyShareToken
-/// @notice ERC-20 property share with transfers limited to KYC-verified wallets and allowlisted system contracts.
+/// @notice REOC v1 L2 + L4 profile B — property share with transfers gated by `IComplianceRegistry`.
+/// @dev See `docs/standards/reoc-v1.md` §5. Same L2 surface as `PropertyShareToken` with compliance checks on transfer.
 contract RestrictedPropertyShareToken is IPropertyShareToken, ERC20, ERC20Permit, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 

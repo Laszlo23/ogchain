@@ -7,7 +7,8 @@ import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20P
 import {IPropertyShareToken} from "./interfaces/IPropertyShareToken.sol";
 
 /// @title PropertyShareToken
-/// @notice ERC-20 shares for one property; optional supply cap; MINTER_ROLE for issuance.
+/// @notice REOC v1 L2 — ERC-20 property shares; optional supply cap; MINTER_ROLE for issuance (L4 profile A: unrestricted transfers).
+/// @dev See `docs/standards/reoc-v1.md` §3–§5.
 contract PropertyShareToken is IPropertyShareToken, ERC20, ERC20Permit, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
