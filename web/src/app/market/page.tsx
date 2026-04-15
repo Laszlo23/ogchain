@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { TrustStrip } from "@/components/TrustStrip";
+import { TrustSection } from "@/components/TrustSection";
 import { explorerBase } from "@/lib/contracts";
 
 export default function MarketPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-10 pb-16">
+    <div className="mx-auto max-w-[1280px] space-y-10 pb-16">
       <header className="space-y-3 text-center">
         <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-gold-500/80">Secondary market</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Marketplace</h1>
@@ -15,7 +15,7 @@ export default function MarketPage() {
         </p>
       </header>
 
-      <TrustStrip />
+      <TrustSection />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="glass-card p-6">

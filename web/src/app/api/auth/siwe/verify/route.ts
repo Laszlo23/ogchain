@@ -1,8 +1,10 @@
+import { NextResponse } from "next/server";
 import { createPublicClient, http } from "viem";
 import { parseSiweMessage, verifySiweMessage } from "viem/siwe";
 import { ogGalileo } from "@/lib/chain";
 import { getPool } from "@/lib/db";
 import { takeNonce } from "@/lib/siwe-store";
+import { COOKIE_NAME, sessionCookieOptions, signSession } from "@/lib/web-session";
 
 export const dynamic = "force-dynamic";
 
@@ -39,20 +41,43 @@ export async function POST(req: Request) {
   }
 
   const pool = getPool();
+  let userId: number | undefined;
+  const addrLower = parsed.address.toLowerCase();
   if (pool) {
     const existing = await pool.query<{ user_id: number }>(
       `SELECT user_id FROM wallet_bindings WHERE address = $1`,
-      [parsed.address.toLowerCase()]
+      [addrLower],
     );
     if (existing.rows.length === 0) {
       const userRes = await pool.query<{ id: number }>(`INSERT INTO users DEFAULT VALUES RETURNING id`);
-      const userId = userRes.rows[0].id;
-      await pool.query(`INSERT INTO wallet_bindings (user_id, address) VALUES ($1, $2)`, [
-        userId,
-        parsed.address.toLowerCase(),
-      ]);
+      userId = userRes.rows[0].id;
+      await pool.query(`INSERT INTO wallet_bindings (user_id, address) VALUES ($1, $2)`, [userId, addrLower]);
+    } else {
+      userId = existing.rows[0].user_id;
     }
   }
 
-  return Response.json({ ok: true, address: parsed.address });
+  const token = userId != null ? signSession(userId, parsed.address) : null;
+  const sessionEstablished = Boolean(token);
+  let sessionError: "missing_database" | "missing_session_secret" | undefined;
+  if (!pool) {
+    sessionError = "missing_database";
+  } else if (userId != null && !token) {
+    sessionError = "missing_session_secret";
+  }
+  if (process.env.NODE_ENV === "development" && pool && userId != null && !token) {
+    console.warn("[siwe] User created but no session cookie: set SESSION_SECRET (16+ chars) in web/.env.local");
+  }
+
+  const res = NextResponse.json({
+    ok: true,
+    address: parsed.address,
+    userId: userId ?? null,
+    sessionEstablished,
+    sessionError,
+  });
+  if (token) {
+    res.cookies.set(COOKIE_NAME, token, sessionCookieOptions());
+  }
+  return res;
 }

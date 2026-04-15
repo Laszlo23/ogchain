@@ -3,15 +3,7 @@
 import Link from "next/link";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
 import { PropertyShareButton } from "@/components/PropertyShareButton";
-import {
-  formatAnnualRentEur,
-  formatIllustrativeEconomics,
-  formatSquareMeters,
-  getDemoImageSlides,
-  getEstimatedYieldPercent,
-  type DemoPropertyDetail,
-} from "@/lib/demo-properties";
-import { demoAvailableShares } from "@/lib/demo-investment-math";
+import { getDemoImageSlides, getEstimatedYieldPercent, type DemoPropertyDetail } from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
 import { explorerBase } from "@/lib/contracts";
 import { FundingMeter } from "@/components/FundingMeter";
@@ -26,19 +18,17 @@ type PropertyCardProps = {
 
 export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: PropertyCardProps) {
   const explorerToken = `${explorerBase}/address/${tokenAddress}`;
-  const economicsLine = demo ? formatIllustrativeEconomics(demo) : null;
   const goalUsd = demo?.illustrativePropertyValueUsd ?? 10_000_000;
   const funding = getFundingStats(propertyId, goalUsd);
   const fundingCurrency = demo?.creditLines?.length ? "EUR" : "USD";
   const yieldPct = demo ? getEstimatedYieldPercent(demo) : null;
-  const available = demoAvailableShares(propertyId, goalUsd);
   const priceShare = demo?.illustrativeShareUsd ?? 1000;
   const displayValue = demo?.illustrativePropertyValueUsd ?? goalUsd;
   const idStr = propertyId.toString();
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl shadow-black/50 backdrop-blur-xl transition hover:border-gold-500/20">
-      <div className="relative w-full overflow-hidden bg-zinc-900">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-surface-elevated/80 shadow-2xl shadow-black/40 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-xl">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-900">
         {demo ? (
           <>
             <PropertyImageCarousel
@@ -60,40 +50,24 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-5">
+      <div className="flex flex-1 flex-col gap-4 rounded-b-2xl p-5">
         <FundingMeter stats={funding} variant="compact" label="Funding" currency={fundingCurrency} />
 
-        <dl className="grid grid-cols-2 gap-2 rounded-xl border border-white/[0.06] bg-black/25 p-3 text-[11px] sm:grid-cols-3">
+        <dl className="grid grid-cols-2 gap-3 rounded-xl border border-white/[0.06] bg-black/30 p-4 text-[12px] sm:grid-cols-3">
           <div>
-            <dt className="text-zinc-500">Total value (demo)</dt>
-            <dd className="mt-0.5 font-mono text-zinc-200">
+            <dt className="text-muted">Est. yield</dt>
+            <dd className="mt-0.5 font-semibold text-brand">{yieldPct != null ? `${yieldPct.toFixed(1)}%` : "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-muted">Token price</dt>
+            <dd className="mt-0.5 font-mono font-semibold text-white">~${priceShare.toLocaleString("en-US")}</dd>
+          </div>
+          <div>
+            <dt className="text-muted">Value (illustr.)</dt>
+            <dd className="mt-0.5 font-mono text-white">
               {fundingCurrency === "EUR" ? "€" : "$"}
               {(displayValue / 1e6).toFixed(1)}M
             </dd>
-          </div>
-          <div>
-            <dt className="text-zinc-500">Annual rent (illustr.)</dt>
-            <dd className="mt-0.5 font-mono text-zinc-200">{demo ? formatAnnualRentEur(demo.annualRentalIncomeEur) : "—"}</dd>
-          </div>
-          <div>
-            <dt className="text-zinc-500">Floor area</dt>
-            <dd className="mt-0.5 font-mono text-zinc-200">{demo ? formatSquareMeters(demo.squareMeters) : "—"}</dd>
-          </div>
-          <div>
-            <dt className="text-zinc-500">Units</dt>
-            <dd className="mt-0.5 font-mono text-zinc-200">{demo ? demo.units.toLocaleString("en-US") : "—"}</dd>
-          </div>
-          <div>
-            <dt className="text-zinc-500">Est. gross yield</dt>
-            <dd className="mt-0.5 text-brand">{yieldPct != null ? `${yieldPct.toFixed(1)}%` : "—"}</dd>
-          </div>
-          <div>
-            <dt className="text-zinc-500">Price / share</dt>
-            <dd className="mt-0.5 font-mono text-brand">~${priceShare.toLocaleString("en-US")}</dd>
-          </div>
-          <div className="col-span-2 sm:col-span-1">
-            <dt className="text-zinc-500">Avail. shares</dt>
-            <dd className="mt-0.5 font-mono text-zinc-200">{available.toLocaleString("en-US")}</dd>
           </div>
         </dl>
 
@@ -107,40 +81,28 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
         </div>
 
         {demo && (
-          <>
-            {economicsLine && <p className="text-xs font-medium text-zinc-200/95">{economicsLine}</p>}
-            <p className="line-clamp-3 text-sm leading-relaxed text-zinc-400">{demo.thesis}</p>
-            <p className="text-[11px] text-zinc-500">
-              Min. investment: <span className="text-zinc-300">0.01 OG</span> (testnet, illustrative)
-            </p>
-            <p className="rounded-lg border border-gold-900/30 bg-gold-950/20 px-3 py-2 text-[11px] leading-snug text-gold-200/90">
-              {demo.targetRange}
-            </p>
-          </>
+          <p className="line-clamp-2 text-sm leading-relaxed text-muted">{demo.thesis}</p>
         )}
 
-        <div className="mt-auto flex flex-wrap items-center gap-2 pt-1">
+        <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-white/[0.06] pt-4">
           <Link
             href={`/properties/${idStr}`}
-            className="rounded-full px-4 py-2 text-xs font-semibold text-black hover:opacity-95"
-            style={{
-              background: "linear-gradient(to right, #9a7d45, #C6A55C)",
-            }}
+            className="min-h-[44px] flex-1 rounded-full bg-brand py-2.5 text-center text-sm font-semibold text-[#0A0A0A] transition hover:bg-brand-light sm:flex-none sm:px-6"
           >
-            View investment
+            View property
           </Link>
-          {demo && <PropertyShareButton propertyId={idStr} title={demo.headline} variant="compact" />}
           <Link
             href={`/trade?property=${idStr}`}
-            className="rounded-full border border-white/15 px-4 py-2 text-xs font-medium text-zinc-200 hover:border-gold-500/40"
+            className="min-h-[44px] flex-1 rounded-full border border-white/20 py-2.5 text-center text-sm font-semibold text-white transition hover:border-brand/40 sm:flex-none sm:px-6"
           >
-            Buy shares
+            Invest
           </Link>
+          {demo && <PropertyShareButton propertyId={idStr} title={demo.headline} variant="compact" />}
           <Link
             href={explorerToken}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full border border-transparent px-3 py-2 text-xs text-zinc-500 hover:text-zinc-300"
+            className="w-full rounded-full py-2 text-center text-xs text-muted hover:text-white sm:w-auto sm:px-3"
           >
             Explorer
           </Link>

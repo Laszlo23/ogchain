@@ -1,6 +1,6 @@
 /**
  * Curated presentation for seeded demo properties (chain metadata URIs are placeholders).
- * Not financial advice — illustrative only.
+ * Not financial advice — illustrative only. Sustainability claims in copy should match verifiable ops/audit data.
  */
 export type DemoImageSlide = { src: string; alt: string };
 

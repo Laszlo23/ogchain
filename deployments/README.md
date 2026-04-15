@@ -25,9 +25,13 @@ cast send <COMPLIANCE_REGISTRY> "setKycBypass(bool)" true \
   --private-key "$PRIVATE_KEY"
 ```
 
-Copy logged addresses into `deployments/testnet.json` (start from [testnet.example.json](testnet.example.json)), including **`ComplianceRegistry`**, **`PropertyShareProof`**, and **`OgStaking`** when present.
+Copy logged addresses into `deployments/testnet.json` (start from [testnet.example.json](testnet.example.json)), including **`ComplianceRegistry`**, **`PropertyShareProof`**, and **`OgStaking`** when present. Set `deployedAt` (ISO date) and `deployer` (checksummed address) for your records.
 
 For production NFT metadata, set **`NFT_BASE_URI`** when running `DeployAll` (public HTTPS URL ending with `/`, e.g. `https://your.app/api/nft/`) so wallet `tokenURI` resolves to your Next.js `GET /api/nft/[tokenId]` route.
+
+### Token economics (seed scripts)
+
+[`script/SeedTokenSupply.sol`](../script/SeedTokenSupply.sol) sets each property’s share **supply cap** so that one **whole token** (`1e18` wei) matches about **$1,000 notional** in the demo (with a 110% buffer on token count). This does **not** fix a USD price on-chain; primary issuers set OG prices separately (see [Primary share sale](#6-primary-share-sale-optional) and [`docs/primary-sale.md`](../docs/primary-sale.md)).
 
 ## 3. Seed demo properties + share tokens
 
@@ -74,13 +78,77 @@ forge script script/SeedThreeProperties.s.sol:SeedThreePropertiesScript \
 
 Update `deployments/testnet.json` with `propertyId` and `shareToken` from the broadcast output or explorer if you track them there.
 
-## 4. Web app
+## 4. Bootstrap AMM liquidity (0G)
+
+After shares exist in the treasury wallet, add **WETH + share** liquidity so the Trade page can quote swaps. Each new `OgPair` must be allowlisted on `ComplianceRegistry` (the script does this).
+
+Set:
+
+- `OG_ROUTER`, `OG_WETH`, `COMPLIANCE_REGISTRY`, `PROPERTY_SHARE_FACTORY` (same addresses as in `testnet.json` under `contracts`).
+- `BOOTSTRAP_WETH_WEI` — native OG to wrap per pool (e.g. `1000000000000000000` for 1 OG).
+- `BOOTSTRAP_SHARE_WEI` — share amount per side (e.g. `1000000000000000000` for 1 whole share).
+- `START_PROPERTY_ID` / `END_PROPERTY_ID` — inclusive range of `propertyId`s to bootstrap (default `1` and `7` if unset).
+
+The broadcast wallet must hold enough **OG** and **share tokens** (treasury is usually the deployer after seeding).
+
+```bash
+export PRIVATE_KEY=0x...
+export OG_ROUTER=0x...
+export OG_WETH=0x...
+export COMPLIANCE_REGISTRY=0x...
+export PROPERTY_SHARE_FACTORY=0x...
+export BOOTSTRAP_WETH_WEI=1000000000000000000
+export BOOTSTRAP_SHARE_WEI=1000000000000000000
+export START_PROPERTY_ID=1
+export END_PROPERTY_ID=3
+
+forge script script/BootstrapLiquidity.s.sol:BootstrapLiquidityScript \
+  --rpc-url https://evmrpc-testnet.0g.ai \
+  --broadcast
+```
+
+Alternatively, use the **Pool** page in the web app with the same wrap / approve / add steps.
+
+## 5. Staking rewards (`OgStaking`)
+
+`DeployAll` deploys [`OgStaking`](../src/staking/OgStaking.sol). Put its address in `deployments/testnet.json` as `OgStaking` and sync web env so `NEXT_PUBLIC_STAKING` is set.
+
+Fund a reward period (native OG, **with** the transaction value):
+
+```bash
+cast send <OG_STAKING_ADDRESS> "notifyRewardAmount(uint256)" 604800 \
+  --value 10ether \
+  --rpc-url https://evmrpc-testnet.0g.ai \
+  --private-key "$PRIVATE_KEY"
+```
+
+`604800` is seconds (7 days); adjust duration and reward amount as needed. Caller must have `REWARD_ROLE` (default: deployer admin).
+
+## 6. Primary share sale (optional)
+
+For **issuer primary** sales that only sell **whole shares** (minimum one full share at a fixed native-OG price), deploy [`PrimaryShareSale`](../src/PrimaryShareSale.sol):
+
+```bash
+export PRIMARY_SHARE_TOKEN=0x...   # RestrictedPropertyShareToken
+export PRIMARY_SELLER=0x...        # treasury (must approve shares to the sale contract)
+export PRIMARY_PRICE_WEI_PER_SHARE=1000000000000000000   # example: 1 OG per full share
+
+forge script script/DeployPrimaryShare.s.sol:DeployPrimaryShareScript \
+  --rpc-url https://evmrpc-testnet.0g.ai \
+  --broadcast
+```
+
+Then the seller approves the sale contract and buyers call `buyWholeShares(uint256 numWholeShares)` with `msg.value == numWholeShares * price`. See [`docs/primary-sale.md`](../docs/primary-sale.md). OTC-only primary (no contract) is also fine.
+
+## 7. Web app
 
 Generate env lines from this JSON:
 
 ```bash
 python3 scripts/sync_web_env.py deployments/testnet.json > web/.env.local
 ```
+
+Optional: add `siteUrl` to `deployments/testnet.json` (public origin, no trailing slash) so `NEXT_PUBLIC_SITE_URL` is emitted for NFT metadata and share links.
 
 Or copy manually from [web/.env.local.example](../web/.env.local.example).
 

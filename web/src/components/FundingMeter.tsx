@@ -54,7 +54,7 @@ export function FundingMeter({ stats, variant = "hero", label = "Community fundi
       </p>
       <div className="mt-4 h-2 overflow-hidden rounded-full bg-zinc-800/80">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-gold-700 via-gold-500 to-gold-300 shadow-lg shadow-gold-500/30"
+          className="h-full rounded-full bg-gradient-to-r from-gold-700 via-gold-500 to-gold-300 shadow-lg shadow-gold-500/30 transition-all duration-700 ease-out"
           style={{ width: `${Math.min(100, pct)}%` }}
         />
       </div>

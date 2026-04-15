@@ -6,7 +6,8 @@ import { useMemo } from "react";
 import { formatEther, zeroAddress } from "viem";
 import { useAccount, useReadContracts } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
-import { TrustStrip } from "@/components/TrustStrip";
+import { PortfolioIllustrativeCharts } from "@/components/PortfolioIllustrativeCharts";
+import { TrustSection } from "@/components/TrustSection";
 import { addresses, erc20Abi } from "@/lib/contracts";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
@@ -99,20 +100,20 @@ export default function PortfolioPage() {
   const hasAnyShare = withBalances.some((r) => (r.balance ?? 0n) > 0n);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 pb-16">
+    <div className="mx-auto w-full max-w-[1280px] space-y-10 pb-16">
       <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Holdings</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Portfolio</h1>
-        <p className="text-sm leading-relaxed text-zinc-400">
-          Wrapped OG (WETH) and property share balances. USD estimates use illustrative per-share references from{" "}
-          <Link href="/guide" className="text-gold-400 hover:underline">
-            demo metadata
-          </Link>{" "}
-          — not a mark-to-market valuation.
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Dashboard</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Portfolio</h1>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted">
+          Wallet balances, property exposure, and illustrative charts. USD uses demo per-share references — not
+          mark-to-market.{" "}
+          <Link href="/guide" className="text-brand hover:underline">
+            Operator guide
+          </Link>
         </p>
       </header>
       <ComplianceStatus />
-      <TrustStrip />
+      <TrustSection />
 
       {!isConnected ? (
         <p className="text-center text-zinc-500">Connect a wallet to see balances.</p>
@@ -122,26 +123,33 @@ export default function PortfolioPage() {
         <p className="text-zinc-500">Loading…</p>
       ) : (
         <>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="glass-card-strong p-6">
-              <p className="text-xs uppercase tracking-wide text-zinc-500">WETH (wrapped OG)</p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border border-brand/20 bg-white/[0.03] p-6">
+              <p className="text-xs uppercase tracking-wide text-muted">Wallet (WETH)</p>
               <p className="mt-2 font-mono text-2xl text-white">
                 {wethBalance !== undefined ? formatEther(wethBalance) : loadingBalances ? "…" : "0"}
               </p>
-              <p className="mt-2 text-xs text-zinc-500">Use for liquidity or swap paths.</p>
+              <p className="mt-2 text-xs text-muted">For swaps &amp; pools.</p>
             </div>
-            <div className="glass-card-strong p-6">
-              <p className="text-xs uppercase tracking-wide text-zinc-500">Est. positions (demo USD)</p>
-              <p className="mt-2 font-mono text-2xl text-gradient-gold">
+            <div className="rounded-2xl border border-brand/20 bg-white/[0.03] p-6">
+              <p className="text-xs uppercase tracking-wide text-muted">Portfolio value (illustr.)</p>
+              <p className="mt-2 font-mono text-2xl text-brand">
                 {hasAnyShare
                   ? new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
                       totalUsdEst,
                     )
                   : "—"}
               </p>
-              <p className="mt-2 text-xs text-zinc-500">Illustrative only — not a NAV or appraisal.</p>
+              <p className="mt-2 text-xs text-muted">Not NAV.</p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6">
+              <p className="text-xs uppercase tracking-wide text-muted">Positions</p>
+              <p className="mt-2 font-mono text-2xl text-white">{positions.length}</p>
+              <p className="mt-2 text-xs text-muted">Properties with balance.</p>
             </div>
           </div>
+
+          {isConnected && hasAnyShare && <PortfolioIllustrativeCharts totalUsdEst={totalUsdEst} />}
 
           {hasAnyShare && positions.length > 0 && (
             <div className="glass-card p-6">
@@ -175,7 +183,7 @@ export default function PortfolioPage() {
           )}
 
           <div className="space-y-3">
-            <h2 className="text-sm font-medium text-zinc-300">Property shares</h2>
+            <h2 className="text-lg font-semibold text-white">Property holdings</h2>
             {rows.length === 0 ? (
               <p className="text-sm text-zinc-500">No share tokens deployed yet.</p>
             ) : !hasAnyShare && !loadingBalances ? (

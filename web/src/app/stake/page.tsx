@@ -11,7 +11,8 @@ import {
   useWriteContract,
 } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
-import { TrustStrip } from "@/components/TrustStrip";
+import { TrustSection } from "@/components/TrustSection";
+import { Card } from "@/components/ui/Card";
 import { addresses, explorerBase, ogStakingAbi } from "@/lib/contracts";
 
 const SECONDS_PER_YEAR = 365n * 24n * 60n * 60n;
@@ -179,17 +180,44 @@ export default function StakePage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 pb-16">
+    <div className="mx-auto max-w-[1280px] space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Native OG</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Stake OG</h1>
-        <p className="text-sm leading-relaxed text-zinc-400">
+        <h1 className="text-3xl font-bold tracking-tight text-white">Stake OG</h1>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted">
           Lock OG to earn rewards. See estimated APY, total staked, and pending rewards — unstaking uses a cooldown
           before principal is released.
         </p>
       </header>
       <ComplianceStatus />
-      <TrustStrip />
+      <TrustSection />
+
+      <section aria-labelledby="stake-edu-heading" className="grid gap-4 md:grid-cols-3">
+        <h2 id="stake-edu-heading" className="sr-only">
+          How staking works
+        </h2>
+        <Card hover className="border-brand/10">
+          <h3 className="text-sm font-semibold text-white">Stake</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Deposit native OG into the staking contract. Your principal is tracked on-chain; rewards accrue from the
+            configured emission schedule.
+          </p>
+        </Card>
+        <Card hover className="border-brand/10">
+          <h3 className="text-sm font-semibold text-white">Earn</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Pending rewards are claimable anytime. Estimated APY is illustrative — it assumes the current reward rate
+            holds for a year and emissions may end after the reward period.
+          </p>
+        </Card>
+        <Card hover className="border-brand/10">
+          <h3 className="text-sm font-semibold text-white">Rewards</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Claim OG rewards without exiting your stake. Unstaking is a two-step process: request, then withdraw after
+            cooldown — not a guaranteed yield or audited product.
+          </p>
+        </Card>
+      </section>
 
       {!configured ? (
         <div className="glass-card border border-amber-500/20 p-5 text-sm text-zinc-300">
@@ -206,19 +234,27 @@ export default function StakePage() {
         </div>
       ) : (
         <>
-          <div className="glass-card-strong grid gap-4 p-5 sm:grid-cols-2">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-zinc-500">TVL (staked)</p>
-              <p className="mt-1 font-mono text-xl text-white">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="glass-card-strong rounded-2xl border border-white/[0.08] p-6">
+              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted">Pool TVL</p>
+              <p className="mt-2 font-mono text-2xl text-white">
                 {totalStaked !== undefined ? `${formatEther(totalStaked)} OG` : "—"}
               </p>
+              <p className="mt-2 text-[11px] text-muted">Total OG locked in the staking contract.</p>
             </div>
-            <div>
-              <p className="text-xs uppercase tracking-wide text-zinc-500">Est. APY (if current rate held 1y)</p>
-              <p className="mt-1 font-mono text-xl text-gradient-gold">
+            <div className="glass-card-strong rounded-2xl border border-brand/20 p-6">
+              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted">Est. APY</p>
+              <p className="mt-2 font-mono text-2xl text-gradient-gold">
                 {estApyPct != null ? `${estApyPct.toFixed(2)}%` : "—"}
               </p>
-              <p className="mt-1 text-[11px] text-zinc-500">Illustrative; emissions stop after period ends.</p>
+              <p className="mt-2 text-[11px] text-muted">Illustrative if current rate held 1y; emissions stop after period ends.</p>
+            </div>
+            <div className="glass-card-strong rounded-2xl border border-white/[0.08] p-6 sm:col-span-2 lg:col-span-1">
+              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted">Reward rate</p>
+              <p className="mt-2 font-mono text-lg text-white">
+                {rewardRate !== undefined && rewardRate > 0n ? `${formatEther(rewardRate)} OG/s` : "—"}
+              </p>
+              <p className="mt-2 text-[11px] text-muted">On-chain emission parameter; not a promise of future returns.</p>
             </div>
           </div>
 

@@ -7,7 +7,7 @@ import { formatEther, zeroAddress } from "viem";
 import { useAccount, useBalance, useReadContracts } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { InvestorJourney } from "@/components/InvestorJourney";
-import { TrustStrip } from "@/components/TrustStrip";
+import { TrustSection } from "@/components/TrustSection";
 import { addresses, erc20Abi, ogStakingAbi } from "@/lib/contracts";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
@@ -118,18 +118,54 @@ export default function InvestPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 pb-16">
+    <div className="mx-auto max-w-[1280px] space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">One place</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Investor hub</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          Your dashboard: balances, property exposure, and shortcuts to stake OG, provide liquidity, and trade — like
-          a neobank for on-chain real estate.
+          A compact view of exposure and participation: balances, illustrative property weights, and links to stake,
+          pool, and trade. Nothing here is a promise of returns — see{" "}
+          <Link href="/legal/risk" className="text-brand hover:underline">
+            risks &amp; disclaimer
+          </Link>
+          .
         </p>
       </header>
-      <InvestorJourney />
+
+      <section className="glass-card border border-gold-500/15 p-5">
+        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gold-500/90">
+          How value can compound (illustrative)
+        </p>
+        <ul className="mt-3 grid gap-3 text-sm text-zinc-400 sm:grid-cols-3">
+          <li>
+            <span className="font-medium text-zinc-200">Trading fees</span> — LPs in automated pools may earn swap fees
+            when liquidity and volume exist (not guaranteed).
+          </li>
+          <li>
+            <span className="font-medium text-zinc-200">Staking</span> — Rewards follow the staking contract&apos;s
+            rules; yields vary and can be zero.
+          </li>
+          <li>
+            <span className="font-medium text-zinc-200">Issuance &amp; property economics</span> — Longer-term outcomes
+            follow offering documents and off-chain performance — not a monthly ROI from this UI.
+          </li>
+        </ul>
+      </section>
+
+      <details className="group glass-card">
+        <summary className="cursor-pointer list-none px-5 py-4 text-sm font-medium text-white marker:content-none [&::-webkit-details-marker]:hidden">
+          <span className="inline-flex items-center gap-2">
+            Investor journey &amp; trust
+            <span className="text-[11px] font-normal text-zinc-500">(expand)</span>
+          </span>
+        </summary>
+        <div className="space-y-6 border-t border-white/[0.06] px-5 py-5">
+          <InvestorJourney />
+          <TrustSection />
+        </div>
+      </details>
+
       <ComplianceStatus />
-      <TrustStrip />
 
       <div className="flex flex-wrap gap-2 border-b border-white/[0.06] pb-3">
         {tabs.map((t) => (
@@ -156,44 +192,45 @@ export default function InvestPage() {
         <p className="text-zinc-500">Loading…</p>
       ) : (
         <>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="glass-card-strong p-4">
+              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Native OG</p>
+              <p className="mt-1 font-mono text-xl text-white">{nativeBal ? formatEther(nativeBal.value) : "—"}</p>
+            </div>
+            <div className="glass-card-strong p-4">
+              <p className="text-[10px] uppercase tracking-wide text-zinc-500">WETH</p>
+              <p className="mt-1 font-mono text-xl text-white">
+                {wethBalance !== undefined ? formatEther(wethBalance) : loadingBalances ? "…" : "—"}
+              </p>
+            </div>
+            <div className="glass-card-strong p-4">
+              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Staked OG</p>
+              <p className="mt-1 font-mono text-xl text-gradient-gold">
+                {stakedOg !== undefined ? formatEther(stakedOg) : staking === zeroAddress ? "—" : "0"}
+              </p>
+              {stakeEarned !== undefined && stakeEarned > 0n && (
+                <p className="mt-1 text-[10px] text-zinc-500">Pending ~{formatEther(stakeEarned)} OG</p>
+              )}
+            </div>
+            <div className="glass-card-strong p-4">
+              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Illustrative USD (shares)</p>
+              <p className="mt-1 font-mono text-xl text-white">
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                }).format(totalUsdEst)}
+              </p>
+              <p className="mt-1 text-[10px] text-zinc-500">Not NAV — demo weighting only.</p>
+            </div>
+          </div>
+
           {tab === "overview" && (
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="glass-card-strong p-5">
-                  <p className="text-xs uppercase tracking-wide text-zinc-500">Native OG</p>
-                  <p className="mt-2 font-mono text-2xl text-white">
-                    {nativeBal ? formatEther(nativeBal.value) : "—"}
-                  </p>
-                </div>
-                <div className="glass-card-strong p-5">
-                  <p className="text-xs uppercase tracking-wide text-zinc-500">WETH (wrapped)</p>
-                  <p className="mt-2 font-mono text-2xl text-white">
-                    {wethBalance !== undefined ? formatEther(wethBalance) : loadingBalances ? "…" : "—"}
-                  </p>
-                </div>
-                <div className="glass-card-strong p-5">
-                  <p className="text-xs uppercase tracking-wide text-zinc-500">Staked OG</p>
-                  <p className="mt-2 font-mono text-2xl text-gradient-gold">
-                    {stakedOg !== undefined ? formatEther(stakedOg) : staking === zeroAddress ? "—" : "0"}
-                  </p>
-                  {stakeEarned !== undefined && stakeEarned > 0n && (
-                    <p className="mt-1 text-[11px] text-zinc-500">
-                      Pending rewards ~{formatEther(stakeEarned)} OG
-                    </p>
-                  )}
-                </div>
-                <div className="glass-card-strong p-5">
-                  <p className="text-xs uppercase tracking-wide text-zinc-500">Est. demo USD (shares)</p>
-                  <p className="mt-2 font-mono text-2xl text-white">
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    }).format(totalUsdEst)}
-                  </p>
-                  <p className="mt-1 text-[11px] text-zinc-500">Illustrative — not NAV.</p>
-                </div>
-              </div>
+              <p className="text-sm text-zinc-400">
+                Use the tabs for per-property exposure and liquidity routes. Numbers are chain reads plus illustrative
+                USD where configured — not a suitability assessment.
+              </p>
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/stake"

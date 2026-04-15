@@ -44,14 +44,23 @@ Open [http://localhost:3000](http://localhost:3000). Connect via **injected** wa
 | `NEXT_PUBLIC_ADMIN_PREVIEW` | Set to `1` to show `/admin` layout without on-chain roles (testnet only) |
 | `NEXT_PUBLIC_SITE_URL` | Public site origin (NFT metadata `external_url`) |
 
-Server-only: `OPENAI_API_KEY` in `web/.env.local` for the Guide AI (`/guide`).
+Server-only — Guide AI (`/guide`): `OPENAI_API_KEY`, optional `OPENAI_MODEL`. Alternatively `INFERENCE_BACKEND=og_compute` with `OG_COMPUTE_INFERENCE_URL` (and optional `OG_COMPUTE_API_KEY`) for [0G Compute](https://docs.0g.ai/developer-hub/building-on-0g/compute-network/overview)–compatible endpoints.
+
+**RAG + safety:** `npm run rag:build` regenerates `src/lib/rag/corpus.json` from repo markdown (runs automatically before `npm run build`). Optional `RAG_CORPUS_URL` merges remote JSON chunks (e.g. hosted on [0G Storage](https://docs.0g.ai/developer-hub/building-on-0g/storage/sdk)). `CHAT_AUDIT_LOG=1` logs structured JSON; `CHAT_AUDIT_LOG_PATH` appends to a file (Node only). `CHAT_RAG_TOP_K`, `CHAT_RATE_LIMIT_PER_MIN` tune retrieval and rate limits.
+
+**Risk:** `POST /api/risk/score` returns heuristic scores for admin tools. `ADMIN_RISK_WEBHOOK_URL` receives alerts when scores exceed `ADMIN_RISK_WEBHOOK_MIN_SCORE` (default 75).
+
+**Handoff:** `SUPPORT_HANDOFF_URL` (and optional `SUPPORT_HANDOFF_SECRET`) for the Contact button and keyword-based handoff from chat.
+
+**Community** (`/community`, `/profile`, `/u/[slug]`): requires `DATABASE_URL`, applied SQL in [`sql/`](../web/sql/README.md), and **`SESSION_SECRET`** (long random string) so SIWE sign-in can set an HttpOnly session cookie. Without these, browse listings and share links still work; profile/tasks/referrals stay disabled.
 
 Backend (optional): `DATABASE_URL`, `RELAYER_PRIVATE_KEY`, `COMPLIANCE_REGISTRY_ADDRESS`, `KYC_WEBHOOK_SECRET` — see API routes under `src/app/api/`.
 
 ## Scripts
 
 - `npm run dev` — development server  
-- `npm run build` — production build  
+- `npm run rag:build` — rebuild RAG corpus from `../docs`, `../README.md`, etc.  
+- `npm run build` — `rag:build` then production build  
 - `npm run lint` — ESLint  
 
 ## Pages
@@ -61,6 +70,9 @@ Backend (optional): `DATABASE_URL`, `RELAYER_PRIVATE_KEY`, `COMPLIANCE_REGISTRY_
 | `/` | Home + funding meter (demo stats) + trust strip |
 | `/onboarding` | Wallet → KYC → deposit → invest |
 | `/guide` | Checklist + optional AI assistant |
+| `/community` | Platform updates, tasks, referral link (needs DB + `SESSION_SECRET`) |
+| `/profile` | Edit community profile (privacy, socials) |
+| `/u/[slug]` | Public profile when visibility is public |
 | `/properties` | On-chain listings + demo cards |
 | `/properties/[id]` | Property detail + buy CTA |
 | `/trade` | Buy shares (OG → share); `?property=` supported |

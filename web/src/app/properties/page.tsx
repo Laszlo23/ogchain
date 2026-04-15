@@ -4,7 +4,8 @@ import Link from "next/link";
 import { zeroAddress } from "viem";
 import { FundingMeter } from "@/components/FundingMeter";
 import { PropertyCard } from "@/components/PropertyCard";
-import { TrustStrip } from "@/components/TrustStrip";
+import { PropertyCardSkeleton } from "@/components/PropertyCardSkeleton";
+import { TrustSection } from "@/components/TrustSection";
 import { addresses } from "@/lib/contracts";
 import { getGlobalFundingMeter } from "@/lib/funding-stats";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -19,7 +20,7 @@ function PropertiesPageContent() {
   const globalFunding = getGlobalFundingMeter();
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="mx-auto max-w-[1280px] space-y-8">
       <header className="space-y-2">
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Listings</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Properties</h1>
@@ -27,7 +28,7 @@ function PropertiesPageContent() {
           Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; the grid below
           layers in a <span className="text-zinc-300">demo narrative</span> (imagery + standardized metrics: rent, m², units, yield) for up to
           seven seeded properties when tokens exist on-chain — not investment advice.{" "}
-          <Link href="/guide#how-it-works" className="text-gold-400 hover:underline">
+          <Link href="/how-it-works" className="text-brand hover:underline">
             How tokenization and buying shares work →
           </Link>
         </p>
@@ -42,7 +43,7 @@ function PropertiesPageContent() {
       {unset ? null : (
         <div className="grid gap-6 lg:grid-cols-2">
           <FundingMeter stats={globalFunding} />
-          <TrustStrip />
+          <TrustSection />
         </div>
       )}
 
@@ -54,7 +55,11 @@ function PropertiesPageContent() {
           <code className="text-zinc-300">scripts/sync_web_env.py</code>).
         </p>
       ) : loading && enriched.length === 0 ? (
-        <p className="animate-pulse text-zinc-500">Loading on-chain properties…</p>
+        <section aria-label="Loading listings" className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PropertyCardSkeleton key={i} />
+          ))}
+        </section>
       ) : enriched.length === 0 ? (
         <p className="text-zinc-400">
           No properties yet. Run <code className="text-emerald-400">SeedSevenProperties</code> (fresh registry) or{" "}
@@ -84,7 +89,7 @@ export default function PropertiesPage() {
   const hydrated = useHydrated();
   if (!hydrated) {
     return (
-      <div className="mx-auto max-w-6xl space-y-8">
+      <div className="mx-auto max-w-[1280px] space-y-8">
         <header className="space-y-2">
           <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Listings</p>
           <h1 className="text-3xl font-semibold tracking-tight text-white">Properties</h1>
@@ -92,12 +97,16 @@ export default function PropertiesPage() {
             Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; the grid below
             layers in a <span className="text-zinc-300">demo narrative</span> (imagery + standardized metrics: rent, m², units, yield) for up to
             seven seeded properties when tokens exist on-chain — not investment advice.{" "}
-            <Link href="/guide#how-it-works" className="text-gold-400 hover:underline">
+            <Link href="/how-it-works" className="text-brand hover:underline">
               How tokenization and buying shares work →
             </Link>
           </p>
         </header>
-        <p className="animate-pulse text-zinc-500">Loading on-chain properties…</p>
+        <section aria-label="Loading listings" className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PropertyCardSkeleton key={i} />
+          ))}
+        </section>
       </div>
     );
   }

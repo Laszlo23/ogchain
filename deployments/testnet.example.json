@@ -4,36 +4,21 @@
   "rpcUrl": "https://evmrpc-testnet.0g.ai",
   "explorer": "https://chainscan-galileo.0g.ai",
   "faucet": "https://faucet.0g.ai",
+  "siteUrl": "",
   "deployedAt": "",
   "deployer": "",
   "contracts": {
-    "PropertyRegistry": "0xC7749BCFDC8d06FC246be556f4EAD75Ac7E1320c",
-    "PurchaseEscrow": "0x81cCda83704985FcB88e1174Da4367eEa40871C4",
-    "PropertyShareFactory": "0x81cCda83704985FcB88e1174Da4367eEa40871C4",
+    "PropertyRegistry": "0x0000000000000000000000000000000000000000",
+    "PurchaseEscrow": "0x0000000000000000000000000000000000000000",
+    "PropertyShareFactory": "0x0000000000000000000000000000000000000000",
     "ComplianceRegistry": "0x0000000000000000000000000000000000000000",
-    "WETH9": "0x54e1cFE67f727c32A90Ea6fe7b5F7614FD4c09C0",
-    "OgFactory": "0xEd2aF0e6417CaCC15DF755E80Afb94Ad35Aca1B2",
-    "OgRouter": "0xbe345d1c11E3B55D4091F3031322be3eF4e62273",
-    "MockPriceOracle": "0x1ADDfCBC700bC432B855D5fd1b50F31a2fa9902F",
-    "BinaryPredictionMarket": "0x4369D653Dec1FfDa40FeA02Ba6FC3C4fd912c9a8",
+    "WETH9": "0x0000000000000000000000000000000000000000",
+    "OgFactory": "0x0000000000000000000000000000000000000000",
+    "OgRouter": "0x0000000000000000000000000000000000000000",
+    "MockPriceOracle": "0x0000000000000000000000000000000000000000",
+    "BinaryPredictionMarket": "0x0000000000000000000000000000000000000000",
     "PropertyShareProof": "0x0000000000000000000000000000000000000000",
     "OgStaking": "0x0000000000000000000000000000000000000000"
   },
-  "demoProperties": [
-    {
-      "parcelId": "DEMO-US-CA-001",
-      "propertyId": null,
-      "shareToken": null
-    },
-    {
-      "parcelId": "DEMO-US-CA-002",
-      "propertyId": null,
-      "shareToken": null
-    },
-    {
-      "parcelId": "DEMO-US-CA-003",
-      "propertyId": null,
-      "shareToken": null
-    }
-  ]
+  "demoProperties": []
 }

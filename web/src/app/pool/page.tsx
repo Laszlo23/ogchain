@@ -218,7 +218,7 @@ export default function PoolPage() {
   const shareLabel = selected?.symbol ?? "Share";
 
   return (
-    <div className="mx-auto max-w-xl space-y-8 pb-12">
+    <div className="mx-auto max-w-[1280px] space-y-8 pb-12">
       <header className="space-y-2">
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Liquidity</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Liquidity pool</h1>

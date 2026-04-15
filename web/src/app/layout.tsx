@@ -34,13 +34,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-[#030303] text-zinc-100 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-surface text-white antialiased`}
       >
         <Providers>
           <Nav />
           <ChainSwitchBanner />
           {/* No animate-page-in on <main>: client-side navigations can restart the animation and re-apply keyframe opacity:0, making styles/content appear to vanish until the animation finishes. */}
-          <main className="relative mx-auto min-h-[60vh] max-w-6xl px-4 py-8">{children}</main>
+          <main className="relative mx-auto min-h-[60vh] w-full max-w-[1280px] px-4 py-8 sm:px-8">
+            {children}
+          </main>
           <Footer />
         </Providers>
       </body>

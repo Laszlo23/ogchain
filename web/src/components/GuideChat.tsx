@@ -3,11 +3,14 @@
 import { useState } from "react";
 
 type Msg = { role: "user" | "assistant"; content: string };
+type ChatMode = "education" | "sales" | "support";
 
 export function GuideChat() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<ChatMode>("education");
+  const [handoffBusy, setHandoffBusy] = useState(false);
 
   async function send() {
     const text = input.trim();
@@ -21,6 +24,7 @@ export function GuideChat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          mode,
           messages: next.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
@@ -41,12 +45,62 @@ export function GuideChat() {
     }
   }
 
+  async function requestHandoff() {
+    if (handoffBusy) return;
+    setHandoffBusy(true);
+    try {
+      await fetch("/api/support/handoff", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode, hint: "User requested human handoff from /guide" }),
+      });
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            "Thanks — if webhooks are configured, our team was notified. You can also continue with Support mode for step-by-step help.",
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Handoff could not reach the server. Try again later or use Support mode.",
+        },
+      ]);
+    } finally {
+      setHandoffBusy(false);
+    }
+  }
+
   return (
     <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
       <h2 className="text-sm font-medium text-emerald-400">AI assistant (demo)</h2>
       <p className="mt-1 text-xs text-zinc-500">
-        Answers use this app&apos;s docs and your configured contract addresses. Not legal advice.
+        Answers use RAG over project docs plus your configured contract addresses. Not legal advice.
       </p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {(
+          [
+            ["education", "Learn"],
+            ["sales", "Product"],
+            ["support", "Support"],
+          ] as const
+        ).map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setMode(id)}
+            className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${
+              mode === id ? "bg-emerald-800 text-white" : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
       <div className="mt-3 max-h-64 space-y-2 overflow-y-auto text-sm">
         {messages.length === 0 && (
           <p className="text-zinc-500">Ask how registration differs from share tokens, or what to do first.</p>
@@ -76,6 +130,16 @@ export function GuideChat() {
           className="rounded bg-emerald-700 px-3 py-1.5 text-sm text-white hover:bg-emerald-600 disabled:opacity-50"
         >
           {loading ? "…" : "Send"}
+        </button>
+      </div>
+      <div className="mt-2">
+        <button
+          type="button"
+          disabled={handoffBusy}
+          onClick={() => void requestHandoff()}
+          className="text-[11px] text-zinc-500 underline hover:text-zinc-300 disabled:opacity-50"
+        >
+          {handoffBusy ? "Sending…" : "Contact / handoff (human)"}
         </button>
       </div>
     </div>

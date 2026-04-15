@@ -12,6 +12,7 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ComplianceStatus, useCompliance } from "@/components/ComplianceStatus";
+import { TrustSection } from "@/components/TrustSection";
 import {
   addresses,
   erc20Abi,
@@ -206,20 +207,26 @@ export function TradePageInner() {
   const economicsLine = selected?.demo ? formatIllustrativeEconomics(selected.demo) : null;
   const displayTitle = selected?.demo?.headline ?? selected?.name ?? "Choose a property";
   return (
-    <div className="mx-auto max-w-xl space-y-8 pb-16">
-      <header className="space-y-2 text-center">
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Buy shares</h1>
-        <p className="text-sm leading-relaxed text-zinc-400">
-          Pick a property, enter how much OG you want to spend, and confirm. No contract addresses needed — like
-          sending a payment, but you receive tokenized shares.
+    <div className="mx-auto max-w-[1280px] space-y-8 pb-16">
+      <header className="space-y-2 text-center sm:text-left">
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Marketplace</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Trade</h1>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted">
+          <strong className="text-white">Secondary:</strong> spend OG through the AMM pool for property share tokens.
+          Pool price follows reserves.
         </p>
       </header>
 
       <ComplianceStatus />
+      <TrustSection />
 
       <p className="text-center text-[11px] leading-relaxed text-zinc-500">
-        Demo economics assume about <span className="text-zinc-400">$1,000</span> minimum notional per whole token;
-        the AMM does not enforce that without price oracles.
+        <strong className="text-zinc-400">Primary</strong> (issuer) sales can require whole shares only (min. one full
+        share) — see{" "}
+        <a href="/how-it-works" className="text-brand hover:underline">
+          How it works
+        </a>
+        . Demo seeding assumes ~$<span className="text-zinc-400">1,000</span> notional per 1.0 whole share.
       </p>
 
       {unset ? (
@@ -227,59 +234,146 @@ export function TradePageInner() {
           Configure registry and factory in <code className="text-gold-400">.env.local</code> to load listings.
         </p>
       ) : loading && rows.length === 0 ? (
-        <p className="text-center text-zinc-500">Loading properties…</p>
+        <div className="grid gap-8 lg:grid-cols-5">
+          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] lg:col-span-3">
+            <div className="min-w-[720px] space-y-0 p-4">
+              <div className="mb-4 h-4 w-48 animate-pulse rounded bg-zinc-800" />
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex gap-4 border-b border-white/[0.04] py-3">
+                  <div className="h-10 w-40 animate-pulse rounded-md bg-zinc-800/80" />
+                  <div className="h-4 flex-1 animate-pulse rounded bg-zinc-800/60" />
+                  <div className="h-8 w-16 animate-pulse rounded-full bg-zinc-800/80" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-4 lg:col-span-2">
+            <div className="h-48 animate-pulse rounded-2xl border border-white/[0.06] bg-zinc-900/80" />
+            <div className="h-24 animate-pulse rounded-xl bg-zinc-900/60" />
+          </div>
+        </div>
       ) : rows.length === 0 ? (
         <p className="text-center text-zinc-400">No share tokens yet. Seed properties first.</p>
       ) : (
         <>
-          <label className="block text-left text-xs font-medium uppercase tracking-wide text-zinc-500">
-            Search
-            <input
-              type="search"
-              placeholder="City, name, or symbol…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-950/80 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-gold-600/50 focus:outline-none"
-            />
-          </label>
-
-          <div className="max-h-72 space-y-2 overflow-y-auto pr-1">
-            {filteredRows.map((r) => {
-              const active = selected?.id === r.id;
-              return (
-                <button
-                  key={r.id.toString()}
-                  type="button"
-                  onClick={() => setSelectedId(r.id.toString())}
-                  className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition ${
-                    active
-                      ? "border-gold-500/50 bg-gold-500/10 ring-1 ring-gold-500/30"
-                      : "border-white/[0.06] bg-white/[0.02] hover:border-white/15"
-                  }`}
-                >
-                  {r.demo?.imageSrc ? (
-                    <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-zinc-800">
-                      <Image
-                        src={r.demo.imageSrc}
-                        alt={r.demo.imageAlt}
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-14 w-20 shrink-0 rounded-lg bg-zinc-800" />
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-zinc-100">{r.demo?.headline ?? r.name}</p>
-                    <p className="text-xs text-zinc-500">{r.demo?.location ?? r.symbol}</p>
-                  </div>
-                  <span className="shrink-0 text-xs text-zinc-500">#{r.id.toString()}</span>
-                </button>
-              );
-            })}
+          <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
+            <table className="w-full min-w-[720px] text-left text-sm">
+              <thead>
+                <tr className="border-b border-white/[0.08] text-muted">
+                  <th className="px-4 py-3 font-medium">Property token</th>
+                  <th className="px-4 py-3 font-medium">Price</th>
+                  <th className="px-4 py-3 font-medium">24h</th>
+                  <th className="px-4 py-3 font-medium">Volume</th>
+                  <th className="px-4 py-3 font-medium">Liquidity</th>
+                  <th className="px-4 py-3 font-medium text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRows.map((r) => {
+                  const active = selected?.id === r.id;
+                  return (
+                    <tr
+                      key={r.id.toString()}
+                      className={`border-b border-white/[0.04] transition hover:bg-white/[0.03] ${
+                        active ? "bg-brand/10" : ""
+                      }`}
+                    >
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          {r.demo?.imageSrc ? (
+                            <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md bg-zinc-800">
+                              <Image
+                                src={r.demo.imageSrc}
+                                alt={r.demo.imageAlt ?? r.name}
+                                fill
+                                className="object-cover"
+                                sizes="56px"
+                              />
+                            </div>
+                          ) : (
+                            <div className="h-10 w-14 shrink-0 rounded-md bg-zinc-800" />
+                          )}
+                          <div>
+                            <p className="font-medium text-white">{r.demo?.headline ?? r.name}</p>
+                            <p className="text-xs text-muted">{r.symbol}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-muted">AMM</td>
+                      <td className="px-4 py-3 text-muted">—</td>
+                      <td className="px-4 py-3 text-muted">—</td>
+                      <td className="px-4 py-3 text-muted">Pool</td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedId(r.id.toString())}
+                          className="rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-[#0A0A0A] hover:bg-brand-light"
+                        >
+                          Buy
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
+          <p className="text-[10px] text-muted">
+            24h, volume, and liquidity are not indexed here — connect a subgraph for live market stats.
+          </p>
 
+          <div className="grid gap-8 lg:grid-cols-5">
+            <div className="space-y-6 lg:col-span-3">
+              <label className="block text-left text-xs font-medium uppercase tracking-wide text-muted">
+                Search
+                <input
+                  type="search"
+                  placeholder="City, name, or symbol…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="mt-1.5 w-full rounded-xl border border-white/10 bg-zinc-950/80 px-4 py-3 text-sm text-white placeholder:text-zinc-600 focus:border-brand/50 focus:outline-none"
+                />
+              </label>
+
+              <div className="max-h-72 space-y-2 overflow-y-auto pr-1 md:hidden">
+                {filteredRows.map((r) => {
+                  const active = selected?.id === r.id;
+                  return (
+                    <button
+                      key={r.id.toString()}
+                      type="button"
+                      onClick={() => setSelectedId(r.id.toString())}
+                      className={`flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition ${
+                        active
+                          ? "border-brand/50 bg-brand/10 ring-1 ring-brand/30"
+                          : "border-white/[0.06] bg-white/[0.02] hover:border-white/15"
+                      }`}
+                    >
+                      {r.demo?.imageSrc ? (
+                        <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-zinc-800">
+                          <Image
+                            src={r.demo.imageSrc}
+                            alt={r.demo.imageAlt}
+                            fill
+                            className="object-cover"
+                            sizes="80px"
+                          />
+                        </div>
+                      ) : (
+                        <div className="h-14 w-20 shrink-0 rounded-lg bg-zinc-800" />
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-white">{r.demo?.headline ?? r.name}</p>
+                        <p className="text-xs text-muted">{r.demo?.location ?? r.symbol}</p>
+                      </div>
+                      <span className="shrink-0 text-xs text-muted">#{r.id.toString()}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-6 lg:col-span-2 lg:sticky lg:top-28 lg:self-start">
           <div className="glass-card-strong overflow-hidden shadow-2xl shadow-black/40">
             <div className="space-y-1 border-b border-white/[0.06] px-6 py-5">
               <p className="text-xs font-medium uppercase tracking-wide text-gold-500/90">You pay</p>
@@ -400,16 +494,18 @@ export function TradePageInner() {
             </p>
           )}
           {swapError && <p className="text-center text-xs text-red-400">{swapError.message}</p>}
+            </div>
+          </div>
 
           <button
             type="button"
             onClick={() => setAdvancedOpen(!advancedOpen)}
-            className="w-full text-center text-xs text-zinc-500 underline-offset-2 hover:text-zinc-400"
+            className="w-full text-center text-xs text-muted underline-offset-2 hover:text-white"
           >
             {advancedOpen ? "Hide" : "Show"} technical details
           </button>
           {advancedOpen && selected && (
-            <div className="rounded-xl border border-white/[0.06] bg-zinc-950/80 p-4 font-mono text-[10px] leading-relaxed text-zinc-500">
+            <div className="rounded-xl border border-white/[0.06] bg-zinc-950/80 p-4 font-mono text-[10px] leading-relaxed text-muted">
               <p>Share token: {tokenOut}</p>
               <p>WETH: {weth}</p>
               <p>Router: {router}</p>

@@ -3,14 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --background: #030303;
-  --foreground: #fafafa;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --text-muted: #9ca3af;
+  --accent: #c9a24a;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.text-muted {
+  color: var(--text-muted);
 }
 
 @layer components {
@@ -91,12 +97,12 @@ body {
   }
 
   .hero-grid {
-    background-color: #030303;
-    background-image: linear-gradient(to bottom, rgba(3, 3, 3, 0.2), rgba(3, 3, 3, 0.95));
+    background-color: #0a0a0a;
+    background-image: linear-gradient(to bottom, rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.96));
   }
 
   .skyline {
-    background: linear-gradient(180deg, transparent, rgba(212, 168, 83, 0.06), rgba(3, 3, 3, 0.9));
+    background: linear-gradient(180deg, transparent, rgba(201, 162, 74, 0.07), rgba(10, 10, 10, 0.92));
     opacity: 0.85;
   }
 }

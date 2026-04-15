@@ -60,7 +60,7 @@ export function WalletConnectControls() {
             const wc = connectors.find((c) => c.id === "walletConnect");
             if (wc) connect({ connector: wc });
           }}
-          className="rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-3 py-1.5 text-xs font-semibold text-black shadow-lg shadow-gold-900/20 hover:from-gold-500 hover:to-gold-400 disabled:opacity-50"
+          className="rounded-full bg-brand px-3 py-1.5 text-xs font-semibold text-[#0A0A0A] shadow-[0_0_16px_-2px_rgba(201,162,74,0.5)] hover:bg-brand-light disabled:opacity-50"
         >
           {isPending ? "…" : "WalletConnect"}
         </button>

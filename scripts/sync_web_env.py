@@ -15,6 +15,7 @@ def main() -> None:
     comp = c.get("ComplianceRegistry", "0x0000000000000000000000000000000000000000")
     proof = c.get("PropertyShareProof", "0x0000000000000000000000000000000000000000")
     staking = c.get("OgStaking", "0x0000000000000000000000000000000000000000")
+    site_url = data.get("siteUrl") or data.get("site_url") or ""
     lines = [
         f"NEXT_PUBLIC_OG_RPC={rpc}",
         f"NEXT_PUBLIC_REGISTRY={c['PropertyRegistry']}",
@@ -28,6 +29,8 @@ def main() -> None:
         f"NEXT_PUBLIC_STAKING={staking}",
         f"NEXT_PUBLIC_EXPLORER={data.get('explorer', 'https://chainscan-galileo.0g.ai')}",
     ]
+    if site_url:
+        lines.append(f"NEXT_PUBLIC_SITE_URL={site_url.rstrip('/')}")
     print("\n".join(lines))
 
 if __name__ == "__main__":

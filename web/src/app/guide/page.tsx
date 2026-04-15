@@ -36,14 +36,20 @@ export default function GuidePage() {
       <div>
         <h1 className="text-2xl font-semibold">Demo guide</h1>
         <p className="mt-2 max-w-2xl text-sm text-zinc-400">
-          This walkthrough matches up to seven seeded demo properties (e.g. Gesellschaft Berggasse / vier Häuser, 1130
-          Wien, Keutschach, Reifnitz, LandMark Weinviertel, 1210 and 1010 Wien) when deployed on-chain. Tokens are
-          testnet demo assets, not legal title; read{" "}
-          <code className="text-zinc-400">docs/compliance.md</code> in the repository.
+          <strong className="text-zinc-300">End users:</strong> read{" "}
+          <Link href="/how-it-works" className="text-brand hover:underline">
+            How it works
+          </Link>{" "}
+          for a plain-language investor flow. This page is for <strong className="text-zinc-300">operators</strong>: deploy
+          contracts, configure env, and verify transactions.
+        </p>
+        <p className="mt-2 max-w-2xl text-sm text-zinc-400">
+          The demo supports up to seven seeded properties when deployed on-chain. Tokens are testnet assets, not legal
+          title; read <code className="text-zinc-400">docs/compliance.md</code> in the repository.
         </p>
       </div>
 
-      <section id="how-it-works" className="scroll-mt-8 space-y-4 rounded-xl border border-zinc-800 bg-zinc-900/30 p-6">
+      <section id="tokenization" className="scroll-mt-8 space-y-4 rounded-xl border border-zinc-800 bg-zinc-900/30 p-6">
         <h2 className="text-lg font-semibold text-zinc-100">How tokenization, buying shares, and your platform vision connect</h2>
 
         <div className="space-y-4 text-sm leading-relaxed text-zinc-400">
