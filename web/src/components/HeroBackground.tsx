@@ -1,11 +1,87 @@
 "use client";
 
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { HeroAmbientDecor } from "@/components/HeroAmbientDecor";
+
+/** Default ambient clip under `public/` (URL-encoded spaces/parens). Override with `NEXT_PUBLIC_HERO_VIDEO`. */
+const DEFAULT_HERO_VIDEO =
+  "/grok-video-920c4f79-1b3a-435f-a428-e34fa644b2a0%20(1).mp4";
+
 /**
- * Eco real-estate backdrop: forest gradients + subtle mesh + skyline (CSS only).
+ * Eco real-estate backdrop: optional ambient video, property still, gradients + skyline.
+ * Set `NEXT_PUBLIC_HERO_VIDEO` to a path under `public/` (e.g. `/hero-ambient.webm`) to replace the default.
  */
 export function HeroBackground() {
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const envVideo =
+    typeof process.env.NEXT_PUBLIC_HERO_VIDEO === "string"
+      ? process.env.NEXT_PUBLIC_HERO_VIDEO.trim()
+      : "";
+  const videoSrc = envVideo || DEFAULT_HERO_VIDEO;
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const handler = () => setReduceMotion(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const showVideo = !reduceMotion;
+
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      {/* Base wash — fills letterbox around 16:9 video */}
+      {showVideo ? (
+        <div className="absolute inset-0 bg-gradient-to-b from-forest-deep/90 via-surface to-surface" />
+      ) : null}
+
+      {/* Property still (reduced motion) or 16:9 hero video (centered, more visible) */}
+      <div className={showVideo ? "absolute inset-0" : "absolute inset-0 opacity-[0.22]"}>
+        {showVideo ? (
+          <div className="absolute inset-x-0 top-0 flex justify-center px-3 pt-5 sm:px-5 sm:pt-8 md:pt-10">
+            <div className="relative aspect-video w-full max-w-[min(92vw,56rem)] overflow-hidden rounded-2xl border border-white/10 bg-forest-deep/30 shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)] saturate-[0.96]">
+              <video
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                poster="/Foto-©-AnnABlaU-_DSC0788.jpg"
+                aria-hidden
+              >
+                <source src={videoSrc} type="video/mp4" />
+              </video>
+              {/* Light edge soften — keeps the frame readable without hiding the clip */}
+              <div
+                className="absolute inset-0 bg-[radial-gradient(ellipse_95%_85%_at_50%_48%,transparent_35%,rgba(8,22,17,0.28)_100%)]"
+                aria-hidden
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="relative h-full min-h-[480px] w-full sm:min-h-[560px]">
+            <Image
+              src="/Foto-©-AnnABlaU-_DSC0788.jpg"
+              alt=""
+              fill
+              className="object-cover object-center"
+              sizes="100vw"
+              priority
+            />
+          </div>
+        )}
+      </div>
+      <div
+        className={
+          showVideo
+            ? "absolute inset-0 bg-gradient-to-b from-surface/45 via-surface/62 to-surface/92"
+            : "absolute inset-0 bg-gradient-to-b from-surface/80 via-surface/70 to-surface"
+        }
+      />
+      <HeroAmbientDecor />
       <div className="hero-grid absolute inset-0 opacity-70" />
       <div
         className="absolute inset-0 opacity-[0.35] motion-reduce:animate-none animate-mesh-pan"
@@ -21,7 +97,6 @@ export function HeroBackground() {
         style={{ animationDuration: "6s" }}
       />
       <div className="absolute -right-1/4 top-24 h-[320px] w-[55%] rounded-full bg-eco/10 blur-[90px] animate-float motion-reduce:animate-none" />
-      {/* Abstract building silhouettes — eco-tinted */}
       <div className="skyline absolute bottom-0 left-0 right-0 flex h-32 items-end justify-center gap-1 px-8 opacity-35 sm:h-40">
         {[28, 42, 36, 52, 38, 45, 32, 48, 34, 40].map((h, i) => (
           <div

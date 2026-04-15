@@ -17,9 +17,17 @@ type Props = {
   label?: string;
   /** Display currency for funded/goal amounts (stats are still nominal numbers) */
   currency?: "USD" | "EUR";
+  /** Illustrative properties onboarded — from platform stats on homepage */
+  propertiesOnboarded?: number;
 };
 
-export function FundingMeter({ stats, variant = "hero", label = "Community funding", currency = "USD" }: Props) {
+export function FundingMeter({
+  stats,
+  variant = "hero",
+  label = "Community funding",
+  currency = "USD",
+  propertiesOnboarded,
+}: Props) {
   const fmt = (n: number) => fmtMoney(n, currency);
   const pct = Math.round(stats.progress * 1000) / 10;
 
@@ -58,18 +66,24 @@ export function FundingMeter({ stats, variant = "hero", label = "Community fundi
           style={{ width: `${Math.min(100, pct)}%` }}
         />
       </div>
-      <div className="mt-4 flex flex-wrap gap-6 text-sm">
+      <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div>
           <p className="text-xs text-muted">Investors</p>
-          <p className="font-semibold text-canvas">{stats.investors.toLocaleString()}</p>
+          <p className="font-semibold tabular-nums text-canvas">{stats.investors.toLocaleString()}</p>
         </div>
         <div>
           <p className="text-xs text-muted">Countries</p>
-          <p className="font-semibold text-canvas">{stats.countries}</p>
+          <p className="font-semibold tabular-nums text-canvas">{stats.countries}</p>
         </div>
+        {propertiesOnboarded != null ? (
+          <div>
+            <p className="text-xs text-muted">Properties</p>
+            <p className="font-semibold tabular-nums text-canvas">{propertiesOnboarded}</p>
+          </div>
+        ) : null}
         <div>
           <p className="text-xs text-muted">Funded</p>
-          <p className="font-semibold text-action">{pct}%</p>
+          <p className="font-semibold tabular-nums text-action">{pct}%</p>
         </div>
       </div>
       <p className="mt-4 text-[11px] leading-relaxed text-muted">

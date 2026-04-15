@@ -248,4 +248,34 @@ body {
   .btn-primary-shine::after {
     animation: none !important;
   }
+
+  .hero-decor-grid,
+  .hero-energy-path {
+    animation: none !important;
+  }
+}
+
+/* Hero ambient decor (Building Culture) */
+.hero-decor-grid {
+  animation: hero-decor-drift 50s linear infinite;
+}
+
+@keyframes hero-decor-drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(56px, 56px);
+  }
+}
+
+.hero-energy-path {
+  stroke-dasharray: 14 28;
+  animation: hero-energy-dash 26s linear infinite;
+}
+
+@keyframes hero-energy-dash {
+  to {
+    stroke-dashoffset: -420;
+  }
 }
