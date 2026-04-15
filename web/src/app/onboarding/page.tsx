@@ -49,11 +49,11 @@ export default function OnboardingPage() {
       <div className="glass-card-strong px-5 py-4">
         <div className="mb-2 flex justify-between text-xs text-zinc-500">
           <span>Progress</span>
-          <span className="font-mono text-gold-400">{done} / 4</span>
+          <span className="font-mono text-eco-light">{done} / 4</span>
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-zinc-800">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-gold-600 to-gold-400 transition-all duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-eco to-action transition-all duration-500"
             style={{ width: `${(done / 4) * 100}%` }}
           />
         </div>
@@ -65,7 +65,7 @@ export default function OnboardingPage() {
       <div id="wallet" className="space-y-4">
         {steps.map((s) => (
           <div key={s.n} className="glass-card flex gap-4 p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold-500/30 bg-gold-500/10 text-sm font-semibold text-gold-400">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-eco/40 bg-eco/15 text-sm font-semibold text-eco-light">
               {s.n}
             </div>
             <div className="min-w-0 flex-1">
@@ -73,7 +73,7 @@ export default function OnboardingPage() {
               <p className="mt-1 text-sm leading-relaxed text-zinc-400">{s.body}</p>
               <Link
                 href={s.cta.href}
-                className="mt-3 inline-block text-sm font-medium text-gold-400/90 hover:underline"
+                className="mt-3 inline-block text-sm font-medium text-action hover:underline"
               >
                 {s.cta.label} →
               </Link>
@@ -88,12 +88,12 @@ export default function OnboardingPage() {
             type="button"
             disabled={isPending}
             onClick={() => connect({ connector: connectors[0] })}
-            className="rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-8 py-3 text-sm font-semibold text-black shadow-lg disabled:opacity-50"
+            className="rounded-full bg-gradient-to-r from-action to-action-light px-8 py-3 text-sm font-semibold text-[#0A0A0A] shadow-lg shadow-action/20 disabled:opacity-50"
           >
             {isPending ? "Connecting…" : "Connect wallet"}
           </button>
         ) : (
-          <p className="text-sm text-emerald-400/90">Wallet connected — proceed to KYC if your issuer requires it.</p>
+          <p className="text-sm text-eco-light">Wallet connected — proceed to KYC if your issuer requires it.</p>
         )}
         <Link href="/trade" className="text-sm text-zinc-400 hover:text-white">
           Skip to Buy →

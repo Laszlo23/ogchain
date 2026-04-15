@@ -1,5 +1,10 @@
 import type { Config } from "tailwindcss";
 
+/** Eco fintech spacing: 8,16,24,32,48,64,96 px → Tailwind 2,4,6,8,12,16,24 */
+const spacingScale = {
+  18: "4.5rem", // 72px — optional between 16 and 24
+};
+
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,22 +13,43 @@ export default {
   ],
   theme: {
     extend: {
+      spacing: spacingScale,
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        /** Investor UI accent — premium gold */
+        /** Off-white — body on dark panels */
+        canvas: "#F5F7F5",
+        /** Dark forest + deep green — depth / panels */
+        forest: {
+          DEFAULT: "#0F2A1D",
+          deep: "#1E4D3A",
+        },
+        /** Eco green — trust, assets, progress fills */
+        eco: {
+          DEFAULT: "#3F8F6B",
+          light: "#5aad88",
+          muted: "rgba(63, 143, 107, 0.55)",
+        },
+        /** Warm orange — primary actions (buy, invest, stake) */
+        action: {
+          DEFAULT: "#FF7A18",
+          light: "#ff9a4a",
+          dark: "#e05f0c",
+          muted: "rgba(255, 122, 24, 0.45)",
+        },
+        /** Alias: action orange — keeps existing `brand` classnames working as CTAs */
         brand: {
-          DEFAULT: "#C9A24A",
-          light: "#d4b87a",
-          muted: "rgba(201, 162, 74, 0.5)",
-          dark: "#9a7d45",
+          DEFAULT: "#FF7A18",
+          light: "#ff9a4a",
+          muted: "rgba(255, 122, 24, 0.5)",
+          dark: "#e05f0c",
         },
         muted: {
           DEFAULT: "#9CA3AF",
         },
         surface: {
           DEFAULT: "#0A0A0A",
-          elevated: "#141414",
+          elevated: "#15251c",
         },
         gold: {
           50: "#fffbeb",
@@ -75,6 +101,10 @@ export default {
           "0%, 100%": { opacity: "0.4" },
           "50%": { opacity: "0.8" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out forwards",
@@ -85,6 +115,7 @@ export default {
         shimmer: "shimmer 2s infinite",
         float: "float 8s ease-in-out infinite",
         "pulse-soft": "pulse-soft 4s ease-in-out infinite",
+        marquee: "marquee 38s linear infinite",
       },
       backdropBlur: {
         xs: "2px",

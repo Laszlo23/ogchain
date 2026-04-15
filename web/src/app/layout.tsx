@@ -17,12 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Building Culture — Real estate on 0G",
+  title: "Building Culture — Community owned real estate on 0G",
   description:
-    "Buy fractional real estate shares with OG tokens. Transparent, liquid, and built for the next era of on-chain property.",
+    "Tokenized real estate with an eco-forward fintech experience: fractional shares, AMM liquidity, and compliance-ready flows on 0G testnet.",
   openGraph: {
-    title: "Building Culture — Real estate on 0G",
-    description: "Tokenized real estate on 0G. Fractional shares, AMM liquidity, compliance-ready.",
+    title: "Building Culture — Community owned real estate on 0G",
+    description:
+      "Explore tokenized property, trade shares, and follow the roadmap — testnet-first; verify disclosures before any production use.",
   },
 };
 

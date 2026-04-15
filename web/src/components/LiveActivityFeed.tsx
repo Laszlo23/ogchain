@@ -20,10 +20,13 @@ function randomLine(): string {
   return ACTIONS[1](n, c, shares);
 }
 
-export function LiveActivityFeed() {
-  const [lines, setLines] = useState<string[]>(() =>
-    Array.from({ length: 5 }, () => randomLine()),
-  );
+type Props = {
+  /** Horizontal marquee ticker (home hero) vs stacked list */
+  variant?: "list" | "ticker";
+};
+
+export function LiveActivityFeed({ variant = "list" }: Props) {
+  const [lines, setLines] = useState<string[]>(() => Array.from({ length: 5 }, () => randomLine()));
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -32,17 +35,38 @@ export function LiveActivityFeed() {
     return () => clearInterval(t);
   }, []);
 
-  return (
-    <div className="glass-card overflow-hidden">
-      <div className="border-b border-white/[0.06] px-5 py-3">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Live activity</p>
-        <p className="text-xs text-zinc-500">Illustrative feed — demo only</p>
+  if (variant === "ticker") {
+    const duplicated = [...lines, ...lines];
+    return (
+      <div className="glass-card overflow-hidden border-eco/20 py-0">
+        <div className="flex items-center gap-4 border-b border-eco/15 px-4 py-3 sm:px-6">
+          <p className="shrink-0 text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Live activity</p>
+          <p className="text-[10px] text-muted">Illustrative — demo only</p>
+        </div>
+        <div className="relative overflow-hidden py-3 motion-reduce:animate-none">
+          <div className="flex w-max animate-marquee gap-16 whitespace-nowrap pr-16 motion-reduce:animate-none">
+            {duplicated.map((line, i) => (
+              <span key={`${line}-${i}`} className="text-sm text-canvas/90">
+                <span className="text-eco">●</span> {line}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
-      <ul className="max-h-52 space-y-0 divide-y divide-white/[0.05] overflow-y-auto text-sm">
+    );
+  }
+
+  return (
+    <div className="glass-card overflow-hidden border-eco/20">
+      <div className="border-b border-eco/15 px-5 py-3">
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Live activity</p>
+        <p className="text-xs text-muted">Illustrative feed — demo only</p>
+      </div>
+      <ul className="max-h-52 space-y-0 divide-y divide-eco/10 overflow-y-auto text-sm">
         {lines.map((line, i) => (
           <li
             key={`${line}-${i}`}
-            className={`px-5 py-2.5 text-zinc-300 transition ${i === 0 ? "bg-brand/[0.06]" : ""}`}
+            className={`px-5 py-2.5 text-canvas/90 transition ${i === 0 ? "bg-eco/10" : ""}`}
           >
             {line}
           </li>

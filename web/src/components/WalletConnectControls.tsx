@@ -29,7 +29,7 @@ export function WalletConnectControls() {
         <button
           type="button"
           onClick={() => disconnect()}
-          className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-zinc-300 transition hover:border-gold-500/30 hover:text-white"
+          className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-zinc-300 transition hover:border-eco/40 hover:text-white"
         >
           Disconnect
         </button>
@@ -47,7 +47,7 @@ export function WalletConnectControls() {
           const injectedConnector = connectors.find((c) => c.id === "injected");
           if (injectedConnector) connect({ connector: injectedConnector });
         }}
-        className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs text-zinc-200 hover:border-gold-500/40 disabled:opacity-50"
+        className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs text-zinc-200 hover:border-eco/40 disabled:opacity-50"
       >
         {isPending ? "…" : "Browser"}
       </button>
@@ -60,7 +60,7 @@ export function WalletConnectControls() {
             const wc = connectors.find((c) => c.id === "walletConnect");
             if (wc) connect({ connector: wc });
           }}
-          className="rounded-full bg-brand px-3 py-1.5 text-xs font-semibold text-[#0A0A0A] shadow-[0_0_16px_-2px_rgba(201,162,74,0.5)] hover:bg-brand-light disabled:opacity-50"
+          className="rounded-full bg-action px-3 py-1.5 text-xs font-semibold text-[#0A0A0A] shadow-[0_0_16px_-2px_rgba(255,122,24,0.45)] hover:bg-action-light disabled:opacity-50"
         >
           {isPending ? "…" : "WalletConnect"}
         </button>

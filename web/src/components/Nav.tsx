@@ -15,7 +15,7 @@ import { COMPLIANCE_ADMIN_ROLE, REGISTRAR_ROLE } from "@/lib/roles";
 function navLinkClass(active: boolean) {
   return `group relative inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[13px] transition-colors duration-200 md:px-2.5 ${
     active
-      ? "bg-white/[0.07] text-gold-400"
+      ? "bg-eco/15 text-eco-light"
       : "text-zinc-400 hover:bg-white/[0.04] hover:text-white"
   }`;
 }
@@ -194,7 +194,7 @@ function MobileNavDrawer({
                     href={l.href}
                     onClick={onClose}
                     className={`flex items-start gap-3 rounded-xl px-3 py-3 text-left transition ${
-                      active ? "bg-white/[0.08] text-brand" : "text-zinc-300 hover:bg-white/[0.05]"
+                      active ? "bg-white/[0.08] text-eco-light" : "text-zinc-300 hover:bg-white/[0.05]"
                     }`}
                   >
                     <span className="mt-0.5 text-current">{l.icon(iconCls)}</span>
@@ -213,7 +213,7 @@ function MobileNavDrawer({
                   onClick={onClose}
                   className={`flex items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
                     pathname === "/admin" || pathname.startsWith("/admin/")
-                      ? "bg-white/[0.08] text-brand"
+                      ? "bg-white/[0.08] text-eco-light"
                       : "text-zinc-300 hover:bg-white/[0.05]"
                   }`}
                 >
@@ -254,8 +254,8 @@ export function Nav() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-surface/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+    <header className="sticky top-0 z-50 border-b border-eco/10 bg-surface/95 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-3 px-4 py-3 sm:px-8">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <button
             type="button"
@@ -270,7 +270,7 @@ export function Nav() {
             </svg>
           </button>
           <Link href="/" className="group flex min-w-0 items-baseline gap-1">
-            <span className="bg-gradient-to-r from-white to-gold-400/90 bg-clip-text text-base font-semibold tracking-tight text-transparent sm:text-lg">
+            <span className="bg-gradient-to-r from-canvas to-eco-light bg-clip-text text-base font-semibold tracking-tight text-transparent sm:text-lg">
               Building Culture
             </span>
             <span className="hidden text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500 sm:inline">
@@ -298,7 +298,7 @@ export function Nav() {
           <AdminNavLink />
         </nav>
 
-        <div className="shrink-0 rounded-full p-[2px] shadow-[0_0_20px_-4px_rgba(201,162,74,0.35)] ring-1 ring-brand/25">
+        <div className="shrink-0 rounded-full p-[2px] shadow-[0_0_20px_-4px_rgba(255,122,24,0.25)] ring-1 ring-eco/30">
           <WalletConnectControls />
         </div>
       </div>

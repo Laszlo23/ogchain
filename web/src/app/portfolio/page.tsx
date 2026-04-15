@@ -4,12 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 import { formatEther, zeroAddress } from "viem";
-import { useAccount, useReadContracts } from "wagmi";
+import { useAccount, useBalance, useReadContracts } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { PortfolioIllustrativeCharts } from "@/components/PortfolioIllustrativeCharts";
 import { TrustSection } from "@/components/TrustSection";
 import { addresses, erc20Abi } from "@/lib/contracts";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
+import { getEstimatedYieldPercent } from "@/lib/demo-properties";
 
 function parseShareFloat(wei: bigint): number {
   const s = formatEther(wei);
@@ -20,6 +21,8 @@ function parseShareFloat(wei: bigint): number {
 export default function PortfolioPage() {
   const { address, isConnected } = useAccount();
   const weth = addresses.weth;
+
+  const { data: nativeBal } = useBalance({ address, query: { enabled: !!address } });
 
   const { rows, loading, unset } = usePropertyShareList();
 
@@ -99,15 +102,27 @@ export default function PortfolioPage() {
 
   const hasAnyShare = withBalances.some((r) => (r.balance ?? 0n) > 0n);
 
+  const annualYieldIllustrUsd = useMemo(() => {
+    let sum = 0;
+    for (const r of withBalances) {
+      const bal = r.balance ?? 0n;
+      if (bal === 0n || !r.demo) continue;
+      const usd = parseShareFloat(bal) * (r.demo.illustrativeShareUsd ?? 0);
+      const y = getEstimatedYieldPercent(r.demo);
+      sum += usd * (y / 100);
+    }
+    return sum;
+  }, [withBalances]);
+
   return (
-    <div className="mx-auto w-full max-w-[1280px] space-y-10 pb-16">
-      <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Dashboard</p>
+    <div className="mx-auto w-full max-w-[1280px] space-y-12 pb-16">
+      <header className="space-y-3 text-center sm:text-left">
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Dashboard</p>
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Portfolio</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
           Wallet balances, property exposure, and illustrative charts. USD uses demo per-share references — not
           mark-to-market.{" "}
-          <Link href="/guide" className="text-brand hover:underline">
+          <Link href="/guide" className="text-action hover:underline">
             Operator guide
           </Link>
         </p>
@@ -123,29 +138,43 @@ export default function PortfolioPage() {
         <p className="text-zinc-500">Loading…</p>
       ) : (
         <>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-brand/20 bg-white/[0.03] p-6">
-              <p className="text-xs uppercase tracking-wide text-muted">Wallet (WETH)</p>
-              <p className="mt-2 font-mono text-2xl text-white">
-                {wethBalance !== undefined ? formatEther(wethBalance) : loadingBalances ? "…" : "0"}
-              </p>
-              <p className="mt-2 text-xs text-muted">For swaps &amp; pools.</p>
-            </div>
-            <div className="rounded-2xl border border-brand/20 bg-white/[0.03] p-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
               <p className="text-xs uppercase tracking-wide text-muted">Portfolio value (illustr.)</p>
-              <p className="mt-2 font-mono text-2xl text-brand">
+              <p className="mt-2 font-mono text-2xl tabular-nums text-action-light">
                 {hasAnyShare
                   ? new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
                       totalUsdEst,
                     )
                   : "—"}
               </p>
-              <p className="mt-2 text-xs text-muted">Not NAV.</p>
+              <p className="mt-2 text-xs text-muted">Demo mark — not NAV.</p>
             </div>
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6">
-              <p className="text-xs uppercase tracking-wide text-muted">Positions</p>
-              <p className="mt-2 font-mono text-2xl text-white">{positions.length}</p>
-              <p className="mt-2 text-xs text-muted">Properties with balance.</p>
+            <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
+              <p className="text-xs uppercase tracking-wide text-muted">Properties owned</p>
+              <p className="mt-2 font-mono text-2xl tabular-nums text-canvas">{positions.length}</p>
+              <p className="mt-2 text-xs text-muted">Positions with share balance.</p>
+            </div>
+            <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
+              <p className="text-xs uppercase tracking-wide text-muted">Est. yield / yr (illustr.)</p>
+              <p className="mt-2 font-mono text-2xl tabular-nums text-eco-light">
+                {hasAnyShare && annualYieldIllustrUsd > 0
+                  ? new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
+                      annualYieldIllustrUsd,
+                    )
+                  : "—"}
+              </p>
+              <p className="mt-2 text-xs text-muted">From demo yields × position — not distributed on-chain.</p>
+            </div>
+            <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
+              <p className="text-xs uppercase tracking-wide text-muted">Token balances</p>
+              <p className="mt-2 font-mono text-sm text-canvas">
+                OG: {nativeBal ? formatEther(nativeBal.value) : "—"}
+              </p>
+              <p className="mt-1 font-mono text-sm text-canvas">
+                WETH: {wethBalance !== undefined ? formatEther(wethBalance) : loadingBalances ? "…" : "0"}
+              </p>
+              <p className="mt-2 text-xs text-muted">Native + wrapped for swaps / pools.</p>
             </div>
           </div>
 
@@ -155,15 +184,15 @@ export default function PortfolioPage() {
             <div className="glass-card p-6">
               <h2 className="text-sm font-medium text-white">Diversification</h2>
               <p className="mt-1 text-xs text-zinc-500">Share of estimated demo exposure by property.</p>
-              <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full bg-zinc-800">
+              <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full bg-forest-deep">
                 {positions.map((p, i) => (
                   <div
                     key={p.id}
                     title={`${p.label}: ${p.pct}%`}
-                    className="h-full bg-gradient-to-t from-gold-700 to-gold-400 transition-all"
+                    className="h-full bg-gradient-to-t from-eco to-eco-light transition-all"
                     style={{
                       width: `${p.pct}%`,
-                      opacity: 0.85 - i * 0.06,
+                      opacity: 0.9 - i * 0.05,
                     }}
                   />
                 ))}
@@ -235,7 +264,7 @@ export default function PortfolioPage() {
             </div>
           </div>
 
-          <div className="glass-card border-dashed border-gold-500/20 p-5">
+          <div className="glass-card border-dashed border-eco/30 p-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-sm font-medium text-white">Yield & rewards</h2>
@@ -255,7 +284,7 @@ export default function PortfolioPage() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <Link href="/trade" className="text-gold-400 hover:underline">
+            <Link href="/trade" className="text-action hover:underline">
               Buy more shares
             </Link>
             <Link href="/pool" className="text-zinc-400 hover:text-white">

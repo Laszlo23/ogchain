@@ -30,7 +30,17 @@ const phases = [
     title: "Liquidity & access",
     items: [
       "Deeper pools and clearer routing for property share tokens",
+      "Secondary market / venue listings where permitted — issuer- and venue-dependent",
+      "Liquidity incentives and routing improvements (roadmap; not guaranteed timelines)",
       "Issuer-approved disclosures linked from each property",
+    ],
+  },
+  {
+    phase: "Product layers",
+    title: "Yield, pricing, and distribution (roadmap)",
+    items: [
+      "Rental or cash-flow yield distribution — contract- and issuer-dependent; not guaranteed returns",
+      "Oracle-assisted or AI-assisted pricing signals — illustrative until audited; not investment advice",
     ],
   },
   {
@@ -63,7 +73,7 @@ export default function RoadmapPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-10 pb-16">
       <header>
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Plan</p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Plan</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Roadmap</h1>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           Honest milestones — not a promise of delivery dates. Priorities depend on audits, partners, and regulation.
@@ -73,10 +83,10 @@ export default function RoadmapPage() {
       <ol className="relative space-y-8 border-l border-white/[0.08] pl-8">
         {phases.map((p) => (
           <li key={p.phase} className="relative">
-            <span className="absolute -left-[39px] top-1 flex h-5 w-5 items-center justify-center rounded-full border border-brand/50 bg-[#030303] text-[10px] font-bold text-brand">
+            <span className="absolute -left-[39px] top-1 flex h-5 w-5 items-center justify-center rounded-full border border-eco/50 bg-[#030303] text-[10px] font-bold text-action">
               •
             </span>
-            <p className="text-xs font-semibold uppercase tracking-wider text-brand-muted">{p.phase}</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-eco-muted">{p.phase}</p>
             <h2 className="mt-1 text-lg font-semibold text-white">{p.title}</h2>
             <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-zinc-400">
               {p.items.map((item) => (
@@ -89,7 +99,7 @@ export default function RoadmapPage() {
 
       <p className="text-center text-sm text-zinc-500">
         Verify deployments on the{" "}
-        <Link href="/contracts" className="text-brand hover:underline">
+        <Link href="/contracts" className="text-action hover:underline">
           contracts page
         </Link>
         .
