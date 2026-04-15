@@ -10,7 +10,8 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ComplianceStatus, useCompliance } from "@/components/ComplianceStatus";
-import { addresses, erc20Abi, pairAbi, routerAbi } from "@/lib/contracts";
+import { erc20Abi, pairAbi, routerAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 function deadline(): bigint {
@@ -22,8 +23,7 @@ const zero = "0x0000000000000000000000000000000000000000" as const;
 export default function PoolPage() {
   const { address, isConnected } = useAccount();
   const { blocked } = useCompliance();
-  const router = addresses.router;
-  const weth = addresses.weth;
+  const { router, weth } = useProtocolAddresses();
 
   const { rows, loading, unset } = usePropertyShareList();
   const [selectedId, setSelectedId] = useState("");

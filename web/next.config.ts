@@ -4,6 +4,7 @@ import path from "path";
 const empty = path.join(process.cwd(), "src/shims/npm-empty.js");
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

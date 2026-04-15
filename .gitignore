@@ -10,3 +10,5 @@ deployments/testnet.json
 .DS_Store
 *.log
 web/tsconfig.tsbuildinfo
+# Large camera originals — use compressed assets in public/ for git
+web/public/*.tif

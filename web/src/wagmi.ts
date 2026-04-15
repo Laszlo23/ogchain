@@ -1,8 +1,12 @@
 import { createConfig, http } from "wagmi";
+import { base } from "viem/chains";
 import { injected, walletConnect } from "wagmi/connectors";
 import { ogGalileo } from "./lib/chain";
 
 const wcProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+
+const baseRpc =
+  process.env.NEXT_PUBLIC_BASE_RPC?.trim() || "https://mainnet.base.org";
 
 const connectors = [
   injected(),
@@ -17,9 +21,11 @@ const connectors = [
 ];
 
 export const wagmiConfig = createConfig({
-  chains: [ogGalileo],
+  chains: [ogGalileo, base],
   connectors,
+  ssr: true,
   transports: {
     [ogGalileo.id]: http(ogGalileo.rpcUrls.default.http[0]),
+    [base.id]: http(baseRpc),
   },
 });

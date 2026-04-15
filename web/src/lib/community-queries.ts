@@ -10,6 +10,7 @@ export type UserProfileRow = {
   discord: string | null;
   farcaster: string | null;
   telegram: string | null;
+  linkedin: string | null;
   website: string | null;
   public_slug: string | null;
   extra_wallets: unknown;

@@ -1,23 +1,37 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { flagshipCampaign } from "@/lib/flagship-campaign";
 
 const NAMES = ["Laszlo", "Anna", "Marco", "Sofia", "Jonas", "Elena", "David", "Priya"];
 const CITIES = ["Vienna", "Berlin", "Munich", "Zurich", "Amsterdam", "Paris", "Milan", "Stockholm"];
-const ACTIONS = [
-  (n: string, c: string, a: number) => `${n} from ${c} invested $${a.toLocaleString("en-US")}`,
-  (n: string, c: string, shares: number) => `${n} from ${c} bought ${shares.toLocaleString("en-US")} shares`,
-];
+
+function narrativeLine(): string {
+  const n = NAMES[Math.floor(Math.random() * NAMES.length)];
+  const c = CITIES[Math.floor(Math.random() * CITIES.length)];
+  const pool = [
+    `Investor from ${c} funded ${flagshipCampaign.displayName} — illustrative`,
+    `Community round reached ${52 + Math.floor(Math.random() * 15)}% of illustrative target`,
+    `New property narrative submitted by an architect (demo queue)`,
+    `${n} from ${c} joined the founding investor waitlist (demo)`,
+    `Coworking hub allocation updated for ${flagshipCampaign.displayName.split("—")[0].trim()} (illustr.)`,
+    `${n} reserved ${800 + Math.floor(Math.random() * 4200)} USDC in the testnet UI (not real funds)`,
+    `Rural revitalization project added to discovery — demo`,
+    `Governance vote queued on amenities package — testnet only`,
+  ];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 function randomLine(): string {
+  if (Math.random() > 0.35) return narrativeLine();
   const n = NAMES[Math.floor(Math.random() * NAMES.length)];
   const c = CITIES[Math.floor(Math.random() * CITIES.length)];
   if (Math.random() > 0.45) {
     const amt = 800 + Math.floor(Math.random() * 9200);
-    return ACTIONS[0](n, c, amt);
+    return `${n} from ${c} invested $${amt.toLocaleString("en-US")} (illustr.)`;
   }
   const shares = 12 + Math.floor(Math.random() * 400);
-  return ACTIONS[1](n, c, shares);
+  return `${n} from ${c} bought ${shares.toLocaleString("en-US")} shares (demo)`;
 }
 
 type Props = {

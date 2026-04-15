@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const steps = [
   {
-    title: "Discover properties",
-    body: "Browse tokenized listings, imagery, and illustrative economics — then open the detail page.",
+    title: "Discover projects",
+    body: "Browse community-owned places — imagery, categories, and illustrative economics — then open the detail page.",
     href: "/properties",
     Icon: () => (
       <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
@@ -40,7 +40,7 @@ export function HomeHowItWorksSimple() {
       <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">How it works</p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Three steps</h2>
       <p className="mt-3 max-w-2xl text-sm text-muted">
-        From discovery to position — same clarity as a premium fintech app, with on-chain settlement.
+        From discovery to position — like a Kickstarter for real estate, with on-chain settlement where deployed.
       </p>
       <div className="mt-10 grid gap-6 md:grid-cols-3 md:gap-8">
         {steps.map((s) => (

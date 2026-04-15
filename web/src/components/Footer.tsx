@@ -13,7 +13,12 @@ const product = [
 ];
 
 const learn = [
+  { href: "/experience", label: "Immersive story" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/guestbook", label: "On-chain guestbook" },
+  { href: "/culture-land", label: "Culture Land portfolio" },
+  { href: "/documents", label: "Plan library" },
+  { href: "/build-with-us", label: "Build with us" },
   { href: "/guide", label: "Operator guide" },
   { href: "/blog", label: "Blog" },
   { href: "/feedback", label: "Feedback" },

@@ -1,5 +1,6 @@
 import { createPublicClient, http } from "viem";
 import { ogGalileo } from "@/lib/chain";
+/** Proof NFT metadata is resolved on 0G via NEXT_PUBLIC_PROOF_NFT; a separate Base deployment would need its own metadata route or host. */
 import { addresses, proofNftAbi } from "@/lib/contracts";
 import { DEMO_PROPERTY_DETAILS } from "@/lib/demo-properties";
 

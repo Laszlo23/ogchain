@@ -23,6 +23,7 @@ export const addresses = {
   proofNft:
     (process.env.NEXT_PUBLIC_PROOF_NFT as `0x${string}` | undefined) ?? zero,
   staking: (process.env.NEXT_PUBLIC_STAKING as `0x${string}` | undefined) ?? zero,
+  guestbook: (process.env.NEXT_PUBLIC_GUESTBOOK as `0x${string}` | undefined) ?? zero,
 };
 
 export const accessControlAbi = parseAbi([
@@ -119,4 +120,12 @@ export const predictionAbi = parseAbi([
   "function markets(uint256 id) view returns (string question, uint256 endTime, address stakeToken, uint256 yesPool, uint256 noPool, bool resolved, bool outcomeYes)",
   "function stakeYes(uint256 id, uint256 amount)",
   "function stakeNo(uint256 id, uint256 amount)",
+]);
+
+export const guestbookAbi = parseAbi([
+  "function leaveEntry(string message, string xHandle, string linkedin, string farcaster)",
+  "function entryCount() view returns (uint256)",
+  "function lastEntryAt(address user) view returns (uint256)",
+  "function lastEntries(uint256 maxItems) view returns (address[] authors, uint64[] timestamps, string[] messages, string[] xHandles, string[] linkedins, string[] farcasters)",
+  "function getEntry(uint256 index) view returns (address author, uint64 timestamp, string message, string xHandle, string linkedin, string farcaster)",
 ]);

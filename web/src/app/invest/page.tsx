@@ -8,7 +8,8 @@ import { useAccount, useBalance, useReadContracts } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { InvestorJourney } from "@/components/InvestorJourney";
 import { TrustSection } from "@/components/TrustSection";
-import { addresses, erc20Abi, ogStakingAbi } from "@/lib/contracts";
+import { erc20Abi, ogStakingAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 function parseShareFloat(wei: bigint): number {
@@ -22,8 +23,7 @@ type Tab = "overview" | "properties" | "liquidity";
 export default function InvestPage() {
   const [tab, setTab] = useState<Tab>("overview");
   const { address, isConnected } = useAccount();
-  const weth = addresses.weth;
-  const staking = addresses.staking;
+  const { weth, staking } = useProtocolAddresses();
 
   const { rows, loading, unset } = usePropertyShareList();
 
@@ -124,7 +124,8 @@ export default function InvestPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-white">Investor hub</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
           A compact view of exposure and participation: balances, illustrative property weights, and links to stake,
-          pool, and trade. Nothing here is a promise of returns — see{" "}
+          pool, and trade. Liquidity and pools are per network — switch your wallet to 0G or Base to match the deployment
+          you use. Nothing here is a promise of returns — see{" "}
           <Link href="/legal/risk" className="text-brand hover:underline">
             risks &amp; disclaimer
           </Link>

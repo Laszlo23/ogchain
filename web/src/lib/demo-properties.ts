@@ -2,7 +2,18 @@
  * Curated presentation for seeded demo properties (chain metadata URIs are placeholders).
  * Not financial advice — illustrative only. Sustainability claims in copy should match verifiable ops/audit data.
  */
+import type { PublicDocumentId } from "@/lib/public-documents";
+
 export type DemoImageSlide = { src: string; alt: string };
+
+export const DISCOVERY_CATEGORIES = [
+  "Creative Villages",
+  "Coworking Hubs",
+  "Cultural Spaces",
+  "Sustainable Housing",
+  "Rural Revitalization",
+] as const;
+export type DiscoveryCategory = (typeof DISCOVERY_CATEGORIES)[number];
 
 export type DemoPropertyDetail = {
   headline: string;
@@ -35,6 +46,20 @@ export type DemoPropertyDetail = {
   estimatedYieldPercent?: number;
   /** Short category label for filters / UI */
   propertyType: string;
+  /** Discovery hub filter (editorial) */
+  discoveryCategory: DiscoveryCategory;
+  /** Cultural / community goal */
+  vision?: string;
+  /** Plans, renders, design intent */
+  architectureNarrative?: string;
+  /** Who uses the space */
+  communityUsers?: string[];
+  /** Tokenization path — illustrative */
+  ownershipModel?: string;
+  /** Extra note beside funding UI */
+  fundingRoundNote?: string;
+  /** PDFs from `public-documents` catalog */
+  documentIds?: PublicDocumentId[];
 };
 
 /** Gross yield % from illustrative income and asset value (demo). */
@@ -105,6 +130,16 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     annualRentalIncomeEur: 422_000,
     estimatedYieldPercent: 2.4,
     propertyType: "Mixed residential",
+    discoveryCategory: "Sustainable Housing",
+    vision:
+      "Keep quality rental housing in Vienna and abroad within a transparent, community-aligned capital stack — not a single trophy asset, but a portfolio investors can read.",
+    architectureNarrative:
+      "Berggasse and satellite houses: varied façades and unit mixes. Linked plans are for context only.",
+    communityUsers: ["Tenants", "Local operators", "Investors tracking portfolio yield"],
+    ownershipModel:
+      "Assets held in issuer structures off-chain; economic exposure via on-chain share tokens — revenue rules are issuer-specific.",
+    fundingRoundNote: "Demo metrics only — not a live securities offering.",
+    documentIds: ["droes-plans-221219"],
   },
   2: {
     headline: "Vienna 1130 — ten-unit apartment building",
@@ -133,6 +168,15 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     annualRentalIncomeEur: 210_000,
     estimatedYieldPercent: 3.0,
     propertyType: "Multi-family residential",
+    discoveryCategory: "Sustainable Housing",
+    vision:
+      "Deliver modern, efficient apartments near Hietzing for residents who want stable, well-managed homes — funded with clear on-chain rails for community participation.",
+    architectureNarrative:
+      "Ten-unit building nearing completion; interiors shown are illustrative renders.",
+    communityUsers: ["Families", "Commuters", "Local landlords transitioning to institutional hold"],
+    ownershipModel:
+      "Property → SPV → share token → investors; lease-up risk until stabilized — see risk factors.",
+    fundingRoundNote: "Illustrative funding progress — testnet demo.",
   },
   3: {
     headline: "Keutschach — completed housing development",
@@ -161,6 +205,16 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     annualRentalIncomeEur: 285_000,
     estimatedYieldPercent: 3.0,
     propertyType: "Multi-family residential",
+    discoveryCategory: "Creative Villages",
+    vision:
+      "A lakeside creative cluster: living, working, and gathering in one place — the flagship narrative for community-owned cultural real estate in Carinthia.",
+    architectureNarrative:
+      "Completed residential scheme with Stix-area documentation; supplemental plans show study lines for future adaptive reuse.",
+    communityUsers: ["Remote workers", "Artists", "Founders", "Locals", "Seasonal visitors"],
+    ownershipModel:
+      "Property → SPV → on-chain share token → community investors → rental revenue (issuer-dependent) and governance per charter.",
+    fundingRoundNote: "Campaign figures on the homepage are illustrative; chain data remains testnet demo.",
+    documentIds: ["stix-a3-klein", "droes-plans-221219"],
   },
   4: {
     headline: "Reifnitz — completed housing development",
@@ -184,6 +238,16 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     annualRentalIncomeEur: 180_000,
     estimatedYieldPercent: 3.0,
     propertyType: "Multi-family residential",
+    discoveryCategory: "Rural Revitalization",
+    vision:
+      "Stabilize housing stock near the lake while supporting local services — small-scale, long-term community ownership.",
+    architectureNarrative:
+      "Six-unit completed scheme; rural study PDFs reference comparable retrofit patterns in the region.",
+    communityUsers: ["Residents", "Local employers", "Weekend homeowners"],
+    ownershipModel:
+      "SPV + tokenized shares for fractional exposure; distributions per issuer waterfall.",
+    fundingRoundNote: "Illustrative — not an offer.",
+    documentIds: ["katzelsdorf-studie-auswechslung", "bernhardsthal-plans"],
   },
   5: {
     headline: "LandMark — high-rise & mixed use (Weinviertel)",
@@ -212,6 +276,15 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     annualRentalIncomeEur: 332_500,
     estimatedYieldPercent: 3.5,
     propertyType: "Mixed-use",
+    discoveryCategory: "Coworking Hubs",
+    vision:
+      "Reuse industrial scale for mixed living and work — towers, row housing, and bay retail in one investable bundle.",
+    architectureNarrative:
+      "High-rise silo adaptive reuse with commercial bays; renders illustrative.",
+    communityUsers: ["Residents", "Retail tenants", "Coworking operators", "Commuters"],
+    ownershipModel:
+      "Tokenized fractional ownership with issuer-managed SPV; revenue split by lease type.",
+    fundingRoundNote: "Demo economics only.",
   },
   6: {
     headline: "Vienna 1210 — value-add rental building",
@@ -240,6 +313,16 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     annualRentalIncomeEur: 137_500,
     estimatedYieldPercent: 2.5,
     propertyType: "Value-add residential",
+    discoveryCategory: "Sustainable Housing",
+    vision:
+      "Unlock value in Floridsdorf through renovation and staged sales — transparent milestones for community backers.",
+    architectureNarrative:
+      "Existing ~1,700 m² plus expansion potential; study PDFs show comparable retrofit envelopes.",
+    communityUsers: ["Future buyers", "Renters during construction", "Neighborhood stakeholders"],
+    ownershipModel:
+      "SPV holds title; tokens represent economic interests; exit via sales — high execution risk.",
+    fundingRoundNote: "Illustrative raise — verify legal docs.",
+    documentIds: ["katzelsdorf-studie-encoded"],
   },
   7: {
     headline: "Vienna 1010 — vacant townhouse (seven apartments)",
@@ -268,5 +351,15 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     annualRentalIncomeEur: 580_000,
     estimatedYieldPercent: 4.0,
     propertyType: "Urban residential",
+    discoveryCategory: "Cultural Spaces",
+    vision:
+      "Bring a vacant inner-city building back as short-stay and cultural hospitality — community capital seeds the renovation story.",
+    architectureNarrative:
+      "Townhouse fabric; historic retail context; plans reference Prater-area adaptive reuse studies.",
+    communityUsers: ["Tourists", "Digital nomads", "Event hosts", "Neighbours"],
+    ownershipModel:
+      "Tokenized fractional ownership; revenue from short-stay and events — regulation-heavy; issuer-dependent.",
+    fundingRoundNote: "Illustrative campaign — not live TVL.",
+    documentIds: ["altes-kaufhaus-prater"],
   },
 };

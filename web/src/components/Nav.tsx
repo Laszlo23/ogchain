@@ -8,7 +8,8 @@ import { usePathname } from "next/navigation";
 import { zeroAddress } from "viem";
 import { useAccount, useReadContracts } from "wagmi";
 import { WalletConnectControls } from "@/components/WalletConnectControls";
-import { accessControlAbi, addresses } from "@/lib/contracts";
+import { accessControlAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { useHydrated } from "@/lib/use-hydrated";
 import { COMPLIANCE_ADMIN_ROLE, REGISTRAR_ROLE } from "@/lib/roles";
 
@@ -69,18 +70,19 @@ function useAdminNavAllowed() {
   const hydrated = useHydrated();
   const { address } = useAccount();
   const preview = process.env.NEXT_PUBLIC_ADMIN_PREVIEW === "1";
+  const { registry, compliance } = useProtocolAddresses();
 
   const roleReads =
-    address && addresses.registry !== zeroAddress && addresses.compliance !== zeroAddress
+    address && registry !== zeroAddress && compliance !== zeroAddress
       ? [
           {
-            address: addresses.registry,
+            address: registry,
             abi: accessControlAbi,
             functionName: "hasRole" as const,
             args: [REGISTRAR_ROLE, address],
           },
           {
-            address: addresses.compliance,
+            address: compliance,
             abi: accessControlAbi,
             functionName: "hasRole" as const,
             args: [COMPLIANCE_ADMIN_ROLE, address],

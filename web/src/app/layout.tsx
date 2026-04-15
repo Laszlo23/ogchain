@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import { ChainSwitchBanner } from "@/components/ChainSwitchBanner";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
+import { SiteChrome } from "@/components/SiteChrome";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://localhost:3000";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,14 +17,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Building Culture — Community owned real estate on 0G",
-  description:
-    "Tokenized real estate with an eco-forward fintech experience: fractional shares, AMM liquidity, and compliance-ready flows on 0G testnet.",
-  openGraph: {
-    title: "Building Culture — Community owned real estate on 0G",
-    description:
-      "Explore tokenized property, trade shares, and follow the roadmap — testnet-first; verify disclosures before any production use.",
+  metadataBase: new URL(siteUrl),
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
   },
+  title: "Building Culture — Community-owned cultural real estate on 0G",
+  description:
+    "The Kickstarter for real estate: community funding rounds for coworking, cultural, and housing projects — tokenized shares, AMM liquidity, testnet-first. Verify disclosures before any production use.",
+  openGraph: {
+    title: "Building Culture — Community-owned cultural real estate on 0G",
+    description:
+      "Launch and fund community-owned places with tokenized ownership — testnet-first; not investment advice.",
+    type: "website",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Building Culture — Community-owned cultural real estate on 0G",
+    description:
+      "Community funding rounds for cultural real estate — testnet-first; not investment advice.",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0c1814",
 };
 
 export default function RootLayout({
@@ -38,13 +57,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-surface text-white antialiased`}
       >
         <Providers>
-          <Nav />
-          <ChainSwitchBanner />
           {/* No animate-page-in on <main>: client-side navigations can restart the animation and re-apply keyframe opacity:0, making styles/content appear to vanish until the animation finishes. */}
-          <main className="relative mx-auto min-h-[60vh] w-full max-w-[1280px] px-4 py-8 sm:px-8">
-            {children}
-          </main>
-          <Footer />
+          <SiteChrome>{children}</SiteChrome>
         </Providers>
       </body>
     </html>

@@ -16,9 +16,9 @@ export function VisionSection() {
         Turning cities into community-owned assets.
       </h2>
       <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
-        We&apos;re building infrastructure for property-linked share tokens and transparent liquidity — so issuers and
-        communities can align where regulation permits. Nothing here guarantees a listing, bank product, or loan
-        program.
+        We&apos;re building infrastructure so community-led rounds can meet property-linked share tokens and transparent
+        liquidity — a flagship ecosystem for culture-forward real estate, where regulation permits. Nothing here
+        guarantees a listing, bank product, or loan program.
       </p>
       <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {ROADMAP_ITEMS.map((item) => (

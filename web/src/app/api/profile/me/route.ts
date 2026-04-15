@@ -32,6 +32,7 @@ const PATCH_KEYS = new Set([
   "discord",
   "farcaster",
   "telegram",
+  "linkedin",
   "website",
   "public_slug",
   "extra_wallets",
@@ -51,7 +52,7 @@ function sanitizeProfilePatch(body: unknown): { patch: Record<string, unknown>; 
     out.bio = typeof b.bio === "string" ? b.bio.slice(0, 2000) : null;
   }
   if (typeof b.show_holdings === "boolean") out.show_holdings = b.show_holdings;
-  for (const key of ["twitter", "discord", "farcaster", "telegram", "website"] as const) {
+  for (const key of ["twitter", "discord", "farcaster", "telegram", "linkedin", "website"] as const) {
     if (b[key] === null || typeof b[key] === "string") {
       out[key] = typeof b[key] === "string" ? b[key].slice(0, 200) : null;
     }

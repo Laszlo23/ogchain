@@ -13,13 +13,14 @@ import {
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { TrustSection } from "@/components/TrustSection";
 import { Card } from "@/components/ui/Card";
-import { addresses, explorerBase, ogStakingAbi } from "@/lib/contracts";
+import { ogStakingAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 
 const SECONDS_PER_YEAR = 365n * 24n * 60n * 60n;
 
 export default function StakePage() {
   const { address, isConnected } = useAccount();
-  const staking = addresses.staking;
+  const { staking, explorer: explorerBase } = useProtocolAddresses();
   const configured = staking !== zeroAddress;
 
   const [stakeAmt, setStakeAmt] = useState("");

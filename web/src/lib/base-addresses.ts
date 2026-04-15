@@ -17,6 +17,7 @@ export const baseAddresses = {
   predictionMarket: (process.env.NEXT_PUBLIC_BASE_PREDICTION_MARKET as Addr | undefined) ?? zero,
   proofNft: (process.env.NEXT_PUBLIC_BASE_PROOF_NFT as Addr | undefined) ?? zero,
   staking: (process.env.NEXT_PUBLIC_BASE_STAKING as Addr | undefined) ?? zero,
+  guestbook: (process.env.NEXT_PUBLIC_BASE_GUESTBOOK as Addr | undefined) ?? zero,
 };
 
 export function isBaseConfigured(): boolean {

@@ -67,3 +67,17 @@ export function getGlobalPlatformStats(goalUsd = 10_000_000): GlobalPlatformStat
     daysRemaining: 18 + (h % 14),
   };
 }
+
+const FOUNDING_TOTAL_SLOTS = 200;
+
+/**
+ * Deterministic “remaining founding investor slots” for UI — not enforced on-chain.
+ */
+export function getFoundingInvestorSlotsRemaining(): { remaining: number; total: number } {
+  const h = hashSeed(0xf00dfacebeefn);
+  const filled = 40 + (h % 120);
+  return {
+    remaining: Math.max(0, FOUNDING_TOTAL_SLOTS - filled),
+    total: FOUNDING_TOTAL_SLOTS,
+  };
+}

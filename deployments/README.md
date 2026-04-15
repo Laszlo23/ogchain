@@ -27,6 +27,18 @@ cast send <COMPLIANCE_REGISTRY> "setKycBypass(bool)" true \
 
 Copy logged addresses into `deployments/testnet.json` (start from [testnet.example.json](testnet.example.json)), including **`ComplianceRegistry`**, **`PropertyShareProof`**, and **`OgStaking`** when present. Set `deployedAt` (ISO date) and `deployer` (checksummed address) for your records.
 
+### Community guestbook (optional, separate deploy)
+
+The on-chain guestbook ([`src/guestbook/CommunityGuestbook.sol`](../src/guestbook/CommunityGuestbook.sol)) is **not** part of `DeployAll`. Deploy with the same RPC and key:
+
+```bash
+forge script script/DeployGuestbook.s.sol:DeployGuestbookScript \
+  --rpc-url https://evmrpc-testnet.0g.ai \
+  --broadcast
+```
+
+Set **`NEXT_PUBLIC_GUESTBOOK`** in `web/.env.local` to the logged contract address (use **`NEXT_PUBLIC_BASE_GUESTBOOK`** for a Base deployment).
+
 For production NFT metadata, set **`NFT_BASE_URI`** when running `DeployAll` (public HTTPS URL ending with `/`, e.g. `https://your.app/api/nft/`) so wallet `tokenURI` resolves to your Next.js `GET /api/nft/[tokenId]` route.
 
 ### Token economics (seed scripts)
@@ -149,6 +161,26 @@ python3 scripts/sync_web_env.py deployments/testnet.json > web/.env.local
 ```
 
 Optional: add `siteUrl` to `deployments/testnet.json` (public origin, no trailing slash) so `NEXT_PUBLIC_SITE_URL` is emitted for NFT metadata and share links.
+
+### Base mainnet (chain id 8453)
+
+The same Foundry [`DeployAll.s.sol`](../script/DeployAll.s.sol) stack can be broadcast on Base. Fund the deployer with **ETH on Base** for gas, set a public **`NFT_BASE_URI`** (HTTPS, trailing `/`) for proof NFT metadata, and avoid **`KYC_BYPASS_ON_DEPLOY`** on mainnet unless intended.
+
+```bash
+forge script script/DeployAll.s.sol:DeployAllScript \
+  --rpc-url https://mainnet.base.org \
+  --broadcast
+```
+
+Use a dedicated RPC (Alchemy, Infura, etc.) via `--rpc-url` if the public endpoint rate-limits broadcasts. Copy addresses from `broadcast/DeployAll.s.sol/8453/` into [`base-mainnet.json`](base-mainnet.json) (same schema as [`testnet.example.json`](testnet.example.json)).
+
+Append Base env lines to `web/.env.local` (merge with 0G lines from `testnet.json`):
+
+```bash
+python3 scripts/sync_web_env.py deployments/base-mainnet.json >> web/.env.local
+```
+
+Optional: verify contracts on Basescan with `forge verify-contract` and `BASESCAN_API_KEY`.
 
 Or copy manually from [web/.env.local.example](../web/.env.local.example).
 

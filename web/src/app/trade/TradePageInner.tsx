@@ -13,14 +13,8 @@ import {
 } from "wagmi";
 import { ComplianceStatus, useCompliance } from "@/components/ComplianceStatus";
 import { TrustSection } from "@/components/TrustSection";
-import {
-  addresses,
-  erc20Abi,
-  explorerBase,
-  pairAbi,
-  proofNftAbi,
-  routerAbi,
-} from "@/lib/contracts";
+import { erc20Abi, pairAbi, proofNftAbi, routerAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { formatIllustrativeEconomics } from "@/lib/demo-properties";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
@@ -36,9 +30,7 @@ export function TradePageInner() {
 
   const { address, isConnected } = useAccount();
   const { blocked } = useCompliance();
-  const router = addresses.router;
-  const weth = addresses.weth;
-  const proofNft = addresses.proofNft;
+  const { router, weth, proofNft, explorer: explorerBase } = useProtocolAddresses();
 
   const { rows, loading, unset } = usePropertyShareList();
   const [selectedId, setSelectedId] = useState<string>("");

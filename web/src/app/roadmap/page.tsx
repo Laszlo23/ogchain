@@ -7,6 +7,48 @@ export const metadata: Metadata = {
     "Milestones toward audits, liquidity, and ecosystem interoperability — partner- and regulator-dependent.",
 };
 
+/**
+ * Ordered journey for capital and distributions — illustrative sequence, not a binding schedule.
+ * Actual timing is issuer-, jurisdiction-, and offering-specific; see legal disclosures.
+ */
+const mainnetFundsJourney = [
+  {
+    step: "1",
+    title: "Mainnet deployment",
+    when: "After audited contracts are deployed and addresses are published",
+    detail:
+      "The protocol and property share contracts go live on the target mainnet. Until then, any UI on testnet is for rehearsal only — no real funds at risk on-chain in the demo environment.",
+  },
+  {
+    step: "2",
+    title: "Offering & eligibility",
+    when: "When an issuer opens a round (if applicable)",
+    detail:
+      "Each property or programme may have subscription documents, minimums, and caps. You only become eligible to send funds after you accept disclosures and meet issuer criteria for that offering.",
+  },
+  {
+    step: "3",
+    title: "KYC / AML complete",
+    when: "Before your wallet can receive restricted tokens or certain payouts",
+    detail:
+      "ComplianceRegistry (or the issuer’s provider) must mark your wallet as verified where regulation requires it. Fulfilling KYC does not by itself obligate any transfer — it unlocks permitted flows per issuer rules.",
+  },
+  {
+    step: "4",
+    title: "Capital deployed",
+    when: "After subscription clears and settlement completes",
+    detail:
+      "Funds move per the offering’s instructions (e.g. swap into share tokens, escrow release). Settlement timing is issuer- and bank-rail-dependent — not instant by default.",
+  },
+  {
+    step: "5",
+    title: "Ongoing distributions",
+    when: "Per issuer schedule and smart-contract rules post-closing",
+    detail:
+      "Rental income, fees, or other cash flows — if and when declared — are distributed according to the SPV / issuer waterfall and on-chain logic. Past testnet behaviour is not a forecast of mainnet returns.",
+  },
+];
+
 const phases = [
   {
     phase: "Now",
@@ -79,6 +121,43 @@ export default function RoadmapPage() {
           Honest milestones — not a promise of delivery dates. Priorities depend on audits, partners, and regulation.
         </p>
       </header>
+
+      <section
+        className="rounded-2xl border border-eco/25 bg-forest/25 p-6 sm:p-8"
+        aria-labelledby="funds-journey-heading"
+      >
+        <h2 id="funds-journey-heading" className="text-xl font-semibold tracking-tight text-white">
+          Receiving funds after mainnet &amp; KYC
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+          Below is the <strong className="font-medium text-zinc-300">typical order of operations</strong> for investors.
+          It is <strong className="font-medium text-zinc-300">not</strong> a guaranteed calendar — dates, gates, and
+          payouts depend on each issuer, the offering documents, and applicable law.
+        </p>
+        <ol className="mt-6 space-y-5">
+          {mainnetFundsJourney.map((row) => (
+            <li
+              key={row.step}
+              className="rounded-xl border border-white/[0.06] bg-black/20 px-4 py-4 sm:px-5 sm:py-5"
+            >
+              <div className="flex flex-wrap items-baseline gap-2">
+                <span className="font-mono text-xs font-semibold text-action">{row.step}</span>
+                <h3 className="text-base font-semibold text-white">{row.title}</h3>
+              </div>
+              <p className="mt-1 text-xs font-medium uppercase tracking-wide text-eco-muted/90">{row.when}</p>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">{row.detail}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-6 text-xs leading-relaxed text-zinc-500">
+          Nothing here is investment, tax, or legal advice. KYC status and smart-contract permissions can change with
+          issuer policy and regulation. See{" "}
+          <Link href="/legal/risk" className="text-action hover:underline">
+            Risks &amp; disclaimer
+          </Link>
+          .
+        </p>
+      </section>
 
       <ol className="relative space-y-8 border-l border-white/[0.08] pl-8">
         {phases.map((p) => (

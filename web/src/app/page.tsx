@@ -15,8 +15,15 @@ import { HomeFinalCta } from "@/components/home/HomeFinalCta";
 import { HomeDisclaimerStrip } from "@/components/home/HomeDisclaimerStrip";
 import { HomeFeaturedProperties } from "@/components/home/HomeFeaturedProperties";
 import { HomeHowItWorksSimple } from "@/components/home/HomeHowItWorksSimple";
-import { OwnershipFlowDiagram } from "@/components/home/OwnershipFlowDiagram";
+import { CulturalEcosystemFlow } from "@/components/home/CulturalEcosystemFlow";
 import { RealWorldOnChainSection } from "@/components/home/RealWorldOnChainSection";
+import { FlagshipProjectSection } from "@/components/home/FlagshipProjectSection";
+import { FoundingInvestorsSection } from "@/components/home/FoundingInvestorsSection";
+import { EcosystemPartnersSection } from "@/components/home/EcosystemPartnersSection";
+import { HomeCommunityFeed } from "@/components/home/HomeCommunityFeed";
+import { HomeGuestbookStrip } from "@/components/home/HomeGuestbookStrip";
+import { HomeIntroRedirect } from "@/components/home/HomeIntroRedirect";
+import { FLAGSHIP_PROPERTY_ID } from "@/lib/flagship-campaign";
 
 /** Talent app domain verification — must appear on the homepage <head>. */
 export const metadata: Metadata = {
@@ -29,24 +36,37 @@ export const metadata: Metadata = {
 export default function Home() {
   const globalFunding = getGlobalFundingMeter();
   const platform = getGlobalPlatformStats();
+  const flagshipHref = `/properties/${FLAGSHIP_PROPERTY_ID.toString()}`;
 
   return (
     <div className="relative -mx-4 -mt-8 overflow-hidden px-4 pt-8">
+      <HomeIntroRedirect />
       <HeroBackground />
 
       <div className="stagger-fade relative z-10 mx-auto max-w-4xl space-y-6 pb-8 pt-8 text-center sm:space-y-8 sm:pt-14">
+        <Link
+          href={flagshipHref}
+          className="inline-flex items-center gap-2 rounded-full border border-action/40 bg-action/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-action-light transition hover:border-action/60 hover:bg-action/20"
+        >
+          Flagship funding round live
+          <span aria-hidden className="text-action">
+            →
+          </span>
+        </Link>
         <p className="inline-flex rounded-full border border-eco/30 bg-eco/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-eco-light">
           Building Culture · 0G
         </p>
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl md:leading-[1.1]">
-          Own the Future of{" "}
-          <span className="text-gradient-eco">Real Estate</span>
+          Own Real Places That{" "}
+          <span className="text-gradient-eco">Matter</span>
         </h1>
         <p className="mx-auto max-w-2xl text-lg font-medium leading-relaxed text-canvas sm:text-xl">
-          The first global platform for community-owned property on-chain.
+          The first platform for community-owned cultural real estate — coworking hubs, cafés, creative villages and
+          housing — powered on-chain.
         </p>
         <p className="mx-auto max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-          Invest. Trade. Earn. All powered by smart contracts.
+          The Kickstarter for real estate: communities launch funding rounds with tokenized ownership — testnet-first;
+          verify disclosures before any production use.
         </p>
 
         <div className="mx-auto w-full max-w-2xl px-0 text-left">
@@ -58,9 +78,9 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-          <ButtonLink href="/properties">Explore Properties</ButtonLink>
+          <ButtonLink href="/properties">Explore projects</ButtonLink>
           <ButtonLink href="/invest" variant="secondary">
-            Start Investing
+            Become a founding investor
           </ButtonLink>
         </div>
         <p className="text-sm text-muted">
@@ -79,7 +99,13 @@ export default function Home() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1280px] space-y-16 pb-16 sm:space-y-24">
+        <FlagshipProjectSection />
+
+        <EcosystemPartnersSection />
+
         <SocialProofBand funding={globalFunding} platform={platform} />
+
+        <FoundingInvestorsSection />
 
         <HomeHowItWorksSimple />
 
@@ -88,13 +114,13 @@ export default function Home() {
         <PlatformEcosystemSection />
 
         <section className="glass-card border-eco/20 p-6 sm:p-10">
-          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Tokenized ownership</p>
-          <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">From asset to yield</h2>
+          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">How value flows</p>
+          <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">Community to investors</h2>
           <p className="mt-3 max-w-2xl text-sm text-muted">
-            A simplified view of how real-world exposure becomes programmable on-chain — actual terms vary by issuer.
+            A simplified view of how backing becomes programmable exposure — actual terms vary by issuer.
           </p>
           <div className="mt-10">
-            <OwnershipFlowDiagram />
+            <CulturalEcosystemFlow />
           </div>
         </section>
 
@@ -103,13 +129,18 @@ export default function Home() {
         <HomeFeaturedProperties />
 
         <div className="grid gap-8 lg:grid-cols-2">
-          <LiveActivityFeed variant="list" />
+          <HomeCommunityFeed limit={5} />
           <div className="glass-card flex flex-col justify-center border-eco/20 p-6 sm:p-8">
             <h2 className="text-lg font-semibold text-canvas">Why tokenize</h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              Transparent liquidity and programmable settlement can sit alongside traditional bank-led leverage. This
-              stack is a testnet-first step — read the full story on our mission page.
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              Transparent liquidity and programmable settlement can sit alongside traditional bank-led leverage — see
+              mission for the full story.
             </p>
+            <div className="mt-6 space-y-3">
+              <h3 className="text-sm font-medium text-canvas">Illustrative activity</h3>
+              <p className="text-xs text-muted">Demo lines — not blockchain events.</p>
+              <LiveActivityFeed variant="list" />
+            </div>
             <Link
               href="/mission"
               className="mt-6 inline-flex w-fit rounded-full border border-action/50 bg-action/10 px-5 py-2 text-sm font-semibold text-action-light hover:bg-action/20"
@@ -118,6 +149,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
+
+        <HomeGuestbookStrip />
 
         <TrustSection />
 
@@ -137,6 +170,9 @@ export default function Home() {
             </Link>
             <Link href="/guide" className="text-muted hover:text-canvas">
               Operator guide →
+            </Link>
+            <Link href="/build-with-us" className="text-muted hover:text-canvas">
+              Build with us →
             </Link>
             <Link href="/legal" className="text-muted hover:text-canvas">
               Legal &amp; risks →

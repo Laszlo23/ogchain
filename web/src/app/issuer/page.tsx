@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { keccak256, stringToBytes } from "viem";
-import { addresses } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { encryptMetadataJson } from "@/lib/client-crypto";
 
 export default function IssuerPage() {
   const { address, isConnected } = useAccount();
+  const { registry } = useProtocolAddresses();
   const [parcelLabel, setParcelLabel] = useState("");
   const [metadataJson, setMetadataJson] = useState('{\n  "title": "",\n  "jurisdiction": ""\n}');
   const [passphrase, setPassphrase] = useState("");
@@ -64,7 +65,7 @@ export default function IssuerPage() {
         Submit a parcel label and optional public metadata URI. Encrypt sensitive JSON client-side with a
         passphrase before it is sent — the server stores only ciphertext. On-chain{" "}
         <span className="font-mono">registerProperty</span> requires <span className="font-mono">REGISTRAR_ROLE</span>{" "}
-        on PropertyRegistry ({addresses.registry.slice(0, 10)}…).
+        on PropertyRegistry ({registry.slice(0, 10)}…).
       </p>
 
       {!isConnected && <p className="text-amber-400">Connect a wallet to associate this application.</p>}

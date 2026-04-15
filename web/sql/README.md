@@ -7,11 +7,13 @@ PostgreSQL DDL for optional app features when `DATABASE_URL` is set in `web/.env
 1. **Base** — [`schema.sql`](schema.sql) — users, wallet bindings, SIWE nonces, KYC, issuer applications.
 2. **Community** — [`community_schema.sql`](community_schema.sql) — profiles, referrals, tasks, announcements.
 3. **Feedback** — [`feedback_schema.sql`](feedback_schema.sql) — optional feedback submissions (used by `POST /api/feedback`).
+4. **LinkedIn on profiles** (if you already applied community schema) — [`add_linkedin_to_user_profiles.sql`](add_linkedin_to_user_profiles.sql).
 
 ```bash
 psql "$DATABASE_URL" -f web/sql/schema.sql
 psql "$DATABASE_URL" -f web/sql/community_schema.sql
 psql "$DATABASE_URL" -f web/sql/feedback_schema.sql
+psql "$DATABASE_URL" -f web/sql/add_linkedin_to_user_profiles.sql
 # Optional sample announcement:
 # psql "$DATABASE_URL" -f web/sql/seed_community_example.sql
 ```

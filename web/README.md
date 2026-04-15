@@ -19,11 +19,14 @@ cd web
 cp .env.local.example .env.local
 # Fill contract addresses from deployment, or from repo root:
 # python3 scripts/sync_web_env.py deployments/testnet.json > web/.env.local
+# Optional Base mainnet: append with `python3 scripts/sync_web_env.py deployments/base-mainnet.json >> web/.env.local`
 npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). Connect via **injected** wallets or **WalletConnect** when `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` is set.
+
+**Mobile / X (Twitter) in-app browser:** embedded browsers often block wallet deep links. The app shows a **banner** suggesting you open the site in Safari or Chrome. For QR / mobile pairing, set `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`. Set **`NEXT_PUBLIC_SITE_URL`** to your public origin (e.g. `https://your.domain`) so Open Graph / X link previews resolve correctly.
 
 ## Environment variables
 
@@ -40,9 +43,29 @@ Open [http://localhost:3000](http://localhost:3000). Connect via **injected** wa
 | `NEXT_PUBLIC_PREDICTION_MARKET` | `BinaryPredictionMarket` |
 | `NEXT_PUBLIC_PROOF_NFT` | `PropertyShareProof` ERC-721 (optional certificates) |
 | `NEXT_PUBLIC_STAKING` | `OgStaking` native staking + rewards |
+| `NEXT_PUBLIC_GUESTBOOK` | `CommunityGuestbook` (on-chain guestbook; deploy via `script/DeployGuestbook.s.sol`) |
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect Cloud project id (optional; browser wallets work without it) |
 | `NEXT_PUBLIC_ADMIN_PREVIEW` | Set to `1` to show `/admin` layout without on-chain roles (testnet only) |
 | `NEXT_PUBLIC_SITE_URL` | Public site origin (NFT metadata `external_url`) |
+
+**Base mainnet (optional second deployment)** — separate AMM and liquidity from 0G; merge env from `scripts/sync_web_env.py deployments/base-mainnet.json`:
+
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_BASE_RPC` | Base JSON-RPC URL (defaults to `https://mainnet.base.org` in app if unset) |
+| `NEXT_PUBLIC_BASE_EXPLORER` | Block explorer base for Base (e.g. `https://basescan.org`) |
+| `NEXT_PUBLIC_BASE_REGISTRY` | `PropertyRegistry` on Base |
+| `NEXT_PUBLIC_BASE_SHARE_FACTORY` | `PropertyShareFactory` |
+| `NEXT_PUBLIC_BASE_COMPLIANCE_REGISTRY` | `ComplianceRegistry` |
+| `NEXT_PUBLIC_BASE_WETH` | `WETH9` |
+| `NEXT_PUBLIC_BASE_ROUTER` | `OgRouter` |
+| `NEXT_PUBLIC_BASE_LENDING_POOL` | `SimpleLendingPool` |
+| `NEXT_PUBLIC_BASE_PREDICTION_MARKET` | `BinaryPredictionMarket` |
+| `NEXT_PUBLIC_BASE_PROOF_NFT` | `PropertyShareProof` |
+| `NEXT_PUBLIC_BASE_STAKING` | `OgStaking` |
+| `NEXT_PUBLIC_BASE_GUESTBOOK` | `CommunityGuestbook` on Base (optional) |
+
+**Homepage community feed:** when `DATABASE_URL` is set and `platform_posts` has rows, the landing page shows **Platform updates** from the same API as `/community`.
 
 Server-only — Guide AI (`/guide`): `OPENAI_API_KEY`, optional `OPENAI_MODEL`. Alternatively `INFERENCE_BACKEND=og_compute` with `OG_COMPUTE_INFERENCE_URL` (and optional `OG_COMPUTE_API_KEY`) for [0G Compute](https://docs.0g.ai/developer-hub/building-on-0g/compute-network/overview)–compatible endpoints.
 

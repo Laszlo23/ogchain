@@ -39,6 +39,13 @@ export default function MissionPage() {
           <strong className="text-zinc-200">hypothetical until negotiated and permitted</strong>; they are not commitments
           from this software.
         </p>
+        <p>
+          For illustrative partner programmes and sustainability narratives in English (Building Culture Land), see the{" "}
+          <Link href="/culture-land" className="font-medium text-brand hover:underline">
+            Culture Land portfolio
+          </Link>{" "}
+          one-pager — not a substitute for offering documents.
+        </p>
       </section>
 
       <section className="glass-card border border-brand/20 bg-brand/[0.04] p-6">

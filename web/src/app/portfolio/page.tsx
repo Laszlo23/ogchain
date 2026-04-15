@@ -8,7 +8,8 @@ import { useAccount, useBalance, useReadContracts } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { PortfolioIllustrativeCharts } from "@/components/PortfolioIllustrativeCharts";
 import { TrustSection } from "@/components/TrustSection";
-import { addresses, erc20Abi } from "@/lib/contracts";
+import { erc20Abi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 import { getEstimatedYieldPercent } from "@/lib/demo-properties";
 
@@ -20,7 +21,7 @@ function parseShareFloat(wei: bigint): number {
 
 export default function PortfolioPage() {
   const { address, isConnected } = useAccount();
-  const weth = addresses.weth;
+  const { weth } = useProtocolAddresses();
 
   const { data: nativeBal } = useBalance({ address, query: { enabled: !!address } });
 

@@ -279,3 +279,102 @@ body {
     stroke-dashoffset: -420;
   }
 }
+
+/* Incoming slide: subtle scale-settle (composes with Ken Burns on child) */
+@keyframes immersive-bg-enter {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .immersive-bg-enter {
+    animation: immersive-bg-enter 1.95s cubic-bezier(0.18, 0.82, 0.32, 1) forwards;
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .immersive-bg-enter {
+    transform: none;
+  }
+}
+
+/* Fullscreen experience funnel — stronger zoom on active slide */
+@keyframes immersive-ken-burns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .immersive-ken-burns {
+    animation: immersive-ken-burns 30s cubic-bezier(0.25, 0.1, 0.25, 1) 1.85s forwards;
+    will-change: transform;
+  }
+}
+
+@keyframes immersive-beat-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .immersive-beat-enter {
+    animation: immersive-beat-enter 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .immersive-beat-enter {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes immersive-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .immersive-panel-enter {
+    animation: immersive-panel-enter 0.55s ease-out 0.08s both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .immersive-panel-enter {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes immersive-quote-glow {
+  from {
+    box-shadow: 0 0 28px -12px rgba(63, 143, 107, 0.22);
+    opacity: 0.94;
+  }
+  to {
+    box-shadow: 0 0 48px -8px rgba(63, 143, 107, 0.38);
+    opacity: 1;
+  }
+}

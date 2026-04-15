@@ -12,6 +12,7 @@ type Profile = {
   twitter: string | null;
   discord: string | null;
   farcaster: string | null;
+  linkedin: string | null;
   telegram: string | null;
   website: string | null;
   public_slug: string | null;
@@ -102,6 +103,7 @@ export default function ProfilePage() {
         twitter: p.twitter ?? null,
         discord: p.discord ?? null,
         farcaster: p.farcaster ?? null,
+        linkedin: p.linkedin ?? null,
         telegram: p.telegram ?? null,
         website: p.website ?? null,
         public_slug: p.public_slug ?? null,
@@ -155,7 +157,15 @@ export default function ProfilePage() {
         Boolean(profile.display_name?.trim()) ||
         Boolean(profile.bio?.trim()) ||
         Boolean(
-          (profile.twitter ?? profile.discord ?? profile.farcaster ?? profile.telegram ?? profile.website ?? "").trim(),
+          (
+            profile.twitter ??
+            profile.discord ??
+            profile.farcaster ??
+            profile.linkedin ??
+            profile.telegram ??
+            profile.website ??
+            ""
+          ).trim(),
         );
       if (complete) {
         await fetch("/api/tasks/claim", {
@@ -280,9 +290,9 @@ export default function ProfilePage() {
             </label>
           )}
 
-          {(["twitter", "discord", "farcaster", "telegram", "website"] as const).map((k) => (
+          {(["twitter", "discord", "farcaster", "linkedin", "telegram", "website"] as const).map((k) => (
             <label key={k} className="block text-sm">
-              <span className="text-zinc-500 capitalize">{k}</span>
+              <span className="text-zinc-500 capitalize">{k === "linkedin" ? "LinkedIn" : k}</span>
               <input
                 value={profile[k] ?? ""}
                 onChange={(e) => setProfile({ ...profile, [k]: e.target.value || null })}

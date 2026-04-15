@@ -5,7 +5,7 @@ import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
 import { PropertyShareButton } from "@/components/PropertyShareButton";
 import { getDemoImageSlides, getEstimatedYieldPercent, type DemoPropertyDetail } from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
-import { explorerBase } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { FundingMeter } from "@/components/FundingMeter";
 
 type PropertyCardProps = {
@@ -17,7 +17,8 @@ type PropertyCardProps = {
 };
 
 export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: PropertyCardProps) {
-  const explorerToken = `${explorerBase}/address/${tokenAddress}`;
+  const { explorer } = useProtocolAddresses();
+  const explorerToken = `${explorer}/address/${tokenAddress}`;
   const goalUsd = demo?.illustrativePropertyValueUsd ?? 10_000_000;
   const funding = getFundingStats(propertyId, goalUsd);
   const fundingCurrency = demo?.creditLines?.length ? "EUR" : "USD";
@@ -37,10 +38,18 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
               sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 400px"
             />
             <div className="pointer-events-none absolute inset-0 z-[14] bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+            {demo.discoveryCategory && (
+              <div className="absolute left-3 top-3 z-[16] rounded-full border border-eco/35 bg-black/55 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-eco-light backdrop-blur-sm">
+                {demo.discoveryCategory}
+              </div>
+            )}
             <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-[15] p-4">
               <h2 className="text-lg font-semibold tracking-tight text-white">{demo.headline ?? name}</h2>
               <p className="text-xs text-eco-light">{demo.location ?? "Registered property"}</p>
               <p className="mt-1 text-[10px] uppercase tracking-wide text-muted">{demo.propertyType}</p>
+              <p className="mt-2 text-[11px] font-mono tabular-nums text-canvas/90">
+                {Math.round(funding.progress * 100)}% funded · {funding.investors.toLocaleString()} investors
+              </p>
             </div>
           </>
         ) : (

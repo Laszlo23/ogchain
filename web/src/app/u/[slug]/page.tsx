@@ -12,6 +12,7 @@ type PublicProfile = {
   twitter: string | null;
   discord: string | null;
   farcaster: string | null;
+  linkedin: string | null;
   telegram: string | null;
   website: string | null;
   public_slug: string | null;
@@ -121,6 +122,11 @@ export default function PublicProfilePage() {
               Farcaster: <span className="text-zinc-200">{profile.farcaster}</span>
             </li>
           )}
+          {profile.linkedin && (
+            <li>
+              LinkedIn: <span className="text-zinc-200">{profile.linkedin}</span>
+            </li>
+          )}
           {profile.telegram && (
             <li>
               Telegram: <span className="text-zinc-200">{profile.telegram}</span>
@@ -137,6 +143,7 @@ export default function PublicProfilePage() {
           {!profile.twitter &&
             !profile.discord &&
             !profile.farcaster &&
+            !profile.linkedin &&
             !profile.telegram &&
             !profile.website && <li className="text-zinc-600">No links listed.</li>}
         </ul>

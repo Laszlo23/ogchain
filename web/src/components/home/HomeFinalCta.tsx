@@ -18,7 +18,7 @@ export function HomeFinalCta() {
       </h2>
       <p className="relative mx-auto mt-4 max-w-lg text-sm text-muted">Start with a wallet, explore listings, and build your on-chain position — where permitted.</p>
       <div className="relative mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-        <ButtonLink href="/properties">Explore properties</ButtonLink>
+        <ButtonLink href="/properties">Explore projects</ButtonLink>
         {!hydrated ? (
           <span className="inline-flex min-h-[44px] min-w-[160px] items-center justify-center rounded-full border border-eco/40 px-6 py-2.5 text-sm font-semibold text-canvas opacity-60">
             Connect wallet

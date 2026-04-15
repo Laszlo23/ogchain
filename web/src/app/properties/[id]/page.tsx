@@ -8,7 +8,8 @@ import { useReadContract } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { FundingMeter } from "@/components/FundingMeter";
 import { TrustSection } from "@/components/TrustSection";
-import { addresses, erc20Abi, explorerBase } from "@/lib/contracts";
+import { erc20Abi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { demoAvailableShares } from "@/lib/demo-investment-math";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
 import { PropertyShareButton } from "@/components/PropertyShareButton";
@@ -20,6 +21,7 @@ import {
   getEstimatedYieldPercent,
 } from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
+import { getPublicDocumentById, publicDocumentHref } from "@/lib/public-documents";
 import { PropertyInvestmentCalculator } from "@/components/PropertyInvestmentCalculator";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
@@ -34,7 +36,7 @@ export default function PropertyDetailPage() {
     }
   }, [idStr]);
 
-  const registry = addresses.registry;
+  const { registry, proofNft, explorer: explorerBase } = useProtocolAddresses();
   const unset = registry === zeroAddress;
 
   const { rows, loading } = usePropertyShareList();
@@ -91,7 +93,7 @@ export default function PropertyDetailPage() {
 
   const economics = demo ? formatIllustrativeEconomics(demo) : null;
   const explorerToken = `${explorerBase}/address/${row.tokenAddress}`;
-  const proofConfigured = addresses.proofNft !== zeroAddress;
+  const proofConfigured = proofNft !== zeroAddress;
   const totalSupplyStr =
     totalSupplyWei !== undefined ? Number(formatEther(totalSupplyWei)).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "—";
   const remainingShares = demo ? demoAvailableShares(propertyId, goalUsd).toLocaleString("en-US") : "—";
@@ -132,6 +134,11 @@ export default function PropertyDetailPage() {
               />
               <div className="pointer-events-none absolute inset-0 z-[14] bg-gradient-to-t from-black via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 z-[15] p-6 sm:p-10">
+                {demo.discoveryCategory && (
+                  <p className="mb-2 inline-block rounded-full border border-gold-400/30 bg-black/50 px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-gold-300">
+                    {demo.discoveryCategory}
+                  </p>
+                )}
                 <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-400/90">Property #{idStr}</p>
                 <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                   {demo.headline ?? row.name}
@@ -149,6 +156,89 @@ export default function PropertyDetailPage() {
       </div>
 
       <ComplianceStatus />
+
+      {demo && (demo.vision || demo.architectureNarrative || demo.communityUsers || demo.ownershipModel) && (
+        <div className="space-y-6">
+          {demo.vision && (
+            <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+              <h2 className="text-lg font-semibold text-white">Vision</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">{demo.vision}</p>
+            </section>
+          )}
+          {(demo.architectureNarrative || (demo.documentIds && demo.documentIds.length > 0)) && (
+            <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+              <h2 className="text-lg font-semibold text-white">Architecture &amp; plans</h2>
+              {demo.architectureNarrative && (
+                <p className="mt-3 text-sm leading-relaxed text-muted">{demo.architectureNarrative}</p>
+              )}
+              {demo.documentIds && demo.documentIds.length > 0 && (
+                <ul className="mt-4 space-y-2">
+                  {demo.documentIds.map((docId) => {
+                    const doc = getPublicDocumentById(docId);
+                    if (!doc) return null;
+                    return (
+                      <li key={docId} className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                        <Link
+                          href={publicDocumentHref(doc.filePath)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm font-medium text-brand hover:underline"
+                        >
+                          {doc.title} (PDF) →
+                        </Link>
+                        <Link href={`/documents/${docId}`} className="text-sm text-muted hover:text-brand hover:underline">
+                          Story page →
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              <p className="mt-3 text-xs text-muted">Plans are illustrative references — not a title report.</p>
+            </section>
+          )}
+          {demo.communityUsers && demo.communityUsers.length > 0 && (
+            <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+              <h2 className="text-lg font-semibold text-white">Community</h2>
+              <p className="mt-2 text-sm text-muted">Who uses this place:</p>
+              <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-muted">
+                {demo.communityUsers.map((u) => (
+                  <li key={u}>{u}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {demo.ownershipModel && (
+            <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+              <h2 className="text-lg font-semibold text-white">Ownership model</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted">{demo.ownershipModel}</p>
+            </section>
+          )}
+          <section className="rounded-2xl border border-brand/20 bg-brand/[0.06] p-6 sm:p-8">
+            <h2 className="text-lg font-semibold text-white">Funding round (illustrative)</h2>
+            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Progress</dt>
+                <dd className="mt-1 font-mono text-sm text-white">{Math.round(funding.progress * 100)}%</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Investors (demo)</dt>
+                <dd className="mt-1 font-mono text-sm text-white">{funding.investors.toLocaleString()}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Share price ref.</dt>
+                <dd className="mt-1 font-mono text-sm text-white">{sharePrice}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Est. yield (illustr.)</dt>
+                <dd className="mt-1 font-mono text-sm text-brand">{demo ? `${getEstimatedYieldPercent(demo).toFixed(1)}%` : "—"}</dd>
+              </div>
+            </dl>
+            {demo.fundingRoundNote && <p className="mt-4 text-xs text-muted">{demo.fundingRoundNote}</p>}
+            <p className="mt-2 text-xs text-muted">Figures are not live on-chain TVL — testnet demo.</p>
+          </section>
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
@@ -278,7 +368,30 @@ export default function PropertyDetailPage() {
                 Offering memorandum, subscription agreement, and risk factors should live off-chain with issuer
                 control. Hash commitments on-chain if required.
               </p>
-              <p className="mt-4 text-sm text-muted">
+              {demo?.documentIds && demo.documentIds.length > 0 && (
+                <ul className="mt-6 space-y-3 border-t border-white/10 pt-6">
+                  {demo.documentIds.map((docId) => {
+                    const doc = getPublicDocumentById(docId);
+                    if (!doc) return null;
+                    return (
+                      <li key={docId} className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                        <Link
+                          href={publicDocumentHref(doc.filePath)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm font-medium text-brand hover:underline"
+                        >
+                          {doc.title} (PDF) →
+                        </Link>
+                        <Link href={`/documents/${docId}`} className="text-sm text-muted hover:text-brand hover:underline">
+                          Story →
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+              <p className="mt-6 text-sm text-muted">
                 See{" "}
                 <Link href="/legal" className="text-brand hover:underline">
                   Legal &amp; risks

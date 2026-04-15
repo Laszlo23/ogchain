@@ -3,7 +3,8 @@
 import { useMemo } from "react";
 import { zeroAddress } from "viem";
 import { useReadContract, useReadContracts } from "wagmi";
-import { addresses, erc20Abi, registryAbi, shareFactoryAbi } from "@/lib/contracts";
+import { erc20Abi, registryAbi, shareFactoryAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { DEMO_PROPERTY_DETAILS, type DemoPropertyDetail } from "@/lib/demo-properties";
 
 export type PropertyShareRow = {
@@ -15,8 +16,7 @@ export type PropertyShareRow = {
 };
 
 export function usePropertyShareList() {
-  const registry = addresses.registry;
-  const shareFactory = addresses.shareFactory;
+  const { registry, shareFactory } = useProtocolAddresses();
   const unset = registry === zeroAddress || shareFactory === zeroAddress;
 
   const { data: nextId } = useReadContract({

@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS user_profiles (
   show_holdings BOOLEAN NOT NULL DEFAULT FALSE,
   twitter TEXT,
   discord TEXT,
+  linkedin TEXT,
   farcaster TEXT,
   telegram TEXT,
   website TEXT,

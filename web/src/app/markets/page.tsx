@@ -1,10 +1,11 @@
 "use client";
 
 import { useReadContract } from "wagmi";
-import { addresses, predictionAbi } from "@/lib/contracts";
+import { predictionAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 
 export default function MarketsPage() {
-  const m = addresses.predictionMarket;
+  const { predictionMarket: m } = useProtocolAddresses();
 
   const { data: nextId } = useReadContract({
     address: m,

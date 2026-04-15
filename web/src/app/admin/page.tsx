@@ -10,12 +10,21 @@ import {
 } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { TrustStrip } from "@/components/TrustStrip";
-import { accessControlAbi, addresses, complianceAdminAbi, explorerBase, registryAbi } from "@/lib/contracts";
+import { accessControlAbi, complianceAdminAbi, registryAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { COMPLIANCE_ADMIN_ROLE, REGISTRAR_ROLE } from "@/lib/roles";
 
 const STATUS_LABELS = ["None", "Pending", "Verified", "Revoked"] as const;
 
-function AddrRow({ label, addr }: { label: string; addr: `0x${string}` }) {
+function AddrRow({
+  label,
+  addr,
+  explorer,
+}: {
+  label: string;
+  addr: `0x${string}`;
+  explorer: string;
+}) {
   const short = `${addr.slice(0, 6)}…${addr.slice(-4)}`;
   const unset = addr === zeroAddress;
   return (
@@ -25,7 +34,7 @@ function AddrRow({ label, addr }: { label: string; addr: `0x${string}` }) {
         <span className="font-mono text-xs text-zinc-600">not set</span>
       ) : (
         <a
-          href={`${explorerBase}/address/${addr}`}
+          href={`${explorer}/address/${addr}`}
           target="_blank"
           rel="noreferrer"
           className="font-mono text-xs text-gold-400 hover:underline"
@@ -42,14 +51,25 @@ export default function AdminPage() {
   const preview = process.env.NEXT_PUBLIC_ADMIN_PREVIEW === "1";
   const [walletInput, setWalletInput] = useState("");
   const [statusIdx, setStatusIdx] = useState(2);
+  const {
+    registry,
+    shareFactory,
+    compliance,
+    weth,
+    router,
+    predictionMarket,
+    proofNft,
+    staking,
+    explorer: explorerBase,
+  } = useProtocolAddresses();
 
   const rolesEnabled =
-    !!address && addresses.registry !== zeroAddress && addresses.compliance !== zeroAddress;
+    !!address && registry !== zeroAddress && compliance !== zeroAddress;
 
   const roleAccount = address ?? zeroAddress;
 
   const { data: registrarRole, refetch: refetchRegistrarRole } = useReadContract({
-    address: addresses.registry,
+    address: registry,
     abi: accessControlAbi,
     functionName: "hasRole",
     args: [REGISTRAR_ROLE, roleAccount],
@@ -57,7 +77,7 @@ export default function AdminPage() {
   });
 
   const { data: complianceRole, refetch: refetchComplianceRole } = useReadContract({
-    address: addresses.compliance,
+    address: compliance,
     abi: accessControlAbi,
     functionName: "hasRole",
     args: [COMPLIANCE_ADMIN_ROLE, roleAccount],
@@ -77,10 +97,10 @@ export default function AdminPage() {
   const showAnySection = showRegistrar || showCompliance;
 
   const { data: nextPropertyId } = useReadContract({
-    address: addresses.registry,
+    address: registry,
     abi: registryAbi,
     functionName: "nextPropertyId",
-    query: { enabled: addresses.registry !== zeroAddress },
+    query: { enabled: registry !== zeroAddress },
   });
 
   const { writeContract, data: txHash, isPending, error: writeErr } = useWriteContract();
@@ -91,11 +111,11 @@ export default function AdminPage() {
   }, [confirmed, refetchRoles]);
 
   function submitCompliance() {
-    if (addresses.compliance === zeroAddress) return;
+    if (compliance === zeroAddress) return;
     const w = walletInput.trim() as `0x${string}`;
     if (!isAddress(w)) return;
     writeContract({
-      address: addresses.compliance,
+      address: compliance,
       abi: complianceAdminAbi,
       functionName: "setWalletStatus",
       args: [w, statusIdx],
@@ -126,14 +146,14 @@ export default function AdminPage() {
         <h2 className="text-sm font-medium text-white">Deployment</h2>
         <p className="mt-1 text-xs text-zinc-500">Addresses from environment (sync via scripts/sync_web_env.py).</p>
         <div className="mt-3">
-          <AddrRow label="PropertyRegistry" addr={addresses.registry} />
-          <AddrRow label="PropertyShareFactory" addr={addresses.shareFactory} />
-          <AddrRow label="ComplianceRegistry" addr={addresses.compliance} />
-          <AddrRow label="OgRouter" addr={addresses.router} />
-          <AddrRow label="WETH9" addr={addresses.weth} />
-          <AddrRow label="BinaryPredictionMarket" addr={addresses.predictionMarket} />
-          <AddrRow label="PropertyShareProof" addr={addresses.proofNft} />
-          <AddrRow label="OgStaking" addr={addresses.staking} />
+          <AddrRow label="PropertyRegistry" addr={registry} explorer={explorerBase} />
+          <AddrRow label="PropertyShareFactory" addr={shareFactory} explorer={explorerBase} />
+          <AddrRow label="ComplianceRegistry" addr={compliance} explorer={explorerBase} />
+          <AddrRow label="OgRouter" addr={router} explorer={explorerBase} />
+          <AddrRow label="WETH9" addr={weth} explorer={explorerBase} />
+          <AddrRow label="BinaryPredictionMarket" addr={predictionMarket} explorer={explorerBase} />
+          <AddrRow label="PropertyShareProof" addr={proofNft} explorer={explorerBase} />
+          <AddrRow label="OgStaking" addr={staking} explorer={explorerBase} />
         </div>
         <p className="mt-4 text-[11px] text-zinc-500">
           Explorer:{" "}
@@ -161,7 +181,7 @@ export default function AdminPage() {
           </p>
           <p className="mt-3 font-mono text-lg text-gold-200/90">
             nextPropertyId:{" "}
-            {nextPropertyId !== undefined ? nextPropertyId.toString() : addresses.registry === zeroAddress ? "—" : "…"}
+            {nextPropertyId !== undefined ? nextPropertyId.toString() : registry === zeroAddress ? "—" : "…"}
           </p>
         </div>
       )}
@@ -203,7 +223,7 @@ export default function AdminPage() {
                 !isConnected ||
                 isPending ||
                 confirming ||
-                addresses.compliance === zeroAddress ||
+                compliance === zeroAddress ||
                 !isAddress(walletInput.trim())
               }
               onClick={submitCompliance}

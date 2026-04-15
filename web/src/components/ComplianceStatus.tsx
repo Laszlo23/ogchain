@@ -1,14 +1,15 @@
 "use client";
 
 import { useAccount, useReadContract } from "wagmi";
-import { addresses, complianceAbi } from "@/lib/contracts";
+import { complianceAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 
 const zero = "0x0000000000000000000000000000000000000000" as const;
 
 /** When no compliance contract is configured, trading is unrestricted in the UI. */
 export function useCompliance() {
   const { address } = useAccount();
-  const reg = addresses.compliance;
+  const { compliance: reg } = useProtocolAddresses();
   const hasRegistry = reg !== zero;
   const verifiedEnabled = !!address && hasRegistry;
 

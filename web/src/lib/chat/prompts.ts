@@ -1,4 +1,5 @@
 import { addresses, explorerBase } from "@/lib/contracts";
+import { baseAddresses, baseExplorerBase, isBaseConfigured } from "@/lib/base-addresses";
 import { formatRagBlock, type RagChunk } from "@/lib/rag/retrieve";
 
 export type ChatMode = "education" | "sales" | "support";
@@ -13,8 +14,8 @@ Mandatory safety and compliance:
 `;
 
 function baseDeploymentBlock(): string {
-  return `
-Deployment (public env) — use ONLY these addresses when answering; they may be zero if unset:
+  const og = `
+Deployment (0G Galileo, chain id 16602) — use ONLY these addresses when answering; they may be zero if unset:
 - Registry: ${addresses.registry}
 - Share factory: ${addresses.shareFactory}
 - Compliance: ${addresses.compliance}
@@ -25,6 +26,20 @@ Deployment (public env) — use ONLY these addresses when answering; they may be
 - Proof NFT: ${addresses.proofNft}
 - Staking: ${addresses.staking}
 - Explorer: ${explorerBase}
+`;
+  if (!isBaseConfigured()) return og;
+  return `${og}
+Optional Base mainnet (chain id 8453) — separate liquidity and contracts; not a unified cross-chain pool:
+- Registry: ${baseAddresses.registry}
+- Share factory: ${baseAddresses.shareFactory}
+- Compliance: ${baseAddresses.compliance}
+- WETH: ${baseAddresses.weth}
+- Router: ${baseAddresses.router}
+- Lending pool: ${baseAddresses.lendingPool}
+- Prediction market: ${baseAddresses.predictionMarket}
+- Proof NFT: ${baseAddresses.proofNft}
+- Staking: ${baseAddresses.staking}
+- Explorer: ${baseExplorerBase}
 `;
 }
 

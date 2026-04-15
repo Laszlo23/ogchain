@@ -9,13 +9,13 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ComplianceStatus, useCompliance } from "@/components/ComplianceStatus";
-import { addresses, erc20Abi, lendingPoolAbi } from "@/lib/contracts";
+import { erc20Abi, lendingPoolAbi } from "@/lib/contracts";
+import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 
 export default function LendPage() {
   const { address, isConnected } = useAccount();
   const { blocked } = useCompliance();
-  const pool = addresses.lendingPool;
-  const weth = addresses.weth;
+  const { lendingPool: pool, weth } = useProtocolAddresses();
 
   const unset = pool === "0x0000000000000000000000000000000000000000";
 
