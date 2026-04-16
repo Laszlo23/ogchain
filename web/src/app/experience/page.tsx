@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { ImmersiveExperience } from "@/components/experience/ImmersiveExperience";
 
-const ogImagePath = "/Innen01.jpg";
+const ogImagePath = "/extracted/water-side-keutschach-20220112/page-01.jpg";
 
 export const metadata: Metadata = {
   title: "Immersive story — Building Culture | Community-owned cultural real estate",
   description:
-    "Full-screen visual story: real places, tokenized participation, and a $1B-scale ecosystem ambition — community funding, flagship projects, and transparent (illustrative) economics. Testnet-first; not investment advice.",
+    "Full-screen visual story: community-owned cultural assets, curated Culture Land listings, and transparent reference financials — live on 0G; not investment advice.",
   keywords: [
     "Building Culture",
     "community real estate",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Immersive story — Building Culture",
     description:
-      "Photography-led narrative of community-owned places, protocol rails, and illustrative campaign context — explore before you invest time on-chain.",
+      "Photography-led narrative of community-owned places, protocol rails, and reference campaign context — explore before you invest time on-chain.",
     type: "website",
     url: "/experience",
     siteName: "Building Culture",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Immersive story — Building Culture",
     description:
-      "Own the narrative: community-first capital for cultural real estate — illustrative metrics; testnet-first.",
+      "Own the narrative: community-first capital for cultural real estate — reference metrics on 0G.",
     images: [ogImagePath],
   },
 };

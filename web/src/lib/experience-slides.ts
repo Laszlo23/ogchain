@@ -1,6 +1,8 @@
 /**
  * Fullscreen funnel slides — one panel per demo property (imagery + copy from `demo-properties`).
+ * Titles align with Culture Land when `exploreHref` matches (`culture-land-portfolio`).
  */
+import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portfolio";
 import { DEMO_PROPERTY_DETAILS, getDemoImageSlides } from "@/lib/demo-properties";
 
 export type ExperienceSlide = {
@@ -27,11 +29,16 @@ export function getProjectExperienceSlides(): ExperienceSlide[] {
   return ids.map((propertyId) => {
     const d = DEMO_PROPERTY_DETAILS[propertyId]!;
     const img = getDemoImageSlides(d)[0]!;
+    const cl = getCultureLandDisplayForDemoPropertyId(propertyId);
+    const title = cl?.title ?? d.headline;
+    const subtitle = cl
+      ? truncateThesis(`${cl.tagline} — ${cl.region}`, 220)
+      : truncateThesis(d.thesis, 220);
     return {
       propertyId,
       kicker: d.discoveryCategory,
-      title: d.headline,
-      subtitle: truncateThesis(d.thesis, 220),
+      title,
+      subtitle,
       imageSrc: img.src,
       imageAlt: img.alt,
     };

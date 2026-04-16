@@ -76,10 +76,10 @@ export function ComplianceStatus() {
 
   return (
     <div className="rounded-md border border-amber-900/60 bg-amber-950/30 px-3 py-2 text-xs text-amber-100">
-      <p className="font-medium">Verification (paused for testing in many pilots)</p>
+      <p className="font-medium">Verification (configuration-dependent)</p>
       <p className="mt-1 text-amber-200/80">
         Your wallet is not marked verified on the ComplianceRegistry. When provider flows are enabled, the relayer
-        updates on-chain status via webhook. For testnets, a compliance admin may call{" "}
+        updates on-chain status via webhook. A compliance admin may call{" "}
         <span className="font-mono">setWalletStatus</span>.
       </p>
     </div>

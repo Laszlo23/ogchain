@@ -122,7 +122,7 @@ export function FoundingInvestorsSection() {
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted">
             A limited window for people who want skin in the game on community-owned cultural spaces. Everything below is
-            illustrative UI — final perks depend on each issuer and jurisdiction.
+            reference UI — final perks depend on each issuer and jurisdiction.
           </p>
 
           <ol className="relative mt-8 space-y-0 border-l border-eco/30 pl-6">
@@ -183,7 +183,7 @@ export function FoundingInvestorsSection() {
                 <p className="text-[11px] font-medium uppercase tracking-wide text-muted">Remaining founding slots</p>
                 <p className="mt-1 font-mono text-3xl font-semibold tabular-nums text-eco-light sm:text-4xl">{remaining}</p>
                 <p className="mt-1 text-xs text-muted">
-                  of {total} illustrative slots — not enforced on-chain; verify any live offering docs.
+                  of {total} reference slots — not enforced on-chain; verify any live offering docs.
                 </p>
               </div>
               <div className="w-full min-w-[140px] max-w-[220px] flex-1">

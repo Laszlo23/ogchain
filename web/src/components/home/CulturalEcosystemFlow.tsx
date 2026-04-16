@@ -8,14 +8,14 @@ const steps = [
 ];
 
 /**
- * Vertical flow: Community → … → Investors (illustrative).
+ * Vertical flow: Community → … → Investors (reference model).
  */
 export function CulturalEcosystemFlow() {
   return (
-    <div className="mx-auto flex w-full max-w-md flex-col gap-0">
+    <div className="mx-auto flex w-full max-w-lg flex-col gap-0">
       {steps.map((st, i) => (
         <div key={st.title}>
-          <div className="rounded-2xl border border-eco/25 bg-forest/40 px-5 py-4 text-center shadow-lg shadow-black/20">
+          <div className="rounded-2xl border border-eco/25 bg-forest/40 px-6 py-5 text-center shadow-lg shadow-black/20">
             <p className="text-sm font-semibold text-canvas">{st.title}</p>
             <p className="mt-1 text-[11px] text-muted">{st.sub}</p>
           </div>
@@ -28,7 +28,7 @@ export function CulturalEcosystemFlow() {
           ) : null}
         </div>
       ))}
-      <p className="mt-4 text-center text-[10px] text-muted">Illustrative flow — actual terms vary by issuer and jurisdiction.</p>
+      <p className="mt-4 text-center text-[10px] text-muted">Reference flow — actual terms vary by issuer and jurisdiction.</p>
     </div>
   );
 }

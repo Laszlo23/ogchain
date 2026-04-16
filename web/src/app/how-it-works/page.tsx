@@ -30,14 +30,14 @@ export default function HowItWorksPage() {
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           Each property can have an ERC-20 <strong className="text-zinc-300">share token</strong> representing a
           fractional economic interest as defined by the issuer&apos;s legal structure — not automatic land title. On
-          testnet, numbers and metadata are <strong className="text-zinc-300">illustrative</strong>.
+          0G, numbers and metadata are <strong className="text-zinc-300">reference</strong> unless you verify issuer filings.
         </p>
       </section>
 
       <section className="glass-card p-6 sm:p-8">
         <h2 className="text-lg font-semibold text-white">Primary vs secondary</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          In the demo model, <strong className="text-zinc-300">one whole share</strong> (1.0 token) lines up with about{" "}
+          In the seeded listing model, <strong className="text-zinc-300">one whole share</strong> (1.0 token) lines up with about{" "}
           <strong className="text-zinc-300">$1,000</strong> notional at seed time. Issuers can offer{" "}
           <strong className="text-zinc-300">primary</strong> sales that only sell whole shares (minimum one), at a
           price they set in native OG. On the{" "}
@@ -62,9 +62,9 @@ export default function HowItWorksPage() {
       </section>
 
       <section className="glass-card border border-amber-500/20 bg-amber-950/10 p-6 sm:p-8">
-        <h2 className="text-lg font-semibold text-amber-200/90">Risks (demo)</h2>
+        <h2 className="text-lg font-semibold text-amber-200/90">Risks</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          Smart contracts, oracles, and liquidity can fail. This is a testnet demo — not investment advice. Read the{" "}
+          Smart contracts, oracles, and liquidity can fail. This interface is not investment advice. Read the{" "}
           <Link href="/legal/risk" className="text-brand hover:underline">
             risk disclaimer
           </Link>{" "}

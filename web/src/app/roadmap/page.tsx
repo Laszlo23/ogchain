@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Ordered journey for capital and distributions — illustrative sequence, not a binding schedule.
+ * Ordered journey for capital and distributions — reference sequence, not a binding schedule.
  * Actual timing is issuer-, jurisdiction-, and offering-specific; see legal disclosures.
  */
 const mainnetFundsJourney = [
@@ -17,7 +17,7 @@ const mainnetFundsJourney = [
     title: "Mainnet deployment",
     when: "After audited contracts are deployed and addresses are published",
     detail:
-      "The protocol and property share contracts go live on the target mainnet. Until then, any UI on testnet is for rehearsal only — no real funds at risk on-chain in the demo environment.",
+      "The protocol and property share contracts go live on the target mainnet. Until then, any UI on 0G is for rehearsal — use only funds you intend to expose and verify network settings.",
   },
   {
     step: "2",
@@ -45,17 +45,17 @@ const mainnetFundsJourney = [
     title: "Ongoing distributions",
     when: "Per issuer schedule and smart-contract rules post-closing",
     detail:
-      "Rental income, fees, or other cash flows — if and when declared — are distributed according to the SPV / issuer waterfall and on-chain logic. Past testnet behaviour is not a forecast of mainnet returns.",
+      "Rental income, fees, or other cash flows — if and when declared — are distributed according to the SPV / issuer waterfall and on-chain logic. Past behaviour on any network is not a forecast of future returns.",
   },
 ];
 
 const phases = [
   {
     phase: "Now",
-    title: "Testnet demo on 0G Galileo",
+    title: "Live stack on 0G",
     items: [
       "Registry + share factory + AMM swap + staking + portfolio flows",
-      "Illustrative property metadata and funding UI",
+      "Culture Land property metadata and funding UI",
     ],
   },
   {
@@ -82,7 +82,7 @@ const phases = [
     title: "Yield, pricing, and distribution (roadmap)",
     items: [
       "Rental or cash-flow yield distribution — contract- and issuer-dependent; not guaranteed returns",
-      "Oracle-assisted or AI-assisted pricing signals — illustrative until audited; not investment advice",
+      "Oracle-assisted or AI-assisted pricing signals — reference until audited; not investment advice",
     ],
   },
   {

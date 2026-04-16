@@ -32,8 +32,8 @@ function PropertiesPageContent() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Discovery hub</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Community-owned places</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
-          Browse tokenized cultural and residential projects on 0G Galileo. Each listing has an on-chain share token; cards add a{" "}
-          <span className="text-zinc-300">demo narrative</span> (imagery, funding progress, yield) when metadata is present — not investment advice.{" "}
+          Browse tokenized cultural and residential projects on 0G. Each listing has an on-chain share token; cards add a{" "}
+          <span className="text-zinc-300">Culture Land narrative</span> (imagery, funding progress, yield) when metadata is present — not investment advice.{" "}
           <Link href="/how-it-works" className="text-brand hover:underline">
             How shares work →
           </Link>
@@ -133,8 +133,8 @@ export default function PropertiesPage() {
           <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Listings</p>
           <h1 className="text-3xl font-semibold tracking-tight text-white">Properties</h1>
           <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
-            Live listings from your deployment on 0G Galileo. Each property has an on-chain share token; the grid below
-            layers in a <span className="text-zinc-300">demo narrative</span> (imagery + standardized metrics: rent, m², units, yield) for up to
+            Live listings from your deployment on 0G. Each property has an on-chain share token; the grid below
+            layers in a <span className="text-zinc-300">listing narrative</span> (imagery + standardized metrics: rent, m², units, yield) for up to
             seven seeded properties when tokens exist on-chain — not investment advice.{" "}
             <Link href="/how-it-works" className="text-brand hover:underline">
               How tokenization and buying shares work →

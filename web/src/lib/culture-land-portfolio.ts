@@ -1,7 +1,16 @@
 /**
- * Partner / investor portfolio copy — editorial English, illustrative economics.
- * Not an offer; verify all figures with official disclosures.
+ * Building Culture Land — partner portfolio copy, editorial English.
+ * Reference figures are partner-sourced; verify all numbers with issuer disclosures. Not an offer.
  */
+
+import { BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
+import { ST_IMMO_HOMEPAGE, ST_IMMO_LAND_PHILOSOPHY } from "@/lib/st-immo-buildings";
+
+/** Short narrative: settlement layer + people-aligned ownership + path to dedicated RWA infrastructure. */
+export const CULTURE_LAND_CHAIN_MANIFESTO: readonly string[] = [
+  "Building Culture Land is programmable real estate — transparent rules on-chain, community-first capital, and settlement that does not depend on opaque intermediaries for every step.",
+  "We are live on 0G with cultural assets you can explore and back; the roadmap is a dedicated chain for real-world property — owned by participants, auditable by design, and built for long-term stewardship.",
+];
 
 export const HOLZBAUER_REFERENCE_URL =
   "https://holzbauer-partner.at/haus-im-weinviertelniederoesterreich/";
@@ -22,26 +31,14 @@ export type CultureLandProject = {
   partnerNote?: string;
   imageSrc: string;
   imageAlt: string;
-  /** Link to on-chain property detail when the demo listing aligns */
+  /** Link to on-chain property detail when the listing aligns */
   exploreHref?: string;
 };
 
-export const BLOCKCHAIN_HOMEPAGE_LINES = {
-  kicker: "Building Culture",
-  headline: "Creating spaces that enrich everyday life",
-  sublines: [
-    "We make a contribution to the world of construction and life with our projects.",
-    "Structures are reflections — they are intended to create positive change.",
-  ],
-} as const;
+/** Homepage hero lines — canonical copy lives in `st-immo-buildings.ts` (ST-IMMO briefs). */
+export const BLOCKCHAIN_HOMEPAGE_LINES = ST_IMMO_HOMEPAGE;
 
-export const BUILDING_CULTURE_LAND_PHILOSOPHY: string[] = [
-  "We care about preserving spaces that represent our future.",
-  "As active players in housing and urban development, we revitalise old village centres to preserve the attractive architectural character of historic country houses and reinforce their relevance for modern life. The structural quality of old buildings is often more sustainable than that of many new builds.",
-  "We revive traditional techniques before they are lost and use natural materials such as wood, brick, and plaster. That creates an elegant atmosphere indoors, while solid brickwork supports a healthy indoor climate.",
-  "Our work brings new life not only to old houses and villages, but to nature as well. An attractive village helps people enjoy spending time there, turns connecting routes into lifelines, and curbs sprawl. Existing green space should not be sealed unnecessarily.",
-  "Individualisation is often the start of future problems — building culture must be a shared concern. Professional revitalisation enables modern living in old walls for the long term. We seek intelligent solutions that reflect local conditions, enrich village life, and inspire architecturally. A home of one’s own need not remain a dream when old knowledge meets modern needs — opening new aesthetic territory.",
-];
+export const BUILDING_CULTURE_LAND_PHILOSOPHY: string[] = ST_IMMO_LAND_PHILOSOPHY;
 
 export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
   {
@@ -56,8 +53,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Total rental area", value: "220 m²" },
       { label: "Terrace (rental)", value: "100 m²" },
       { label: "Garden (rental)", value: "1,000 m²" },
-      { label: "Acquisition (illustrative)", value: "€650,000" },
-      { label: "Gross rental income (p.a., illustrative)", value: "€50,000" },
+      { label: "Reference acquisition", value: "€650,000" },
+      { label: "Gross rental income (p.a., reference)", value: "€50,000" },
     ],
     greenPrint: [
       "Air-source heat pump",
@@ -67,8 +64,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
     ],
     partnerNote:
       "Weinviertel reference architecture (external site — imagery may differ from this project): see link in the introduction.",
-    imageSrc: "/Kamera01_Variante.jpg",
-    imageAlt: "Interior atmosphere — illustrative (AlterStadl programme)",
+    imageSrc: "/extracted/katzelsdorf-studie-auswechslung/page-02.jpg",
+    imageAlt: "Katzelsdorf study — masonry and reuse (PDF preview)",
   },
   {
     id: "whalewatching",
@@ -83,16 +80,16 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Total rental area", value: "440 m²" },
       { label: "Terrace (rental)", value: "100 m²" },
       { label: "Garden (rental)", value: "800 m²" },
-      { label: "Acquisition (illustrative)", value: "€2,900,000" },
-      { label: "Gross rental income (p.a., illustrative)", value: "€100,000" },
+      { label: "Reference acquisition", value: "€2,900,000" },
+      { label: "Gross rental income (p.a., reference)", value: "€100,000" },
     ],
     greenPrint: [
       "Large green yards that help cool the microclimate",
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/STIX Wohnanlage Keutschacher See 2024-04-04_0212.jpg",
-    imageAlt: "Waterfront architecture — illustrative mood (Whalewatching narrative)",
+    imageSrc: "/STIX Wohnanlage Keutschacher See 2024-04-04_0312.jpg",
+    imageAlt: "Waterfront architecture — coastal reference programme",
   },
   {
     id: "old-department-store",
@@ -106,8 +103,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Total rental area", value: "400 m²" },
       { label: "Terrace (rental)", value: "100 m²" },
       { label: "Garden (rental)", value: "200 m²" },
-      { label: "Acquisition (illustrative)", value: "€850,000" },
-      { label: "Gross rental income (p.a., illustrative)", value: "€50,000" },
+      { label: "Reference acquisition", value: "€850,000" },
+      { label: "Gross rental income (p.a., reference)", value: "€50,000" },
     ],
     greenPrint: [
       "Air-source heat pump and solar",
@@ -115,8 +112,9 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/Innen01.jpg",
-    imageAlt: "Interior — illustrative (department store adaptive reuse)",
+    imageSrc: "/extracted/altes-kaufhaus-prater/page-01.jpg",
+    imageAlt: "Former department store — plan preview (PDF)",
+    exploreHref: "/properties/7",
   },
   {
     id: "altes-presshaus",
@@ -130,8 +128,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Total rental area", value: "300 m²" },
       { label: "Terrace (rental)", value: "100 m²" },
       { label: "Garden (rental)", value: "800 m²" },
-      { label: "Acquisition (illustrative)", value: "€950,000" },
-      { label: "Gross rental income (p.a., illustrative)", value: "€70,000" },
+      { label: "Reference acquisition", value: "€950,000" },
+      { label: "Gross rental income (p.a., reference)", value: "€70,000" },
     ],
     greenPrint: [
       "Air-source heat pump and solar",
@@ -139,8 +137,9 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/Kamera02_Variante.jpg",
-    imageAlt: "Interior — illustrative (Presshaus programme)",
+    imageSrc: "/extracted/katzelsdorf-studie-auswechslung/page-01.jpg",
+    imageAlt: "Altes Presshaus — study PDF preview",
+    exploreHref: "/properties/6",
   },
   {
     id: "landmark-bernhardsthal",
@@ -158,8 +157,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Terrace (rental)", value: "1,020 m²" },
       { label: "Garden (rental)", value: "656 m²" },
       { label: "Parking spaces", value: "23" },
-      { label: "Acquisition (illustrative)", value: "€10,900,000" },
-      { label: "Gross rental income (p.a., illustrative)", value: "€350,000" },
+      { label: "Reference acquisition", value: "€10,900,000" },
+      { label: "Gross rental income (p.a., reference)", value: "€350,000" },
     ],
     greenPrint: [
       "Geothermal heating and cooling",
@@ -169,8 +168,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "No unnecessary sealing of valuable land",
       "Conversion of grain storage into contemporary homes — high-quality reuse",
     ],
-    imageSrc: "/Innen02.jpg",
-    imageAlt: "Interior — illustrative (LandMark mixed programme)",
+    imageSrc: "/extracted/land-mark-bernhardsthal-20210625/page-01.jpg",
+    imageAlt: "Land-Mark Bernhardsthal — project PDF preview",
     exploreHref: "/properties/5",
   },
   {
@@ -186,8 +185,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Terrace (rental)", value: "230 m²" },
       { label: "Garden (rental)", value: "429 m²" },
       { label: "Parking spaces", value: "16" },
-      { label: "Acquisition (illustrative)", value: "€10,500,000" },
-      { label: "Gross rental income (p.a., illustrative)", value: "€250,000" },
+      { label: "Reference acquisition", value: "€10,500,000" },
+      { label: "Gross rental income (p.a., reference)", value: "€250,000" },
     ],
     greenPrint: [
       "Geothermal heating and cooling",
@@ -195,8 +194,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces for all apartments",
       "Private lake access with jetty and bathhouse",
     ],
-    imageSrc: "/STIX Wohnanlage Keutschacher See 2024-04-04_0239.jpg",
-    imageAlt: "Keutschach am See — residential scheme (project imagery)",
+    imageSrc: "/extracted/water-side-keutschach-20220112/page-01.jpg",
+    imageAlt: "Water Side Keutschach — project PDF preview",
     exploreHref: "/properties/3",
   },
   {
@@ -212,8 +211,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Terrace (rental)", value: "106 m²" },
       { label: "Garden (rental)", value: "429 m²" },
       { label: "Parking spaces", value: "6" },
-      { label: "Acquisition (illustrative)", value: "€8,300,000" },
-      { label: "Gross rental income (p.a., illustrative)", value: "€187,000" },
+      { label: "Reference acquisition", value: "€8,300,000" },
+      { label: "Gross rental income (p.a., reference)", value: "€187,000" },
     ],
     greenPrint: [
       "Air-source heat pump and solar",
@@ -221,8 +220,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces for all apartments",
       "Prime location beside the Lainzer Tiergarten — Vienna’s large recreational forest",
     ],
-    imageSrc: "/Innenraum_Jagdschlossgasse_81.jpg",
-    imageAlt: "Interior — Jagdschlossgasse programme (illustrative)",
+    imageSrc: "/extracted/bau-land-kultur-20201113/page-01.jpg",
+    imageAlt: "Jagdschlossgasse — Bau–Land–Kultur PDF preview",
     exploreHref: "/properties/4",
   },
   {
@@ -237,8 +236,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       { label: "Total rental area", value: "730 m²" },
       { label: "Terrace (rental)", value: "340 m²" },
       { label: "Parking spaces", value: "4" },
-      { label: "Acquisition (illustrative)", value: "€15,917,000" },
-      { label: "Gross rental income (illustrative)", value: "€250,000" },
+      { label: "Reference acquisition", value: "€15,917,000" },
+      { label: "Gross rental income (reference)", value: "€250,000" },
     ],
     greenPrint: [
       "District heating and district cooling",
@@ -247,8 +246,22 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Central, vibrant residential quarter",
       "Conversion of office / telegraph use into contemporary homes — high-quality reuse",
     ],
-    imageSrc: "/Foto-©-AnnABlaU-_DSC0788.jpg",
-    imageAlt: "Berggasse — exterior (project imagery)",
+    imageSrc: BERGGASSE_HERO_STILL,
+    imageAlt: "Berggasse — exterior with tower (project imagery)",
     exploreHref: "/properties/1",
   },
 ];
+
+export type CultureLandDisplay = {
+  title: string;
+  tagline: string;
+  region: string;
+};
+
+/** Culture Land card copy for a seeded listing id when `exploreHref` matches `/properties/{id}`. */
+export function getCultureLandDisplayForDemoPropertyId(id: number): CultureLandDisplay | null {
+  const href = `/properties/${id}`;
+  const p = CULTURE_LAND_PROJECTS.find((x) => x.exploreHref === href);
+  if (!p) return null;
+  return { title: p.title, tagline: p.tagline, region: p.region };
+}

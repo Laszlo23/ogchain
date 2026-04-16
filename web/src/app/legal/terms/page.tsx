@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of use — Building Culture",
-  description: "Terms of use for the Building Culture demo application.",
+  description: "Terms of use for Building Culture and Culture Land web interfaces.",
 };
 
 export default function LegalTermsPage() {
@@ -16,10 +16,10 @@ export default function LegalTermsPage() {
 
       <div className="prose prose-invert prose-sm max-w-none space-y-6">
         <section>
-          <h2 className="text-lg font-medium text-zinc-200">Experimental software</h2>
+          <h2 className="text-lg font-medium text-zinc-200">Software status</h2>
           <p className="text-zinc-400">
-            This website and related smart contracts are provided for experimentation, grants, and hackathon
-            demonstration on testnet. Services may change or stop without notice.
+            This website and related smart contracts are under active development. Interfaces and deployments may change
+            or stop without notice — verify addresses and disclosures for the environment you use.
           </p>
         </section>
         <section>
@@ -40,7 +40,7 @@ export default function LegalTermsPage() {
           <h2 className="text-lg font-medium text-zinc-200">Limitation of liability</h2>
           <p className="text-zinc-400">
             To the maximum extent permitted by law, operators and contributors disclaim liability for damages arising
-            from use of this demo, including smart contract bugs, front-end errors, or third-party infrastructure.
+            from use of this software, including smart contract bugs, front-end errors, or third-party infrastructure.
           </p>
         </section>
       </div>

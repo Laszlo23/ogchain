@@ -4,7 +4,7 @@ import { explorerBase } from "@/lib/contracts";
 
 export const metadata: Metadata = {
   title: "Risks & disclaimer — Building Culture",
-  description: "Risk factors and disclaimers for the Building Culture tokenized real estate demo.",
+  description: "Risk factors and disclaimers for Building Culture tokenized real estate interfaces.",
 };
 
 export default function LegalRiskPage() {
@@ -14,7 +14,7 @@ export default function LegalRiskPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Legal</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">Risks &amp; disclaimer</h1>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          This software is provided for experimentation. Real estate tokenization may be regulated in your jurisdiction.
+          This software is provided as-is. Real estate tokenization may be regulated in your jurisdiction.
         </p>
       </header>
 
@@ -37,7 +37,7 @@ export default function LegalRiskPage() {
         <section>
           <h2 className="text-lg font-medium text-zinc-200">Proof NFTs</h2>
           <p className="text-zinc-400">
-            Optional certificate NFTs are soulbound (non-transferable) demo receipts. They are not legal title or proof
+            Optional certificate NFTs are soulbound (non-transferable) receipts. They are not legal title or proof
             of accredited status beyond what the underlying ERC-20 represents.
           </p>
         </section>
@@ -56,16 +56,16 @@ export default function LegalRiskPage() {
           </p>
         </section>
         <section>
-          <h2 className="text-lg font-medium text-zinc-200">Lending demo</h2>
+          <h2 className="text-lg font-medium text-zinc-200">Lending interfaces</h2>
           <p className="text-zinc-400">
-            The demo lending pool is not a licensed lending product. Borrow limits depend on oracles; liquidations can
+            The lending pool is not a licensed lending product. Borrow limits depend on oracles; liquidations can
             occur. Oracle manipulation is a critical risk in production systems.
           </p>
         </section>
         <section>
           <h2 className="text-lg font-medium text-zinc-200">Audits &amp; verification</h2>
           <p className="text-zinc-400">
-            Before mainnet, publish audit reports. For this testnet, use the{" "}
+            Before mainnet, publish audit reports. For this deployment, use the{" "}
             <a href={explorerBase} target="_blank" rel="noreferrer" className="text-brand hover:underline">
               block explorer
             </a>{" "}

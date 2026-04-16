@@ -274,7 +274,7 @@ export default function ProfilePage() {
               checked={profile.show_holdings}
               onChange={(e) => setProfile({ ...profile, show_holdings: e.target.checked })}
             />
-            Show estimated holdings on public profile (illustrative USD from on-chain balances)
+            Show estimated holdings on public profile (reference USD from on-chain balances)
           </label>
 
           {profile.visibility === "public" && (

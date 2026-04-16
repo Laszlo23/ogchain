@@ -39,7 +39,7 @@ export function PropertyShareButton({
   }, [origin, propertyId]);
 
   const body = useMemo(
-    () => `Invest in fractional real estate: ${title}. Not investment advice — testnet demo.`,
+    () => `Invest in fractional real estate: ${title}. Not investment advice — verify disclosures.`,
     [title],
   );
 

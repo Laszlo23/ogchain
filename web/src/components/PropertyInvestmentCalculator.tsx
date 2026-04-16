@@ -24,7 +24,7 @@ export function PropertyInvestmentCalculator({ propertyId, demo, symbol, tradeHr
   const estShares = useMemo(() => {
     const n = parseFloat(ogAmount.replace(",", "."));
     if (!Number.isFinite(n) || n <= 0) return null;
-    // Demo: map OG spend to shares via illustrative $/share (no live DEX price here)
+    // Map OG spend to shares via reference $/share (no live DEX price in this widget)
     const usd = n * 0.15;
     const shares = usd / shareUsd;
     return shares;
@@ -34,8 +34,8 @@ export function PropertyInvestmentCalculator({ propertyId, demo, symbol, tradeHr
     <section className="glass-card p-6">
       <h2 className="text-lg font-semibold text-white">Investment calculator</h2>
       <p className="mt-1 text-xs text-zinc-500">
-        Illustrative only — enter OG to see estimated whole-share equivalents at ~${shareUsd.toLocaleString("en-US")}{" "}
-        / share (demo). Live swaps use pool prices on{" "}
+        Reference only — enter OG to see estimated whole-share equivalents at ~${shareUsd.toLocaleString("en-US")}{" "}
+        / share. Live swaps use pool prices on{" "}
         <Link href={tradeHref} className="text-brand hover:underline">
           Trade
         </Link>
@@ -52,21 +52,21 @@ export function PropertyInvestmentCalculator({ propertyId, demo, symbol, tradeHr
         />
       </label>
       <div className="mt-4 rounded-xl border border-white/[0.06] bg-black/30 p-4">
-        <p className="text-[10px] uppercase tracking-wide text-zinc-500">Estimated shares (demo)</p>
+        <p className="text-[10px] uppercase tracking-wide text-zinc-500">Estimated shares (reference)</p>
         <p className="mt-1 font-mono text-2xl text-brand">
           {estShares != null ? estShares.toFixed(4) : "—"} <span className="text-sm text-zinc-400">{symbol}</span>
         </p>
         <p className="mt-2 text-[11px] text-zinc-500">
-          Pool depth & slippage apply on-chain. Demo uses ~$0.15 OG/USD illustrative rate.
+          Pool depth & slippage apply on-chain. This widget uses ~$0.15 OG/USD reference rate.
         </p>
       </div>
       <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
         <div>
-          <dt className="text-xs text-zinc-500">Token supply cap (demo)</dt>
+          <dt className="text-xs text-zinc-500">Token supply cap (model)</dt>
           <dd className="font-mono text-zinc-200">{cap.toLocaleString("en-US")} shares</dd>
         </div>
         <div>
-          <dt className="text-xs text-zinc-500">Available (illustrative)</dt>
+          <dt className="text-xs text-zinc-500">Available (reference)</dt>
           <dd className="font-mono text-zinc-200">{available.toLocaleString("en-US")} shares</dd>
         </div>
         <div>

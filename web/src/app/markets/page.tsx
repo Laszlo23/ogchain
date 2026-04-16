@@ -29,7 +29,7 @@ export default function MarketsPage() {
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Prediction markets</h1>
       <p className="text-sm text-zinc-500">
-        Binary YES/NO markets with admin resolution (testnet). Stake ERC-20; claim after resolve.
+        Binary YES/NO markets with admin resolution on this deployment. Stake ERC-20; claim after resolve.
       </p>
       {unset ? (
         <p className="text-amber-400">Set NEXT_PUBLIC_PREDICTION_MARKET in .env.local</p>

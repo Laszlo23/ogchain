@@ -12,6 +12,13 @@ Use this before submitting a grant or recording a demo video:
 4. **Narrative:** Call out **illustrative** funding/yield UI vs **on-chain** swaps/LP — see [docs/grants.md](../docs/grants.md).
 5. **Legal:** Show the in-app **Legal** page; state testnet / not investment advice in voiceover or README.
 
+## PDF plan previews
+
+Raster previews for plan PDFs live under `public/extracted/{documentId}/` (JPEG). Regenerate after changing PDFs or document ids:
+
+- Install [Poppler](https://poppler.freedesktop.org/) (`brew install poppler` on macOS).
+- From the repo root: `node web/scripts/export-pdf-previews.mjs`
+
 ## Setup
 
 ```bash

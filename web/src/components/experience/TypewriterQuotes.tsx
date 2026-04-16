@@ -10,7 +10,7 @@ const QUOTES = [
   "Build together · rise together",
   "Own what matters",
   "Culture is the asset",
-  "Scale toward a $1B ecosystem",
+  "Community-owned cultural assets",
   "Transparency at scale",
   "Community-first capital",
   "Liquidity meets place",

@@ -19,7 +19,7 @@ export type DocumentStory = {
 };
 
 /**
- * Editorial storytelling for each plan PDF — illustrative; verify against issuer docs.
+ * Editorial storytelling for each plan PDF — reference context; verify against issuer docs.
  * Optional future step: anchor file hashes on-chain via a registry contract + IPFS.
  */
 export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
@@ -43,7 +43,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
       },
     ],
     disclaimer:
-      "Illustrative context only — not an offering memorandum. Jurisdiction-specific rules apply; consult qualified advisers.",
+      "Reference context only — not an offering memorandum. Jurisdiction-specific rules apply; consult qualified advisers.",
   },
   "katzelsdorf-studie-auswechslung": {
     id: "katzelsdorf-studie-auswechslung",
@@ -64,7 +64,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "For real testing, pin the canonical file (IPFS or secure storage) and record its hash on-chain so updates are visible to holders.",
       },
     ],
-    disclaimer: "Demo / illustrative documentation — not a securities filing.",
+    disclaimer: "Supporting documentation — not a securities filing.",
   },
   "katzelsdorf-studie-encoded": {
     id: "katzelsdorf-studie-encoded",
@@ -86,7 +86,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
   "bernhardsthal-plans": {
     id: "bernhardsthal-plans",
     label: "Bernhardsthal plans",
-    title: "Bernhardsthal — plan set (illustrative)",
+    title: "Bernhardsthal — plan set (reference)",
     dek: "Parcel and layout references for the Bernhardsthal storyline in the rural bucket.",
     sections: [
       {
@@ -95,10 +95,10 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
       },
       {
         heading: "Testing checklist",
-        body: "For testnet demos: verify wallet reads, property IDs, and that document links resolve with encoded URLs (spaces, double .pdf extensions).",
+        body: "Verify wallet reads, property IDs, and that document links resolve with encoded URLs (spaces, double .pdf extensions).",
       },
     ],
-    disclaimer: "Illustrative — verify against current land records.",
+    disclaimer: "Reference plans — verify against current land records.",
   },
   "altes-kaufhaus-prater": {
     id: "altes-kaufhaus-prater",
@@ -136,7 +136,184 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Deploy a DocumentRegistry contract that stores bytes32 commitments, wire the app to display matching hashes, and host files on IPFS or HTTPS with TLS.",
       },
     ],
-    disclaimer: "Testnet-first — figures on the site are illustrative unless stated otherwise.",
+    disclaimer: "Figures on the site are reference unless stated otherwise — reconcile with issuer filings.",
+  },
+  "land-mark-bernhardsthal-20210625": {
+    id: "land-mark-bernhardsthal-20210625",
+    label: "Land-Mark Bernhardsthal",
+    title: "Land-Mark — Bernhardsthal (2021)",
+    dek: "Rural Weinviertel storyline — grain-storage conversion and mixed programme; planning context.",
+    sections: [
+      {
+        heading: "Why this matters",
+        body: "Large-format PDFs anchor the conversation about footprint, access, and servicing for community-funded rural projects.",
+      },
+      {
+        heading: "How to read it",
+        body: "Use sheet indices and revision dates; cross-check with current land records before any commitment.",
+      },
+    ],
+    disclaimer: "Supporting documentation — not an offering memorandum.",
+  },
+  "bau-land-kultur-20201113": {
+    id: "bau-land-kultur-20201113",
+    label: "Bau — Land — Kultur",
+    title: "Bau — Land — Kultur (2020)",
+    dek: "Culture-forward building narrative — editorial context for adaptive reuse and stewardship.",
+    sections: [
+      {
+        heading: "Story",
+        body: "Heritage-adjacent and community-led development needs both preservation discipline and a clear operating story (housing, hospitality, culture).",
+      },
+      {
+        heading: "Integrity",
+        body: "Pin canonical file hashes when moving from staging to production registries.",
+      },
+    ],
+    disclaimer: "Marketing context — verify rights and issuer disclosures.",
+  },
+  "stix-baukultur-en-20221110": {
+    id: "stix-baukultur-en-20221110",
+    label: "Stix building culture",
+    title: "Stix — Building culture (EN)",
+    dek: "English-language narrative on building culture aligned with the Keutschach / Water Side programme.",
+    sections: [
+      {
+        heading: "Purpose",
+        body: "Communicates design intent and stewardship values alongside the A3 plan sets.",
+      },
+    ],
+    disclaimer: "Editorial context — not an endorsement of any security.",
+  },
+  "water-side-keutschach-20220112": {
+    id: "water-side-keutschach-20220112",
+    label: "Water Side Keutschach",
+    title: "Water Side — Keutschach am See (2022)",
+    dek: "Project PDF for the lakeside residential cluster — use with partner briefs and issuer docs.",
+    sections: [
+      {
+        heading: "Context",
+        body: "Lake-adjacent development combines housing with landscape and access constraints; plans show how the scheme was modeled.",
+      },
+    ],
+    disclaimer: "Verify figures against issuer materials.",
+  },
+  "vkp-lageplan-20220622": {
+    id: "vkp-lageplan-20220622",
+    label: "VKP Lageplan",
+    title: "VKP 1169 — Lageplan (2022)",
+    dek: "Site plan for the VKP 1169 multi-family scheme — relationship to parcel and outdoor programme.",
+    sections: [
+      {
+        heading: "How to read it",
+        body: "Check scale, north arrow, and legend. Compare against survey and easements before relying on distances.",
+      },
+    ],
+    disclaimer: "Technical reference — not a title report.",
+  },
+  "vkp-pool-20220308": {
+    id: "vkp-pool-20220308",
+    label: "VKP Pool",
+    title: "VKP 1169 — Pool (2022)",
+    dek: "Outdoor / pool programme sheet for the VKP 1169 development.",
+    sections: [
+      {
+        heading: "Investor note",
+        body: "Amenity scope can change with zoning and operator decisions — treat as indicative until contracted.",
+      },
+    ],
+    disclaimer: "Reference plans only.",
+  },
+  "vkp-haus-a-og-top3-20221102": {
+    id: "vkp-haus-a-og-top3-20221102",
+    label: "VKP Haus A OG Top 3",
+    title: "VKP 1169 — Haus A OG Top 3 (2022)",
+    dek: "Unit plan sheet — Haus A, upper floor, Top 3.",
+    sections: [
+      {
+        heading: "Checklist",
+        body: "Verify room labels, areas, and revision against the latest issuer package.",
+      },
+    ],
+    disclaimer: "Not a survey or lease outline.",
+  },
+  "vkp-haus-b-eg-top1-20220516": {
+    id: "vkp-haus-b-eg-top1-20220516",
+    label: "VKP Haus B EG Top 1",
+    title: "VKP 1169 — Haus B EG Top 1 (2022)",
+    dek: "Ground-floor unit plan — Haus B, Top 1.",
+    sections: [
+      {
+        heading: "Checklist",
+        body: "Cross-check areas and services with the latest drawings.",
+      },
+    ],
+    disclaimer: "Illustrative documentation.",
+  },
+  "vkp-haus-c-eg-top2-20220308": {
+    id: "vkp-haus-c-eg-top2-20220308",
+    label: "VKP Haus C EG Top 2",
+    title: "VKP 1169 — Haus C EG Top 2 (2022)",
+    dek: "Ground-floor unit plan — Haus C, Top 2.",
+    sections: [
+      {
+        heading: "Checklist",
+        body: "Cross-check areas and services with the latest drawings.",
+      },
+    ],
+    disclaimer: "Illustrative documentation.",
+  },
+  "vkp-haus-e-eg-top1-20220308": {
+    id: "vkp-haus-e-eg-top1-20220308",
+    label: "VKP Haus E EG Top 1",
+    title: "VKP 1169 — Haus E EG Top 1 (2022)",
+    dek: "Ground-floor unit plan — Haus E, Top 1.",
+    sections: [
+      {
+        heading: "Checklist",
+        body: "Cross-check areas and services with the latest drawings.",
+      },
+    ],
+    disclaimer: "Illustrative documentation.",
+  },
+  "vkp-haus-e-eg-top3-20230316": {
+    id: "vkp-haus-e-eg-top3-20230316",
+    label: "VKP Haus E EG Top 3",
+    title: "VKP 1169 — Haus E EG Top 3 (2023)",
+    dek: "Ground-floor unit plan — Haus E, Top 3.",
+    sections: [
+      {
+        heading: "Checklist",
+        body: "Verify revision date against subscription documents.",
+      },
+    ],
+    disclaimer: "Illustrative documentation.",
+  },
+  "vkp-haus-e-up-tg-kg-20230621": {
+    id: "vkp-haus-e-up-tg-kg-20230621",
+    label: "VKP Haus E ÜP TG+KG",
+    title: "VKP 1169 — Haus E ÜP TG+KG (2023)",
+    dek: "Underground / garage level sheet — Haus E (TG+KG).",
+    sections: [
+      {
+        heading: "Checklist",
+        body: "Parking and storage allocations are issuer-specific; confirm against contracts.",
+      },
+    ],
+    disclaimer: "Illustrative documentation.",
+  },
+  "vkp-felsennest-eg-top1-20220315": {
+    id: "vkp-felsennest-eg-top1-20220315",
+    label: "VKP Felsennest EG Top 1",
+    title: "VKP 1169 — Felsennest EG Top 1 (2022)",
+    dek: "Ground-floor unit plan — Felsennest, Top 1.",
+    sections: [
+      {
+        heading: "Checklist",
+        body: "Cross-check areas and services with the latest drawings.",
+      },
+    ],
+    disclaimer: "Illustrative documentation.",
   },
 };
 

@@ -24,6 +24,8 @@ import { HomeCommunityFeed } from "@/components/home/HomeCommunityFeed";
 import { HomeGuestbookStrip } from "@/components/home/HomeGuestbookStrip";
 import { HomeIntroRedirect } from "@/components/home/HomeIntroRedirect";
 import { FLAGSHIP_PROPERTY_ID } from "@/lib/flagship-campaign";
+import { CULTURE_LAND_CHAIN_MANIFESTO } from "@/lib/culture-land-portfolio";
+import { CultureLandImageStrip } from "@/components/home/CultureLandImageStrip";
 
 /** Talent app domain verification — must appear on the homepage <head>. */
 export const metadata: Metadata = {
@@ -57,16 +59,14 @@ export default function Home() {
           Building Culture · 0G
         </p>
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl md:leading-[1.1]">
-          Own Real Places That{" "}
-          <span className="text-gradient-eco">Matter</span>
+          Own a piece of Europe&apos;s architectural heritage.
         </h1>
         <p className="mx-auto max-w-2xl text-lg font-medium leading-relaxed text-canvas sm:text-xl">
-          The first platform for community-owned cultural real estate — coworking hubs, cafés, creative villages and
-          housing — powered on-chain.
+          A new model for community-owned real estate — where cultural buildings become shared assets and long-term
+          investments.
         </p>
         <p className="mx-auto max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-          The Kickstarter for real estate: communities launch funding rounds with tokenized ownership — testnet-first;
-          verify disclosures before any production use.
+          Launching with curated properties in Vienna. Scaling toward a global portfolio of cultural real estate.
         </p>
 
         <div className="mx-auto w-full max-w-2xl px-0 text-left">
@@ -78,9 +78,9 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-          <ButtonLink href="/properties">Explore projects</ButtonLink>
-          <ButtonLink href="/invest" variant="secondary">
-            Become a founding investor
+          <ButtonLink href="/culture-land">Explore Culture Land portfolio</ButtonLink>
+          <ButtonLink href="/properties" variant="secondary">
+            On-chain listings
           </ButtonLink>
         </div>
         <p className="text-sm text-muted">
@@ -90,8 +90,19 @@ export default function Home() {
         </p>
 
         <p className="text-xs text-muted">
-          Not investment advice. Testnet / illustrative where marked — verify disclosures before any production raise.
+          Not investment advice. Live on 0G where marked; reference figures — verify issuer disclosures before relying on
+          economics.
         </p>
+
+        <div className="mx-auto w-full max-w-3xl space-y-4 text-left text-sm leading-relaxed text-muted sm:text-center">
+          {CULTURE_LAND_CHAIN_MANIFESTO.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+
+        <div className="mx-auto w-full max-w-[1280px]">
+          <CultureLandImageStrip />
+        </div>
 
         <div className="mx-auto w-full max-w-[1280px]">
           <LiveActivityFeed variant="ticker" />
@@ -137,8 +148,8 @@ export default function Home() {
               mission for the full story.
             </p>
             <div className="mt-6 space-y-3">
-              <h3 className="text-sm font-medium text-canvas">Illustrative activity</h3>
-              <p className="text-xs text-muted">Demo lines — not blockchain events.</p>
+              <h3 className="text-sm font-medium text-canvas">Community activity</h3>
+              <p className="text-xs text-muted">Synthetic feed — not on-chain events.</p>
               <LiveActivityFeed variant="list" />
             </div>
             <Link

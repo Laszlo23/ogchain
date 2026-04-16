@@ -1,14 +1,16 @@
 /**
- * Per-property story arc: Mission → Vision → place → tension → craft → protocol.
- * Images cycle through `getDemoImageSlides`; copy is trimmed from `DemoPropertyDetail` + platform lines.
+ * Per-property story arc: Mission → Vision → gallery frames → place narrative → tension → craft → protocol.
+ * Images cycle through `getDemoImageSlides`; Culture Land titles when `exploreHref` matches.
  */
+import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portfolio";
 import {
   DEMO_PROPERTY_DETAILS,
   getDemoImageSlides,
   type DemoPropertyDetail,
 } from "@/lib/demo-properties";
+import { MAX_GALLERY_FRAMES } from "@/lib/property-geo";
 
-export type StoryBeatRole = "mission" | "vision" | "place" | "why" | "how" | "partners" | "solution";
+export type StoryBeatRole = "mission" | "vision" | "place" | "gallery" | "why" | "how" | "partners" | "solution";
 
 export type StoryBeat = {
   role: StoryBeatRole;
@@ -26,7 +28,8 @@ const ROLE_LABELS: Record<StoryBeatRole, string> = {
   mission: "Mission",
   vision: "Vision",
   place: "The place",
-  why: "The reality",
+  gallery: "The building",
+  why: "The investment",
   how: "The build",
   partners: "Partners & craft",
   solution: "The protocol",
@@ -34,18 +37,17 @@ const ROLE_LABELS: Record<StoryBeatRole, string> = {
 
 /** Warm, concise — aligned with mission page; not legal advice. */
 const PLATFORM_MISSION_SUBTITLE =
-  "Bring economic exposure back into community hands: transparent rules, fractional access, programmable settlement — so participation can align with people around these assets, not only institutions that gate credit.";
+  "Why real estate ownership must change: bring economic exposure back into community hands — transparent rules, fractional access, and programmable settlement so participation aligns with people and places, not only institutions that gate credit.";
 
 /** From vision section + one infrastructure line. */
-const PLATFORM_VISION_TITLE = "Turning cities into community-owned assets.";
+const PLATFORM_VISION_TITLE = "Community-owned cultural assets.";
 const PLATFORM_VISION_SUBTITLE =
-  "Infrastructure for community-led rounds, property-linked share tokens, and transparent liquidity — culture-forward real estate where regulation permits. Testnet-first; not a promise of returns.";
+  "Infrastructure for community-led rounds, property-linked share tokens, and transparent liquidity — culture-forward real estate where regulation permits. Live on 0G; not a promise of returns.";
 
 const PARTNERS_SUBTITLE =
-  "Real places need serious craft: we're grateful to collaborators who shape the built environment and the journey from vision to keys — from careful architectural reinvention to grounded brokerage. Illustrative funnel; not an endorsement of any security.";
+  "Real places need serious craft: we're grateful to collaborators who shape the built environment and the journey from vision to keys — from careful architectural reinvention to grounded brokerage. Reference narrative; not an endorsement of any security.";
 
 const HOLZBAUER_PARTNER_URL = "https://holzbauer-partner.at/haus-im-weinviertelniederoesterreich/";
-const SIXT_IMMO_URL = "https://sixt-immobilien.at";
 
 function trunc(s: string, max: number): string {
   const t = s.trim();
@@ -78,29 +80,55 @@ function prependPlatformBeats(d: DemoPropertyDetail): StoryBeat[] {
   ];
 }
 
-/** Mission + Vision + four property beats; reuses gallery frames. */
+function appendGalleryBeats(propertyId: number, d: DemoPropertyDetail): StoryBeat[] {
+  const slides = getDemoImageSlides(d);
+  const n = Math.min(slides.length, MAX_GALLERY_FRAMES);
+  const cl = getCultureLandDisplayForDemoPropertyId(propertyId);
+  const out: StoryBeat[] = [];
+
+  for (let i = 0; i < n; i++) {
+    const img = slides[i]!;
+    const isFirst = i === 0;
+    const title = isFirst
+      ? trunc(cl?.title ?? d.headline, 90)
+      : trunc(cl ? `${cl.title} · ${i + 1}/${n}` : `${d.headline} · ${i + 1}/${n}`, 90);
+    const subtitle = isFirst
+      ? cl
+        ? trunc(`${cl.tagline} — ${cl.region}`, 200)
+        : trunc(d.vision?.trim() ?? d.thesis, 200)
+      : trunc(img.alt, 140);
+
+    out.push({
+      role: isFirst ? "place" : "gallery",
+      roleLabel: isFirst ? ROLE_LABELS.place : ROLE_LABELS.gallery,
+      title,
+      subtitle,
+      imageSrc: img.src,
+      imageAlt: img.alt,
+    });
+  }
+
+  return out;
+}
+
+/** Mission + Vision + gallery sweep + property beats; reuses gallery frames with offset after sweep. */
 export function getStoryBeatsForProperty(propertyId: number): StoryBeat[] {
   const d = DEMO_PROPERTY_DETAILS[propertyId];
   if (!d) return [];
 
   const beats: StoryBeat[] = [...prependPlatformBeats(d)];
+  beats.push(...appendGalleryBeats(propertyId, d));
 
-  const placeTitle = d.headline;
-  const placeSub = d.vision?.trim() ?? trunc(d.thesis, 160);
-  beats.push({
-    role: "place",
-    roleLabel: ROLE_LABELS.place,
-    title: trunc(placeTitle, 90),
-    subtitle: trunc(placeSub, 200),
-    ...pickImage(d, 0),
-  });
+  const slides = getDemoImageSlides(d);
+  const sweep = Math.min(slides.length, MAX_GALLERY_FRAMES);
+  const base = sweep;
 
   beats.push({
     role: "why",
     roleLabel: ROLE_LABELS.why,
     title: "Why it matters",
     subtitle: trunc(d.thesis, 220),
-    ...pickImage(d, 1),
+    ...pickImage(d, base + 0),
   });
 
   const howLine =
@@ -111,7 +139,7 @@ export function getStoryBeatsForProperty(propertyId: number): StoryBeat[] {
     roleLabel: ROLE_LABELS.how,
     title: "How it came together",
     subtitle: trunc(howLine, 220),
-    ...pickImage(d, 2),
+    ...pickImage(d, base + 1),
   });
 
   beats.push({
@@ -119,10 +147,10 @@ export function getStoryBeatsForProperty(propertyId: number): StoryBeat[] {
     roleLabel: ROLE_LABELS.partners,
     title: "The story behind the frame",
     subtitle: trunc(PARTNERS_SUBTITLE, 260),
-    ...pickImage(d, 4),
+    ...pickImage(d, base + 2),
     partnerLinks: [
       { label: "Holzbauer & Partner — Haus im Weinviertel", href: HOLZBAUER_PARTNER_URL },
-      { label: "SIXT Immobilien", href: SIXT_IMMO_URL },
+      { label: "Culture Land portfolio", href: "/culture-land" },
     ],
   });
 
@@ -135,7 +163,7 @@ export function getStoryBeatsForProperty(propertyId: number): StoryBeat[] {
     roleLabel: ROLE_LABELS.solution,
     title: "What we're building",
     subtitle: trunc(protocol, 220),
-    ...pickImage(d, 3),
+    ...pickImage(d, base + 3),
   });
 
   return beats;

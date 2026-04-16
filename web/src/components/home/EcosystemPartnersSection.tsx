@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 const PARTNER_LINKS = {
-  sixt: "https://www.sixt-immobilien.de/",
   wien: "https://www.wien.gv.at/",
   cultureLand: "/culture-land",
 } as const;
@@ -29,7 +28,7 @@ export function EcosystemPartnersSection() {
           .
         </p>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-black/25 px-4 py-8 text-center">
             <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">Architects &amp; planning</p>
             <p className="mt-3 text-sm font-semibold text-white">STIX · studio collaborators</p>
@@ -43,18 +42,6 @@ export function EcosystemPartnersSection() {
               View portfolio →
             </Link>
           </div>
-
-          <a
-            href={PARTNER_LINKS.sixt}
-            target="_blank"
-            rel="noreferrer"
-            className="group flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-black/25 px-4 py-8 text-center transition hover:border-gold-500/30 hover:bg-black/40"
-          >
-            <p className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">Real estate</p>
-            <p className="mt-3 font-semibold tracking-tight text-white group-hover:text-gold-200">Sixt Immobilien</p>
-            <p className="mt-2 text-xs text-zinc-500">Institutional partner slot — official logo when approved.</p>
-            <span className="mt-4 text-xs text-gold-400/90 group-hover:underline">Visit site →</span>
-          </a>
 
           <a
             href={PARTNER_LINKS.wien}

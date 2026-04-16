@@ -7,7 +7,8 @@ import { DEMO_PROPERTY_DETAILS } from "@/lib/demo-properties";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 import { PropertyCardSkeleton } from "@/components/PropertyCardSkeleton";
 
-const SHOWCASE_IDS = [1, 2, 3] as const;
+/** Culture Land–linked flagship demos (see `exploreHref` in `culture-land-portfolio`). */
+const SHOWCASE_IDS = [1, 3, 4, 5] as const;
 
 export function HomeFeaturedProperties() {
   const { rows, loading, unset } = usePropertyShareList();
@@ -23,7 +24,7 @@ export function HomeFeaturedProperties() {
           <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Featured</p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Properties</h2>
           <p className="mt-2 max-w-xl text-sm text-muted">
-            Real listings from your deployment; demo narrative layers in when metadata is configured.
+            Listings from your deployment; Culture Land narrative layers in when metadata is configured.
           </p>
         </div>
         <Link href="/properties" className="text-sm font-semibold text-action hover:underline">
@@ -31,7 +32,7 @@ export function HomeFeaturedProperties() {
         </Link>
       </div>
 
-      <div className="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
         {showLoading
           ? Array.from({ length: 3 }).map((_, i) => <PropertyCardSkeleton key={i} />)
           : showChainCards
@@ -52,8 +53,8 @@ export function HomeFeaturedProperties() {
               })}
       </div>
       <p className="mt-6 text-[10px] text-muted">
-        Illustrative economics on cards where marked; not an offer to sell securities. Connect registry in production for
-        live tokens.
+        Reference economics on cards where marked; not an offer to sell securities. Connect registry for live token
+        reads.
       </p>
     </section>
   );

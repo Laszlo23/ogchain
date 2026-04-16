@@ -12,6 +12,7 @@ import {
   formatSquareMeters,
   getEstimatedYieldPercent,
 } from "@/lib/demo-properties";
+import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portfolio";
 import { flagshipCampaign, FLAGSHIP_PROPERTY_ID } from "@/lib/flagship-campaign";
 import { getProjectExperienceSlides } from "@/lib/experience-slides";
 import { getStoryBeatsForProperty } from "@/lib/experience-story-beats";
@@ -164,8 +165,11 @@ export function ImmersiveExperience() {
   };
 
   const showFullStoryChrome = !isMobileViewport || storyDetailsOpen;
-  const heroHeadline = detail?.headline ?? slide.title;
-  const heroSupporting = detail?.location ?? slide.subtitle;
+  const clDisplay = getCultureLandDisplayForDemoPropertyId(slide.propertyId);
+  const heroHeadline = clDisplay?.title ?? detail?.headline ?? slide.title;
+  const heroSupporting = clDisplay
+    ? `${clDisplay.region} · ${clDisplay.tagline}`
+    : (detail?.location ?? slide.subtitle);
 
   return (
     <div
@@ -231,18 +235,27 @@ export function ImmersiveExperience() {
                 {heroHeadline}
               </h1>
               <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/85 drop-shadow-md">{heroSupporting}</p>
-              <button
-                type="button"
-                className="mt-5 inline-flex w-full min-h-[44px] items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 text-sm font-semibold text-white shadow-lg backdrop-blur-sm transition hover:bg-white/15"
-                aria-expanded={storyDetailsOpen}
-                aria-controls="immersive-story-details"
-                onClick={() => setStoryDetailsOpen(true)}
-              >
-                <span>Explore the story</span>
-                <span aria-hidden className="text-lg leading-none">
-                  ↓
-                </span>
-              </button>
+              <div className="mt-5 flex flex-col gap-3">
+                <button
+                  type="button"
+                  className="inline-flex w-full min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 text-sm font-semibold text-white shadow-lg backdrop-blur-sm transition hover:bg-white/15"
+                  aria-expanded={storyDetailsOpen}
+                  aria-controls="immersive-story-details"
+                  onClick={() => setStoryDetailsOpen(true)}
+                >
+                  <span>Explore the story</span>
+                  <span aria-hidden className="text-lg leading-none">
+                    ↓
+                  </span>
+                </button>
+                <Link
+                  href="/"
+                  onClick={() => markIntroSeen()}
+                  className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-6 py-4 text-center text-base font-semibold text-black shadow-xl shadow-black/40 transition hover:opacity-95"
+                >
+                  Enter the Site
+                </Link>
+              </div>
             </div>
           </div>
         )}
@@ -256,32 +269,27 @@ export function ImmersiveExperience() {
         >
         {/* Band 1–2: brand + quotes (stacked on mobile; row on md) */}
         <header className="pointer-events-auto flex shrink-0 flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-6">
-          <div className="flex w-full min-w-0 items-start justify-between gap-3 pr-[7.25rem] md:block md:w-auto md:max-w-[200px] md:pr-0">
+          <div className="flex w-full min-w-0 flex-col gap-3 pr-[7.25rem] md:block md:w-auto md:max-w-[220px] md:pr-0">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white drop-shadow-md">Building Culture</p>
-              <p className="mt-1 text-[10px] leading-snug text-white/55 drop-shadow">Ambition: $1B+ ecosystem · illustrative demos</p>
+              <p className="mt-1 text-[10px] leading-snug text-white/55 drop-shadow">
+                Curated cultural real estate · Culture Land listings
+              </p>
             </div>
-            <Link
-              href="/"
-              onClick={() => markIntroSeen()}
-              className="shrink-0 pt-0.5 text-[10px] font-medium uppercase tracking-widest text-white/85 drop-shadow transition hover:text-white md:hidden"
-            >
-              Enter site
-            </Link>
           </div>
 
           <div className="relative z-10 flex min-w-0 w-full flex-col items-stretch justify-center px-0 md:flex-1 md:items-center md:px-4">
             <TypewriterQuotes />
           </div>
 
-          <div className="hidden min-w-[220px] flex-col items-end gap-2 md:flex">
+          <div className="hidden min-w-[240px] flex-col items-stretch gap-3 md:flex">
             <ExperienceSocialLinks />
             <Link
               href="/"
               onClick={() => markIntroSeen()}
-              className="text-[11px] font-medium uppercase tracking-widest text-white/80 transition hover:text-white"
+              className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-8 py-4 text-center text-lg font-semibold text-black shadow-xl shadow-black/45 transition hover:opacity-95"
             >
-              Enter the full site
+              Enter the Site
             </Link>
           </div>
         </header>
@@ -297,7 +305,7 @@ export function ImmersiveExperience() {
                 {beat.roleLabel}
               </p>
               <span className="hidden text-[10px] text-white/45 sm:inline">·</span>
-              <p className="text-[10px] uppercase tracking-widest text-white/80 drop-shadow sm:text-[10px]">Project #{idStr}</p>
+              <p className="text-[10px] uppercase tracking-widest text-white/80 drop-shadow sm:text-[10px]">Property #{idStr}</p>
             </div>
 
             <div className="flex items-center gap-2" role="tablist" aria-label="Story beats">
@@ -334,17 +342,27 @@ export function ImmersiveExperience() {
                 </p>
                 {beat.partnerLinks && beat.partnerLinks.length > 0 && (
                   <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2">
-                    {beat.partnerLinks.map((pl) => (
-                      <a
-                        key={pl.href}
-                        href={pl.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-medium text-eco-light/95 underline decoration-white/25 underline-offset-[3px] transition hover:text-white hover:decoration-eco-light/80"
-                      >
-                        {pl.label}
-                      </a>
-                    ))}
+                    {beat.partnerLinks.map((pl) =>
+                      pl.href.startsWith("/") ? (
+                        <Link
+                          key={pl.href}
+                          href={pl.href}
+                          className="text-sm font-medium text-eco-light/95 underline decoration-white/25 underline-offset-[3px] transition hover:text-white hover:decoration-eco-light/80"
+                        >
+                          {pl.label}
+                        </Link>
+                      ) : (
+                        <a
+                          key={pl.href}
+                          href={pl.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium text-eco-light/95 underline decoration-white/25 underline-offset-[3px] transition hover:text-white hover:decoration-eco-light/80"
+                        >
+                          {pl.label}
+                        </a>
+                      ),
+                    )}
                   </div>
                 )}
               </div>
@@ -394,7 +412,7 @@ export function ImmersiveExperience() {
                     <dd className="font-mono text-base text-white">{flagshipCampaign.investors.toLocaleString()}</dd>
                   </div>
                   <div>
-                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Min (illustr.)</dt>
+                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Min (ref.)</dt>
                     <dd className="font-mono text-base text-white">${flagshipCampaign.minInvestmentUsd.toLocaleString()}</dd>
                   </div>
                 </dl>
@@ -415,25 +433,25 @@ export function ImmersiveExperience() {
             ) : (
               detail && (
                 <>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Project (demo)</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Culture Land listing</p>
                   <p className="mt-1 text-lg font-semibold leading-snug text-white">{detail.headline}</p>
                   <p className="mt-0.5 text-xs text-zinc-500">{detail.propertyType}</p>
                   {economicsLine && <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">{economicsLine}</p>}
                   <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Illustr. yield</dt>
+                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Expected yield</dt>
                       <dd className="font-mono text-base text-eco-light">{yieldPct.toFixed(1)}%</dd>
                     </div>
                     <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Annual rent (illustr.)</dt>
+                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Annual rental income</dt>
                       <dd className="font-mono text-base text-white">{formatAnnualRentEur(detail.annualRentalIncomeEur)}</dd>
                     </div>
                     <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Units</dt>
-                      <dd className="font-mono text-base text-white">{detail.units}</dd>
+                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Residential units</dt>
+                      <dd className="font-mono text-base text-white">{detail.unitCountLabel ?? detail.units}</dd>
                     </div>
                     <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Area</dt>
+                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Gross floor area</dt>
                       <dd className="font-mono text-base text-white">{formatSquareMeters(detail.squareMeters)}</dd>
                     </div>
                   </dl>
@@ -446,18 +464,18 @@ export function ImmersiveExperience() {
                 href={`/trade?property=${idStr}`}
                 className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
               >
-                Buy a piece of the cake
+                Invest in this building
               </Link>
               <Link
                 href={`/properties/${idStr}`}
                 className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/25 bg-white/5 px-4 text-center text-sm font-semibold text-white transition hover:bg-white/10"
               >
-                View project
+                View property details
               </Link>
             </div>
 
             <p className="mt-3 text-[10px] leading-relaxed text-zinc-500">
-              {isFlagship ? "Illustrative figures — not on-chain TVL. " : "Illustrative economics — demo only. "}
+              {isFlagship ? "Reference figures — not on-chain TVL. " : "Reference financials — verify issuer docs. "}
               <Link href="/legal/risk" className="underline underline-offset-2 hover:text-zinc-400">
                 Risks
               </Link>

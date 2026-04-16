@@ -24,11 +24,11 @@ export const metadata: Metadata = {
   },
   title: "Building Culture — Community-owned cultural real estate on 0G",
   description:
-    "The Kickstarter for real estate: community funding rounds for coworking, cultural, and housing projects — tokenized shares, AMM liquidity, testnet-first. Verify disclosures before any production use.",
+    "Building Culture Land: community funding for coworking, cultural, and housing — tokenized shares and on-chain liquidity on 0G. Verify issuer disclosures before any commitment.",
   openGraph: {
     title: "Building Culture — Community-owned cultural real estate on 0G",
     description:
-      "Launch and fund community-owned places with tokenized ownership — testnet-first; not investment advice.",
+      "Launch and fund community-owned places with tokenized ownership on 0G — not investment advice.",
     type: "website",
     url: "/",
   },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Building Culture — Community-owned cultural real estate on 0G",
     description:
-      "Community funding rounds for cultural real estate — testnet-first; not investment advice.",
+      "Community funding rounds for cultural real estate on 0G — not investment advice.",
   },
 };
 

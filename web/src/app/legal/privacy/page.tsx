@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy policy — Building Culture",
-  description: "Privacy policy for the Building Culture demo application.",
+  description: "Privacy policy for Building Culture web interfaces.",
 };
 
 export default function LegalPrivacyPage() {
@@ -32,15 +32,15 @@ export default function LegalPrivacyPage() {
         <section>
           <h2 className="text-lg font-medium text-zinc-200">Logs &amp; analytics</h2>
           <p className="text-zinc-400">
-            Hosting providers may collect standard server logs (IP, user agent). This demo does not require accounts;
-            analytics, if enabled, should be configured by the deployment operator.
+            Hosting providers may collect standard server logs (IP, user agent). The application does not require accounts
+            by default; analytics, if enabled, should be configured by the deployment operator.
           </p>
         </section>
         <section>
           <h2 className="text-lg font-medium text-zinc-200">Contact</h2>
           <p className="text-zinc-400">
             For privacy requests related to a production deployment, use the contact method published by that
-            deployment&apos;s operator. This testnet demo has no data controller beyond generic hosting logs.
+            deployment&apos;s operator. Unless otherwise stated by that operator, there is no separate data controller beyond generic hosting logs.
           </p>
         </section>
       </div>

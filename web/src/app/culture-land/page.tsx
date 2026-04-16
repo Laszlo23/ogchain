@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   BLOCKCHAIN_HOMEPAGE_LINES,
   BUILDING_CULTURE_LAND_PHILOSOPHY,
+  CULTURE_LAND_CHAIN_MANIFESTO,
   CULTURE_LAND_PROJECTS,
   HOLZBAUER_REFERENCE_URL,
 } from "@/lib/culture-land-portfolio";
@@ -12,7 +13,7 @@ import { ButtonLink } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "Building Culture Land — Portfolio",
   description:
-    "Partner portfolio: revitalised villages, lakefront living, and Vienna landmarks — illustrative economics and sustainability notes. Not investment advice.",
+    "Partner portfolio: revitalised villages, lakefront living, and Vienna landmarks — reference economics and sustainability notes. Not investment advice.",
 };
 
 export default function CultureLandPage() {
@@ -40,10 +41,18 @@ export default function CultureLandPage() {
             <p key={line}>{line}</p>
           ))}
         </div>
-        <p className="mx-auto max-w-2xl text-sm leading-relaxed text-zinc-500">
-          This page gathers partner and investor materials in English. Figures are illustrative unless stated otherwise
-          in your offering documents. On-chain listings in the app are testnet demos — verify before any production use.
-        </p>
+        <div className="mx-auto max-w-2xl space-y-3 text-sm leading-relaxed text-zinc-500">
+          <p>
+            This page gathers partner and investor materials in English. Figures are reference unless stated otherwise in
+            your offering documents. On-chain listings in the app are live on 0G — reconcile with explorer data and issuer
+            filings before any commitment.
+          </p>
+          {CULTURE_LAND_CHAIN_MANIFESTO.map((line) => (
+            <p key={line} className="text-zinc-400">
+              {line}
+            </p>
+          ))}
+        </div>
         <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
           <ButtonLink href="/properties">Explore on-chain listings</ButtonLink>
           <ButtonLink href="/invest" variant="secondary">
@@ -112,14 +121,14 @@ export default function CultureLandPage() {
             className="scroll-mt-28 rounded-3xl border border-white/[0.07] bg-gradient-to-b from-white/[0.04] to-transparent p-6 shadow-2xl shadow-black/20 sm:p-8"
           >
             <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-10">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/80 lg:aspect-auto lg:min-h-[280px]">
+              <div className="relative aspect-[5/4] overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/80 sm:aspect-[4/3] lg:aspect-auto lg:min-h-[340px]">
                 <Image
                   src={p.imageSrc}
                   alt={p.imageAlt}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 420px"
-                  priority={i < 2}
+                  sizes="(max-width: 1024px) 100vw, min(480px, 45vw)"
+                  priority={i === 0}
                 />
               </div>
               <div className="space-y-4">
@@ -172,7 +181,7 @@ export default function CultureLandPage() {
                   href={p.exploreHref}
                   className="text-sm font-medium text-gold-400 underline-offset-2 hover:underline"
                 >
-                  Open related demo listing →
+                  Open related on-chain listing →
                 </Link>
               </div>
             )}
@@ -182,8 +191,8 @@ export default function CultureLandPage() {
 
       <footer className="mx-auto mt-20 max-w-2xl space-y-4 border-t border-white/[0.06] pt-12 text-center">
         <p className="text-xs leading-relaxed text-zinc-500">
-          Illustrative partner materials for discussion. Not a prospectus or investment advice. Sustainability and
-          financial claims require issuer verification and local disclosure rules.
+          Partner materials for discussion. Not a prospectus or investment advice. Sustainability and financial claims
+          require issuer verification and local disclosure rules.
         </p>
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           <Link href="/mission" className="text-zinc-400 hover:text-white">

@@ -4,7 +4,7 @@ import { explorerBase } from "@/lib/contracts";
 
 const steps = [
   {
-    title: "Get testnet OG",
+    title: "Get OG for gas",
     body: "Use the official faucet so your wallet can pay gas on Galileo (chain id 16602).",
     href: "https://faucet.0g.ai/",
   },
@@ -34,7 +34,7 @@ export default function GuidePage() {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-semibold">Demo guide</h1>
+        <h1 className="text-2xl font-semibold">Network guide</h1>
         <p className="mt-2 max-w-2xl text-sm text-zinc-400">
           <strong className="text-zinc-300">End users:</strong> read{" "}
           <Link href="/how-it-works" className="text-brand hover:underline">
@@ -44,8 +44,8 @@ export default function GuidePage() {
           contracts, configure env, and verify transactions.
         </p>
         <p className="mt-2 max-w-2xl text-sm text-zinc-400">
-          The demo supports up to seven seeded properties when deployed on-chain. Tokens are testnet assets, not legal
-          title; read <code className="text-zinc-400">docs/compliance.md</code> in the repository.
+          This deployment supports up to seven seeded properties when configured on-chain. Tokens represent programmed
+          economic interests, not legal title; read <code className="text-zinc-400">docs/compliance.md</code> in the repository.
         </p>
       </div>
 
@@ -61,7 +61,8 @@ export default function GuidePage() {
               <code className="text-zinc-500">propertyId</code> in <code className="text-zinc-500">PropertyRegistry</code>.
               That is <strong className="text-zinc-300">fractional exposure as a crypto asset</strong>, not an automatic
               replacement for land title or securities compliance — real offerings need legal structure, disclosures,
-              and often KYC (see repo <code className="text-zinc-500">docs/compliance.md</code>). On testnet, provider KYC is often paused — use registry bypass or admin verification instead.
+              and often KYC (see repo <code className="text-zinc-500">docs/compliance.md</code>). Early deployments may pause
+              provider KYC — use registry bypass or admin verification instead.
             </p>
           </div>
 

@@ -23,7 +23,7 @@ export function FlagshipProjectSection() {
             {flagshipCampaign.displayName}
           </h2>
           <p className="mt-1 text-sm text-eco-light">{flagshipCampaign.projectType}</p>
-          <p className="mt-2 text-[10px] text-muted">Illustrative campaign figures — not on-chain TVL.</p>
+          <p className="mt-2 text-[10px] text-muted">Reference campaign figures — not on-chain TVL.</p>
           <p className="mt-3">
             <Link
               href="/experience"
@@ -34,7 +34,7 @@ export function FlagshipProjectSection() {
           </p>
         </div>
         <div className="grid gap-0 lg:grid-cols-2">
-          <div className="relative aspect-[16/10] min-h-[200px] w-full bg-zinc-900 lg:min-h-[280px]">
+          <div className="relative aspect-[16/10] min-h-[240px] w-full bg-zinc-900 lg:min-h-[340px]">
             <Image
               src={hero.src}
               alt={hero.alt}
@@ -43,7 +43,7 @@ export function FlagshipProjectSection() {
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
           </div>
           <div className="flex flex-col justify-center gap-4 p-6 sm:p-8">
             <dl className="grid grid-cols-2 gap-4 text-sm">
@@ -62,7 +62,7 @@ export function FlagshipProjectSection() {
                 </dd>
               </div>
               <div>
-                <dt className="text-[10px] font-medium uppercase tracking-wide text-muted">Minimum (illustr.)</dt>
+                <dt className="text-[10px] font-medium uppercase tracking-wide text-muted">Minimum (ref.)</dt>
                 <dd className="mt-1 font-mono text-lg font-semibold tabular-nums text-canvas">
                   ${flagshipCampaign.minInvestmentUsd.toLocaleString()}
                 </dd>

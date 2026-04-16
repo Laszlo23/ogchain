@@ -8,8 +8,8 @@ export default function LegalPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Trust &amp; transparency</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">Legal overview</h1>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          Building Culture is a testnet demonstration for grants and pilots. Replace placeholder copy with
-          counsel-approved documents before any regulated offering.
+          Building Culture publishes software and on-chain interfaces for Culture Land listings. This overview is
+          informational — use counsel-approved documents for any regulated offering or subscription.
         </p>
       </header>
 
@@ -18,7 +18,7 @@ export default function LegalPage() {
         <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-zinc-400">
           <li>Open architecture: registry, factory-issued ERC-20 shares, AMM router, optional compliance registry.</li>
           <li>User flow that mirrors real investing: onboarding → KYC hook → swap → portfolio → explorer links.</li>
-          <li>Extensible: subgraph + KYC webhooks + issuer console — clear path from demo to production.</li>
+          <li>Extensible: subgraph + KYC webhooks + issuer console — clear path from rehearsal to production issuance.</li>
         </ul>
       </section>
 
@@ -42,7 +42,7 @@ export default function LegalPage() {
           className="glass-card block p-5 transition hover:border-brand/30 sm:col-span-2"
         >
           <h2 className="font-medium text-white">Risks &amp; disclaimer</h2>
-          <p className="mt-2 text-sm text-zinc-500">Tokenization, smart contracts, lending demo, and verification.</p>
+          <p className="mt-2 text-sm text-zinc-500">Tokenization, smart contracts, lending interfaces, and verification.</p>
         </Link>
       </section>
 

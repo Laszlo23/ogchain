@@ -4,7 +4,7 @@ const ROADMAP_ITEMS = [
   "Tokenized property markets",
   "Real estate liquidity pools",
   "On-chain mortgages (roadmap; issuer- and regulator-dependent)",
-  "AI / oracle valuation signals (illustrative; not investment advice)",
+  "AI / oracle valuation signals (reference; not investment advice)",
   "Global secondary markets where rules allow",
 ];
 

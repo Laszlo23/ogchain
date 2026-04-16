@@ -49,7 +49,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ tokenId
     name,
     description:
       demo?.thesis ??
-      "Soulbound certificate for an Og property share position. Illustrative demo — not legal title.",
+      "Soulbound certificate for an Og property share position. Reference metadata — not legal title.",
     image,
     external_url: base ? `${base}/properties` : undefined,
   });

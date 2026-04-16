@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { HeroAmbientDecor } from "@/components/HeroAmbientDecor";
+import { BERGGASSE_HERO_OBJECT_POSITION_CLASS, BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
 
 /** Default ambient clip under `public/` (URL-encoded spaces/parens). Override with `NEXT_PUBLIC_HERO_VIDEO`. */
 const DEFAULT_HERO_VIDEO =
@@ -43,20 +44,20 @@ export function HeroBackground() {
           <div className="absolute inset-x-0 top-0 flex justify-center px-3 pt-5 sm:px-5 sm:pt-8 md:pt-10">
             <div className="relative aspect-video w-full max-w-[min(92vw,56rem)] overflow-hidden rounded-2xl border border-white/10 bg-forest-deep/30 shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)] saturate-[0.96]">
               <video
-                className="absolute inset-0 h-full w-full object-cover object-center"
+                className={`absolute inset-0 h-full w-full ${BERGGASSE_HERO_OBJECT_POSITION_CLASS}`}
                 autoPlay
                 muted
                 loop
                 playsInline
                 preload="auto"
-                poster="/Foto-©-AnnABlaU-_DSC0788.jpg"
+                poster={BERGGASSE_HERO_STILL}
                 aria-hidden
               >
                 <source src={videoSrc} type="video/mp4" />
               </video>
               {/* Light edge soften — keeps the frame readable without hiding the clip */}
               <div
-                className="absolute inset-0 bg-[radial-gradient(ellipse_95%_85%_at_50%_48%,transparent_35%,rgba(8,22,17,0.28)_100%)]"
+                className="absolute inset-0 bg-[radial-gradient(ellipse_95%_85%_at_50%_48%,transparent_40%,rgba(8,22,17,0.2)_100%)]"
                 aria-hidden
               />
             </div>
@@ -64,10 +65,10 @@ export function HeroBackground() {
         ) : (
           <div className="relative h-full min-h-[480px] w-full sm:min-h-[560px]">
             <Image
-              src="/Foto-©-AnnABlaU-_DSC0788.jpg"
+              src={BERGGASSE_HERO_STILL}
               alt=""
               fill
-              className="object-cover object-center"
+              className={BERGGASSE_HERO_OBJECT_POSITION_CLASS}
               sizes="100vw"
               priority
             />
@@ -77,7 +78,7 @@ export function HeroBackground() {
       <div
         className={
           showVideo
-            ? "absolute inset-0 bg-gradient-to-b from-surface/45 via-surface/62 to-surface/92"
+            ? "absolute inset-0 bg-gradient-to-b from-surface/32 via-surface/52 to-surface/88"
             : "absolute inset-0 bg-gradient-to-b from-surface/80 via-surface/70 to-surface"
         }
       />

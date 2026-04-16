@@ -77,7 +77,7 @@ export function GuideChat() {
 
   return (
     <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-4">
-      <h2 className="text-sm font-medium text-emerald-400">AI assistant (demo)</h2>
+      <h2 className="text-sm font-medium text-emerald-400">AI assistant</h2>
       <p className="mt-1 text-xs text-zinc-500">
         Answers use RAG over project docs plus your configured contract addresses. Not legal advice.
       </p>

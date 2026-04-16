@@ -31,12 +31,12 @@ export function PortfolioIllustrativeCharts({ totalUsdEst }: Props) {
   return (
     <div className="space-y-4">
       <p className="text-[11px] text-amber-200/80">
-        Charts use <strong className="text-amber-100">illustrative</strong> series — not historical performance or
-        indexer data.
+        Charts use <strong className="text-amber-100">reference</strong> series — not historical performance or indexer
+        data.
       </p>
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-          <p className="text-xs font-medium text-white">Portfolio value (demo)</p>
+          <p className="text-xs font-medium text-white">Portfolio value (ref.)</p>
           <div className="mt-4 h-48 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data}>
@@ -52,7 +52,7 @@ export function PortfolioIllustrativeCharts({ totalUsdEst }: Props) {
           </div>
         </div>
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
-          <p className="text-xs font-medium text-white">Yield earned (demo)</p>
+          <p className="text-xs font-medium text-white">Yield earned (ref.)</p>
           <div className="mt-4 h-48 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data}>

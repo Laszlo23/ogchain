@@ -5,8 +5,8 @@ import { Fragment } from "react";
 
 const steps = [
   { n: 1, title: "Connect wallet", hint: "Link your Web3 wallet", href: "/onboarding#wallet" },
-  { n: 2, title: "Verify identity", hint: "Compliance (demo / bypass)", href: "/onboarding" },
-  { n: 3, title: "Deposit OG", hint: "Fund with testnet OG", href: "/invest" },
+  { n: 2, title: "Verify identity", hint: "Compliance (deployment rules)", href: "/onboarding" },
+  { n: 3, title: "Deposit OG", hint: "Fund with OG (faucet on Galileo)", href: "/invest" },
   { n: 4, title: "Invest", hint: "Pick a property", href: "/properties" },
 ];
 

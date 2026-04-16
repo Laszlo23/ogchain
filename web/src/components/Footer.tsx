@@ -68,7 +68,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <p className="text-lg font-semibold tracking-tight text-white">Building Culture</p>
             <p className="mt-2 max-w-sm text-sm leading-relaxed text-zinc-500">
-              On-chain liquidity and settlement for fractional real estate exposure — illustrative where marked; not
+              On-chain liquidity and settlement for fractional real estate exposure — reference figures where marked; not
               investment advice.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-6">
@@ -110,7 +110,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/[0.06] pt-8 text-center text-[11px] text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:text-left">
           <p>
-            © {new Date().getFullYear()} Building Culture · Testnet · Grants &amp; hackathon demonstration only
+            © {new Date().getFullYear()} Building Culture · Culture Land · Live on 0G
           </p>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 sm:justify-end">
             <Link href="/contracts" className="hover:text-zinc-400">

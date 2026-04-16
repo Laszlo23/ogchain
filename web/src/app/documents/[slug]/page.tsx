@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPublicDocumentById, publicDocumentHref, type PublicDocumentId } from "@/lib/public-documents";
+import {
+  getPublicDocumentById,
+  getPublicDocumentPreviewPaths,
+  publicDocumentHref,
+  type PublicDocumentId,
+} from "@/lib/public-documents";
 import { getStoryBySlug, allStorySlugs } from "@/lib/document-stories";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -30,6 +36,7 @@ export default async function DocumentStoryPage({ params }: Props) {
   if (!story || !doc) notFound();
 
   const pdfHref = publicDocumentHref(doc.filePath);
+  const previews = getPublicDocumentPreviewPaths(doc);
 
   return (
     <article className="mx-auto max-w-[720px] space-y-10 pb-16">
@@ -62,6 +69,31 @@ export default async function DocumentStoryPage({ params }: Props) {
           Download
         </a>
       </div>
+
+      {previews.length > 0 ? (
+        <div className="space-y-3">
+          <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Preview</p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {previews.map((src) => (
+              <div
+                key={src}
+                className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/[0.08] bg-zinc-900"
+              >
+                <Image
+                  src={src}
+                  alt={`${story.title} — preview`}
+                  fill
+                  className="object-contain object-center"
+                  sizes="(max-width: 720px) 100vw, 33vw"
+                />
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-zinc-500">
+            Raster previews from the PDF (first pages). Open the file for full resolution and all sheets.
+          </p>
+        </div>
+      ) : null}
 
       <div className="space-y-8">
         {story.sections.map((s) => (

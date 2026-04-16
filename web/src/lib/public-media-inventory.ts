@@ -1,0 +1,102 @@
+/**
+ * Inventory of static assets under `web/public/` — maps files to demo property ids (or site-wide).
+ * Duplicates / tooling-only files are noted; galleries use curated subsets in `demo-properties.ts`.
+ */
+export type PublicMediaKind = "photo" | "pdf" | "video" | "vector" | "other";
+
+export type PublicMediaEntry = {
+  path: string;
+  kind: PublicMediaKind;
+  /** Demo catalogue id when the asset belongs to a listing; null for site-wide or unassigned. */
+  demoPropertyId: number | null;
+  note?: string;
+};
+
+/** Root `377-DROES-100-P-S-221219.pdf` is not reliably rasterized by Poppler; UI uses `(1).pdf`. */
+export const PUBLIC_MEDIA_INVENTORY: readonly PublicMediaEntry[] = [
+  { path: "/Foto-©-AnnABlaU-_DSC1187.jpg", kind: "photo", demoPropertyId: 1 },
+  { path: "/Foto-©-AnnABlaU-_DSC0788.jpg", kind: "photo", demoPropertyId: 1 },
+  { path: "/Foto-©-AnnABlaU-_DSC0856.jpg", kind: "photo", demoPropertyId: 1 },
+  { path: "/Foto-©-AnnABlaU-_DSC0863.jpg", kind: "photo", demoPropertyId: 1 },
+  { path: "/Foto-©-AnnABlaU-_DSC0971.jpg", kind: "photo", demoPropertyId: 1 },
+  { path: "/_T1A1366.jpg", kind: "photo", demoPropertyId: 1 },
+  ...[
+    "WhatsApp Image 2026-04-14 at 16.24.48 (3).jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.22 (1).jpeg",
+    "WhatsApp Image 2026-04-13 at 23.16.41.jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.23 (7).jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.22 (3).jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.22.jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.23.jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.24 (1).jpeg",
+    "WhatsApp Image 2026-04-13 at 23.15.51.jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.23 (1).jpeg",
+    "WhatsApp Image 2026-04-14 at 16.24.48 (1).jpeg",
+    "WhatsApp Image 2026-04-14 at 16.24.48.jpeg",
+    "WhatsApp Image 2026-04-14 at 16.24.48 (6).jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.23 (4).jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.23 (6).jpeg",
+    "WhatsApp Image 2026-04-14 at 16.24.48 (4).jpeg",
+    "WhatsApp Image 2026-04-14 at 16.24.47.jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.22 (2).jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.23 (3).jpeg",
+    "WhatsApp Image 2026-04-14 at 16.24.48 (2).jpeg",
+    "WhatsApp Image 2026-04-13 at 23.16.10.jpeg",
+    "WhatsApp Image 2026-04-10 at 19.49.23 (2).jpeg",
+    "WhatsApp Image 2026-04-14 at 16.24.48 (5).jpeg",
+  ].map((f) => ({
+    path: `/${f}`,
+    kind: "photo" as const,
+    demoPropertyId: 1 as const,
+    note: "Campaign stills — not in current Berggasse carousel",
+  })),
+  { path: "/Kamera01_Variante.jpg", kind: "photo", demoPropertyId: null, note: "Legacy stock — Culture Land portfolio only" },
+  { path: "/Kamera02_Variante.jpg", kind: "photo", demoPropertyId: null, note: "Legacy stock — Culture Land portfolio only" },
+  { path: "/Innen01.jpg", kind: "photo", demoPropertyId: null, note: "Legacy interior still — not used as listing card hero" },
+  { path: "/Innen02.jpg", kind: "photo", demoPropertyId: null, note: "Legacy interior still — not used as listing card hero" },
+  { path: "/STIX Wohnanlage Keutschacher See 2024-04-04_0212.jpg", kind: "photo", demoPropertyId: 3 },
+  { path: "/STIX Wohnanlage Keutschacher See 2024-04-04_0239.jpg", kind: "photo", demoPropertyId: 3 },
+  { path: "/STIX Wohnanlage Keutschacher See 2024-04-04_0257.jpg", kind: "photo", demoPropertyId: 3 },
+  { path: "/STIX Wohnanlage Keutschacher See 2024-04-04_0312.jpg", kind: "photo", demoPropertyId: 3 },
+  { path: "/STIX Wohnanlage Keutschacher See 2024-04-04_0320.jpg", kind: "photo", demoPropertyId: 3 },
+  { path: "/Innenraum_Jagdschlossgasse_81.jpg", kind: "photo", demoPropertyId: null, note: "Legacy interior — listing cards use `extracted/bau-land-kultur-*`" },
+  { path: "/grok-video-920c4f79-1b3a-435f-a428-e34fa644b2a0 (1).mp4", kind: "video", demoPropertyId: null, note: "Default home hero ambient" },
+  { path: "/WhatsApp Video 2026-04-10 at 19.49.24 (1).mp4", kind: "video", demoPropertyId: null, note: "Optional campaign clip — override via NEXT_PUBLIC_HERO_VIDEO" },
+  { path: "/partners/base-logo.svg", kind: "vector", demoPropertyId: null },
+  { path: "/partners/0g-logo.svg", kind: "vector", demoPropertyId: null },
+  { path: "/vercel.svg", kind: "vector", demoPropertyId: null },
+  { path: "/file.svg", kind: "vector", demoPropertyId: null },
+  { path: "/window.svg", kind: "vector", demoPropertyId: null },
+  { path: "/Foto-©-AnnABlaU-_DSC0856.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — JPG used in UI" },
+  { path: "/Foto-©-AnnABlaU-_DSC0788.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — JPG used in UI" },
+  { path: "/Foto-©-AnnABlaU-_DSC0863.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — JPG used in UI" },
+  { path: "/Foto-©-AnnABlaU-_DSC0908.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — not in carousel" },
+  { path: "/Foto-©-AnnABlaU-_DSC0971.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — JPG used in UI" },
+  { path: "/Foto-©-AnnABlaU-_DSC1020.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — not in carousel" },
+  { path: "/Foto-©-AnnABlaU-_DSC1099.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — not in carousel" },
+  { path: "/Foto-©-AnnABlaU-_DSC1118.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — not in carousel" },
+  { path: "/Foto-©-AnnABlaU-_DSC1187.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — JPG used in UI" },
+  { path: "/Foto-©-AnnABlaU-_DSC0877.tif", kind: "other", demoPropertyId: 1, note: "Source TIFF — not in carousel" },
+  { path: "/377-DROES-100-P-S-221219.pdf", kind: "pdf", demoPropertyId: 1, note: "Damaged xref for Poppler — catalog uses (1).pdf" },
+  { path: "/377-DROES-100-P-S-221219 (1).pdf", kind: "pdf", demoPropertyId: 1, note: "Canonical DROES file for previews + links" },
+  { path: "/377-DROES-100-P-S-221219 (3).pdf", kind: "pdf", demoPropertyId: 1, note: "Duplicate export — not in catalog" },
+  { path: "/Pr_C3_A4_StixA3klein.pdf.pdf", kind: "pdf", demoPropertyId: 3, note: "Duplicate export — UI uses Prä_StixA3klein.pdf" },
+  { path: "/Prä_StixA3klein.pdf", kind: "pdf", demoPropertyId: 3, note: "Canonical Stix A3" },
+  { path: "/Studie_20Hausumbau_20Katzelsdorf_A3-Mappe_AUSWECHSLUNG.pdf.pdf", kind: "pdf", demoPropertyId: 6 },
+  { path: "/Studie Hausumbau Katzelsdorf_A3-Mappe_AUSWECHSLUNG.pdf", kind: "pdf", demoPropertyId: 6 },
+  { path: "/371-BERNHARDSTHAL-100-P-S-221114.pdf.pdf", kind: "pdf", demoPropertyId: 5, note: "Also used for property 7" },
+  { path: "/Altes_20Kaufhaus_Pra_CC_88s_20A3_20klein.pdf.pdf", kind: "pdf", demoPropertyId: 7 },
+  { path: "/20210625_Land-Mark-Bernhardsthal.pdf", kind: "pdf", demoPropertyId: 5 },
+  { path: "/20201113-Bau-Land-Kultur.pdf", kind: "pdf", demoPropertyId: 4, note: "General building-culture narrative" },
+  { path: "/20221110_Stix_Baukultur_EN_Web.pdf", kind: "pdf", demoPropertyId: 3 },
+  { path: "/20220112_WATER-SIDE-Keutschach-am-See (1).pdf", kind: "pdf", demoPropertyId: 3 },
+  { path: "/1169_VKP_Lageplan_2022-06-22.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Pool_2022-03-08.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Haus A_OG_Top3_2022-11-02.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Haus B_EG_Top 1_2022-05-16.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Haus C_EG_Top 2_2022-03-08.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Haus E_EG_Top 1_2022-03-08.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Haus E_EG_Top 3_2023-03-16.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Haus E_ÜP_TG+KG_2023-06-21.pdf", kind: "pdf", demoPropertyId: 2 },
+  { path: "/1169_VKP_Felsennest_EG_Top 1_2022-03-15.pdf", kind: "pdf", demoPropertyId: 2 },
+];

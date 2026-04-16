@@ -123,7 +123,7 @@ export default function InvestPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">One place</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Investor hub</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          A compact view of exposure and participation: balances, illustrative property weights, and links to stake,
+          A compact view of exposure and participation: balances, reference property weights, and links to stake,
           pool, and trade. Liquidity and pools are per network — switch your wallet to 0G or Base to match the deployment
           you use. Nothing here is a promise of returns — see{" "}
           <Link href="/legal/risk" className="text-brand hover:underline">
@@ -135,7 +135,7 @@ export default function InvestPage() {
 
       <section className="glass-card border border-gold-500/15 p-5">
         <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gold-500/90">
-          How value can compound (illustrative)
+          How value can compound (reference)
         </p>
         <ul className="mt-3 grid gap-3 text-sm text-zinc-400 sm:grid-cols-3">
           <li>
@@ -214,7 +214,7 @@ export default function InvestPage() {
               )}
             </div>
             <div className="glass-card-strong p-4">
-              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Illustrative USD (shares)</p>
+              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Reference USD (shares)</p>
               <p className="mt-1 font-mono text-xl text-white">
                 {new Intl.NumberFormat("en-US", {
                   style: "currency",
@@ -222,15 +222,15 @@ export default function InvestPage() {
                   maximumFractionDigits: 0,
                 }).format(totalUsdEst)}
               </p>
-              <p className="mt-1 text-[10px] text-zinc-500">Not NAV — demo weighting only.</p>
+              <p className="mt-1 text-[10px] text-zinc-500">Not NAV — reference weighting only.</p>
             </div>
           </div>
 
           {tab === "overview" && (
             <div className="space-y-4">
               <p className="text-sm text-zinc-400">
-                Use the tabs for per-property exposure and liquidity routes. Numbers are chain reads plus illustrative
-                USD where configured — not a suitability assessment.
+                Use the tabs for per-property exposure and liquidity routes. Numbers are chain reads plus reference USD
+                where configured — not a suitability assessment.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link
@@ -301,7 +301,7 @@ export default function InvestPage() {
                                     currency: "USD",
                                     maximumFractionDigits: 0,
                                   }).format(usdEst)}{" "}
-                                  demo
+                                  ref.
                                 </p>
                               )}
                             </>
@@ -327,7 +327,7 @@ export default function InvestPage() {
               <Link href="/lend" className="glass-card block p-5 transition hover:border-gold-500/25">
                 <p className="text-[10px] font-medium uppercase tracking-wider text-gold-500/80">Lending</p>
                 <h2 className="mt-2 text-lg font-semibold text-white">Lend / borrow</h2>
-                <p className="mt-1 text-sm text-zinc-500">Collateralize shares, borrow WETH (demo pool).</p>
+                <p className="mt-1 text-sm text-zinc-500">Collateralize shares, borrow WETH (protocol pool).</p>
               </Link>
               <Link href="/trade" className="glass-card block p-5 transition hover:border-gold-500/25 sm:col-span-2">
                 <p className="text-[10px] font-medium uppercase tracking-wider text-gold-500/80">Primary</p>

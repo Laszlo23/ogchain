@@ -3,7 +3,7 @@ import Link from "next/link";
 const steps = [
   {
     title: "Discover projects",
-    body: "Browse community-owned places — imagery, categories, and illustrative economics — then open the detail page.",
+    body: "Browse community-owned places — imagery, categories, and reference economics — then open the detail page.",
     href: "/properties",
     Icon: () => (
       <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>

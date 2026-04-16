@@ -224,7 +224,7 @@ export default function PoolPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-white">Liquidity pool</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
           Supply both sides of the market (wrapped OG + property shares). You earn a share of trading fees — similar to
-          being a market maker, simplified for this demo.
+          being a market maker, simplified in this interface.
         </p>
       </header>
       <div className="glass-card border border-brand/20 bg-brand/[0.04] p-4 text-sm text-zinc-300">
@@ -268,7 +268,7 @@ export default function PoolPage() {
                 <p className="mt-1 text-sm text-gold-400">0.30% (Uniswap V2–style)</p>
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wide text-zinc-500">Illustrative APR</p>
+                <p className="text-xs uppercase tracking-wide text-zinc-500">Reference APR</p>
                 <p className="mt-1 text-sm text-zinc-400">
                   Volume-weighted fees ÷ TVL — wire indexer for live APR.
                 </p>

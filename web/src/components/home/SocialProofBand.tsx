@@ -18,7 +18,7 @@ export function SocialProofBand({ funding, platform }: Props) {
     <section className="relative z-10 mx-auto max-w-[1280px] px-0 pb-12 pt-4">
       <p className="text-center text-sm font-medium text-canvas sm:text-base">Community metrics</p>
       <p className="mx-auto mt-2 max-w-lg text-center text-xs text-muted">
-        Illustrative demo figures — not live offering or TVL data.
+        Reference campaign figures — not live offering or on-chain TVL.
       </p>
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
         <div className="rounded-2xl border border-eco/15 bg-forest/35 px-5 py-8 text-center shadow-lg shadow-black/20">
@@ -47,7 +47,7 @@ export function SocialProofBand({ funding, platform }: Props) {
         </div>
       </div>
       <p className="mx-auto mt-6 max-w-2xl text-center text-[10px] leading-relaxed text-muted">
-        Testnet / illustrative where marked — verify disclosures before any production use.
+        Reference metrics where marked — verify issuer disclosures before any commitment.
       </p>
       <PartnerLogoStrip />
     </section>

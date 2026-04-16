@@ -9,8 +9,8 @@ type Props = {
 };
 
 const steps = [
-  { title: "Connect wallet", body: "Use MetaMask or any injected wallet on 0G Galileo.", href: "/onboarding#wallet" },
-  { title: "Verification", body: "Testnet: compliance bypass or admin verification may apply.", href: "/onboarding" },
+  { title: "Connect wallet", body: "Use MetaMask or any injected wallet on 0G (Galileo).", href: "/onboarding#wallet" },
+  { title: "Verification", body: "Compliance bypass or admin verification may apply on early deployments.", href: "/onboarding" },
   { title: "Deposit OG", body: "Fund your wallet from the faucet, then wrap to WETH if adding liquidity.", href: "/invest" },
   { title: "Confirm investment", body: "Choose a property and swap OG for share tokens on Trade.", href: "/properties" },
 ];
@@ -38,7 +38,7 @@ export function InvestFlowModal({ open, onClose }: Props) {
       <div className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 shadow-2xl shadow-black/60">
         <div className="border-b border-white/[0.06] px-6 py-4">
           <h2 className="text-lg font-semibold text-white">Start investing</h2>
-          <p className="mt-1 text-sm text-zinc-500">Stripe-style flow — four quick steps (testnet demo).</p>
+          <p className="mt-1 text-sm text-zinc-500">Four quick steps — wallet to first position.</p>
         </div>
         <ol className="max-h-[min(70vh,520px)] space-y-0 divide-y divide-white/[0.06] overflow-y-auto px-2 py-2">
           {steps.map((s, i) => (

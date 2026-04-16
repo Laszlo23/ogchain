@@ -7,19 +7,19 @@ const steps = [
   {
     n: 1,
     title: "Connect wallet",
-    body: "Use a Web3 wallet on 0G testnet. Your address is your account — no separate signup.",
+    body: "Use a Web3 wallet on 0G (Galileo). Your address is your account — no separate signup.",
     cta: { href: "#wallet", label: "Connect below" },
   },
   {
     n: 2,
-    title: "Verification (paused for testing in many pilots)",
-    body: "Restricted share tokens use ComplianceRegistry on-chain. During testnet demos, admins often enable a global bypass or verify wallets manually — full provider KYC may be paused.",
+    title: "Verification (may be simplified early on)",
+    body: "Restricted share tokens use ComplianceRegistry on-chain. Early deployments may use a global bypass or manual verification — full provider KYC can be phased in per issuer.",
     cta: { href: "/issuer", label: "Issuer console" },
   },
   {
     n: 3,
     title: "Deposit OG tokens",
-    body: "Fund your wallet with testnet OG. Wrap to WETH when adding liquidity or follow the Buy flow with native OG.",
+    body: "Fund your wallet with OG from the faucet. Wrap to WETH when adding liquidity or follow the Buy flow with native OG.",
     cta: { href: "/guide", label: "Read the guide" },
   },
   {

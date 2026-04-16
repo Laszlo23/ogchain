@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -16,13 +17,16 @@ import { PropertyShareButton } from "@/components/PropertyShareButton";
 import {
   formatAnnualRentEur,
   formatIllustrativeEconomics,
+  formatPropertyValueEur,
   formatSquareMeters,
   getDemoImageSlides,
   getEstimatedYieldPercent,
 } from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
-import { getPublicDocumentById, publicDocumentHref } from "@/lib/public-documents";
+import { getPublicDocumentById, getPublicDocumentPreviewPaths, publicDocumentHref } from "@/lib/public-documents";
 import { PropertyInvestmentCalculator } from "@/components/PropertyInvestmentCalculator";
+import { PropertyLocationMap } from "@/components/PropertyLocationMap";
+import { getPropertyGeoById } from "@/lib/property-geo";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 export default function PropertyDetailPage() {
@@ -98,10 +102,9 @@ export default function PropertyDetailPage() {
     totalSupplyWei !== undefined ? Number(formatEther(totalSupplyWei)).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "—";
   const remainingShares = demo ? demoAvailableShares(propertyId, goalUsd).toLocaleString("en-US") : "—";
   const sharePrice = demo?.illustrativeShareUsd != null ? `~$${demo.illustrativeShareUsd.toLocaleString()}` : "—";
+  const propertyGeo = getPropertyGeoById(Number(idStr));
   const assetValue =
-    demo?.creditLines?.length ? "See facilities" : demo?.illustrativePropertyValueUsd != null
-      ? `~$${(demo.illustrativePropertyValueUsd / 1e6).toFixed(1)}M`
-      : "—";
+    demo?.illustrativePropertyValueUsd != null ? formatPropertyValueEur(demo) : "—";
 
   const tabBtn = (id: typeof tab, label: string) => (
     <button
@@ -128,22 +131,25 @@ export default function PropertyDetailPage() {
               <PropertyImageCarousel
                 slides={getDemoImageSlides(demo)}
                 priorityFirst
-                aspectClassName="aspect-[21/9] min-h-[200px] w-full sm:min-h-0 sm:aspect-[2.4/1]"
+                aspectClassName="aspect-[5/3] min-h-[220px] w-full sm:min-h-[280px] sm:aspect-[2.2/1]"
                 sizes="100vw"
                 dotsClassName="top-4 sm:top-6"
               />
-              <div className="pointer-events-none absolute inset-0 z-[14] bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <div className="pointer-events-none absolute inset-0 z-[14] bg-gradient-to-t from-black/95 via-black/25 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 z-[15] p-6 sm:p-10">
                 {demo.discoveryCategory && (
                   <p className="mb-2 inline-block rounded-full border border-gold-400/30 bg-black/50 px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-gold-300">
                     {demo.discoveryCategory}
                   </p>
                 )}
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-400/90">Property #{idStr}</p>
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold-400/90">Culture Land listing #{idStr}</p>
                 <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  {demo.headline ?? row.name}
+                  {demo.investorCardTitle ?? demo.headline ?? row.name}
                 </h1>
-                <p className="mt-2 text-sm text-zinc-300">{demo.location ?? row.symbol}</p>
+                <p className="mt-2 text-sm text-zinc-300">{demo.investorCardSubtitle ?? demo.location ?? row.symbol}</p>
+                {demo.investorCardTitle && demo.headline !== demo.investorCardTitle ? (
+                  <p className="mt-1 text-xs text-zinc-500">{demo.headline}</p>
+                ) : null}
                 <p className="mt-1 text-xs uppercase tracking-wide text-zinc-500">{demo.propertyType}</p>
               </div>
             </>
@@ -154,6 +160,19 @@ export default function PropertyDetailPage() {
           )}
         </div>
       </div>
+
+      {demo?.whyItMatters && (
+        <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">
+            {demo.whyItMattersTitle ?? "Why this building matters"}
+          </h2>
+          <div className="mt-4 space-y-4 text-sm leading-relaxed text-muted">
+            {demo.whyItMatters.split("\n\n").map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
+        </section>
+      )}
 
       <ComplianceStatus />
 
@@ -176,25 +195,42 @@ export default function PropertyDetailPage() {
                   {demo.documentIds.map((docId) => {
                     const doc = getPublicDocumentById(docId);
                     if (!doc) return null;
+                    const previewSrc = getPublicDocumentPreviewPaths(doc)[0];
                     return (
-                      <li key={docId} className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                        <Link
-                          href={publicDocumentHref(doc.filePath)}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-sm font-medium text-brand hover:underline"
-                        >
-                          {doc.title} (PDF) →
-                        </Link>
-                        <Link href={`/documents/${docId}`} className="text-sm text-muted hover:text-brand hover:underline">
-                          Story page →
-                        </Link>
+                      <li key={docId} className="space-y-2 rounded-xl border border-white/[0.06] bg-black/20 p-3 sm:p-4">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                          <Link
+                            href={publicDocumentHref(doc.filePath)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-sm font-medium text-brand hover:underline"
+                          >
+                            {doc.title} (PDF) →
+                          </Link>
+                          <Link href={`/documents/${docId}`} className="text-sm text-muted hover:text-brand hover:underline">
+                            Story page →
+                          </Link>
+                        </div>
+                        {previewSrc ? (
+                          <Link
+                            href={`/documents/${docId}`}
+                            className="relative block h-28 max-w-md overflow-hidden rounded-lg border border-white/[0.08] bg-zinc-900 sm:h-32"
+                          >
+                            <Image
+                              src={previewSrc}
+                              alt={`${doc.title} — preview`}
+                              fill
+                              className="object-contain object-center"
+                              sizes="(max-width: 640px) 100vw, 28rem"
+                            />
+                          </Link>
+                        ) : null}
                       </li>
                     );
                   })}
                 </ul>
               )}
-              <p className="mt-3 text-xs text-muted">Plans are illustrative references — not a title report.</p>
+              <p className="mt-3 text-xs text-muted">Plans are reference documents — not a title report.</p>
             </section>
           )}
           {demo.communityUsers && demo.communityUsers.length > 0 && (
@@ -215,14 +251,14 @@ export default function PropertyDetailPage() {
             </section>
           )}
           <section className="rounded-2xl border border-brand/20 bg-brand/[0.06] p-6 sm:p-8">
-            <h2 className="text-lg font-semibold text-white">Funding round (illustrative)</h2>
+            <h2 className="text-lg font-semibold text-white">Funding round (reference)</h2>
             <dl className="mt-4 grid gap-3 sm:grid-cols-2">
               <div>
                 <dt className="text-xs uppercase tracking-wide text-muted">Progress</dt>
                 <dd className="mt-1 font-mono text-sm text-white">{Math.round(funding.progress * 100)}%</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Investors (demo)</dt>
+                <dt className="text-xs uppercase tracking-wide text-muted">Investors (round)</dt>
                 <dd className="mt-1 font-mono text-sm text-white">{funding.investors.toLocaleString()}</dd>
               </div>
               <div>
@@ -230,19 +266,19 @@ export default function PropertyDetailPage() {
                 <dd className="mt-1 font-mono text-sm text-white">{sharePrice}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Est. yield (illustr.)</dt>
+                <dt className="text-xs uppercase tracking-wide text-muted">Expected yield</dt>
                 <dd className="mt-1 font-mono text-sm text-brand">{demo ? `${getEstimatedYieldPercent(demo).toFixed(1)}%` : "—"}</dd>
               </div>
             </dl>
             {demo.fundingRoundNote && <p className="mt-4 text-xs text-muted">{demo.fundingRoundNote}</p>}
-            <p className="mt-2 text-xs text-muted">Figures are not live on-chain TVL — testnet demo.</p>
+            <p className="mt-2 text-xs text-muted">Figures are reference economics — not live on-chain TVL.</p>
           </section>
         </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Property value (illustr.)</p>
+          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Property value</p>
           <p className="mt-1 font-mono text-lg text-white">{assetValue}</p>
         </div>
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
@@ -265,7 +301,7 @@ export default function PropertyDetailPage() {
         </div>
       </div>
 
-      <FundingMeter stats={funding} label="Funding progress (illustrative)" currency={fundingCurrency} />
+      <FundingMeter stats={funding} label="Funding progress (reference)" currency={fundingCurrency} />
 
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
@@ -300,12 +336,18 @@ export default function PropertyDetailPage() {
                       <dd className="mt-1 text-sm text-white">{demo.propertyType}</dd>
                     </div>
                     <div>
-                      <dt className="text-xs uppercase tracking-wide text-muted">Floor area</dt>
+                      <dt className="text-xs uppercase tracking-wide text-muted">Gross floor area</dt>
                       <dd className="mt-1 font-mono text-sm text-white">{formatSquareMeters(demo.squareMeters)}</dd>
                     </div>
                     <div>
-                      <dt className="text-xs uppercase tracking-wide text-muted">Units</dt>
-                      <dd className="mt-1 font-mono text-sm text-white">{demo.units.toLocaleString("en-US")}</dd>
+                      <dt className="text-xs uppercase tracking-wide text-muted">
+                        {demo.propertyType === "Mixed-use" || demo.propertyType === "Mixed-use adaptive reuse"
+                          ? "Units"
+                          : "Residential units"}
+                      </dt>
+                      <dd className="mt-1 text-sm text-white">
+                        {demo.unitCountLabel ?? demo.units.toLocaleString("en-US")}
+                      </dd>
                     </div>
                     <div>
                       <dt className="text-xs uppercase tracking-wide text-muted">Annual gross rent</dt>
@@ -317,20 +359,26 @@ export default function PropertyDetailPage() {
               <section className="glass-card p-6 sm:p-8">
                 <h2 className="text-lg font-semibold text-white">Location</h2>
                 <p className="mt-2 text-sm text-muted">{demo?.location ?? "See property headline for region."}</p>
-                <div className="mt-4 flex aspect-[2/1] max-h-56 items-center justify-center rounded-xl border border-white/10 bg-zinc-900/80">
-                  <p className="text-xs text-muted">Map placeholder</p>
-                </div>
+                {propertyGeo ? (
+                  <div className="mt-4">
+                    <PropertyLocationMap geo={propertyGeo} />
+                  </div>
+                ) : (
+                  <div className="mt-4 flex aspect-[2/1] max-h-56 items-center justify-center rounded-xl border border-white/10 bg-zinc-900/80">
+                    <p className="text-xs text-muted">Map unavailable for this listing.</p>
+                  </div>
+                )}
               </section>
             </div>
           )}
 
           {tab === "financials" && (
             <section className="glass-card p-6 sm:p-8">
-              <h2 className="text-lg font-semibold text-white">Financials (illustrative)</h2>
+              <h2 className="text-lg font-semibold text-white">Financials (reference)</h2>
               <dl className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className={demo?.creditLines?.length ? "sm:col-span-2" : ""}>
                   <dt className="text-xs uppercase tracking-wide text-muted">
-                    {demo?.creditLines?.length ? "Loan / facility (illustrative)" : "Asset value (demo)"}
+                    {demo?.creditLines?.length ? "Loan / facility (reference)" : "Property value (reference)"}
                   </dt>
                   <dd className="mt-1 text-sm text-white">
                     {demo?.creditLines?.length ? (
@@ -347,7 +395,7 @@ export default function PropertyDetailPage() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-muted">Share price ref. (demo)</dt>
+                  <dt className="text-xs uppercase tracking-wide text-muted">Share price ref.</dt>
                   <dd className="mt-1 font-mono text-white">
                     {demo?.illustrativeShareUsd != null ? `~$${demo.illustrativeShareUsd.toLocaleString()}` : "—"}
                   </dd>
@@ -424,7 +472,7 @@ export default function PropertyDetailPage() {
                   <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand">Investor proof</p>
                   <h2 className="mt-2 text-lg font-semibold text-white">Certificate NFT</h2>
                   <p className="mt-2 text-sm text-muted">
-                    Mint a soulbound proof on the Trade page after you hold shares (testnet demo).
+                    Mint a soulbound proof on the Trade page after you hold shares (live on 0G).
                   </p>
                   <Link
                     href={`/trade?property=${idStr}`}

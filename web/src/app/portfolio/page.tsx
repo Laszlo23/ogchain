@@ -121,8 +121,7 @@ export default function PortfolioPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Dashboard</p>
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Portfolio</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Wallet balances, property exposure, and illustrative charts. USD uses demo per-share references — not
-          mark-to-market.{" "}
+          Wallet balances, property exposure, and reference charts. USD uses per-share references — not mark-to-market.{" "}
           <Link href="/guide" className="text-action hover:underline">
             Operator guide
           </Link>
@@ -141,7 +140,7 @@ export default function PortfolioPage() {
         <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
-              <p className="text-xs uppercase tracking-wide text-muted">Portfolio value (illustr.)</p>
+              <p className="text-xs uppercase tracking-wide text-muted">Portfolio value (ref.)</p>
               <p className="mt-2 font-mono text-2xl tabular-nums text-action-light">
                 {hasAnyShare
                   ? new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
@@ -149,7 +148,7 @@ export default function PortfolioPage() {
                     )
                   : "—"}
               </p>
-              <p className="mt-2 text-xs text-muted">Demo mark — not NAV.</p>
+              <p className="mt-2 text-xs text-muted">Reference mark — not NAV.</p>
             </div>
             <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
               <p className="text-xs uppercase tracking-wide text-muted">Properties owned</p>
@@ -157,7 +156,7 @@ export default function PortfolioPage() {
               <p className="mt-2 text-xs text-muted">Positions with share balance.</p>
             </div>
             <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
-              <p className="text-xs uppercase tracking-wide text-muted">Est. yield / yr (illustr.)</p>
+              <p className="text-xs uppercase tracking-wide text-muted">Est. yield / yr (ref.)</p>
               <p className="mt-2 font-mono text-2xl tabular-nums text-eco-light">
                 {hasAnyShare && annualYieldIllustrUsd > 0
                   ? new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
@@ -165,7 +164,7 @@ export default function PortfolioPage() {
                     )
                   : "—"}
               </p>
-              <p className="mt-2 text-xs text-muted">From demo yields × position — not distributed on-chain.</p>
+              <p className="mt-2 text-xs text-muted">From reference yields × position — not distributed on-chain.</p>
             </div>
             <div className="rounded-2xl border border-eco/20 bg-forest/30 p-6">
               <p className="text-xs uppercase tracking-wide text-muted">Token balances</p>
@@ -184,7 +183,7 @@ export default function PortfolioPage() {
           {hasAnyShare && positions.length > 0 && (
             <div className="glass-card p-6">
               <h2 className="text-sm font-medium text-white">Diversification</h2>
-              <p className="mt-1 text-xs text-zinc-500">Share of estimated demo exposure by property.</p>
+              <p className="mt-1 text-xs text-zinc-500">Share of estimated reference exposure by property.</p>
               <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full bg-forest-deep">
                 {positions.map((p, i) => (
                   <div
@@ -255,7 +254,7 @@ export default function PortfolioPage() {
                         <p className="text-[11px] text-zinc-500">
                           ~{" "}
                           {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(usdEst)}{" "}
-                          demo
+                          ref.
                         </p>
                       )}
                     </div>

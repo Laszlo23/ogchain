@@ -10,14 +10,14 @@ function narrativeLine(): string {
   const n = NAMES[Math.floor(Math.random() * NAMES.length)];
   const c = CITIES[Math.floor(Math.random() * CITIES.length)];
   const pool = [
-    `Investor from ${c} funded ${flagshipCampaign.displayName} — illustrative`,
-    `Community round reached ${52 + Math.floor(Math.random() * 15)}% of illustrative target`,
-    `New property narrative submitted by an architect (demo queue)`,
-    `${n} from ${c} joined the founding investor waitlist (demo)`,
-    `Coworking hub allocation updated for ${flagshipCampaign.displayName.split("—")[0].trim()} (illustr.)`,
-    `${n} reserved ${800 + Math.floor(Math.random() * 4200)} USDC in the testnet UI (not real funds)`,
-    `Rural revitalization project added to discovery — demo`,
-    `Governance vote queued on amenities package — testnet only`,
+    `Investor from ${c} backed ${flagshipCampaign.displayName} — reference round`,
+    `Community round reached ${52 + Math.floor(Math.random() * 15)}% of reference target`,
+    `New property narrative submitted by an architect (review queue)`,
+    `${n} from ${c} joined the founding investor waitlist`,
+    `Coworking hub allocation updated for ${flagshipCampaign.displayName.split("—")[0].trim()} (reference UI)`,
+    `${n} reserved ${800 + Math.floor(Math.random() * 4200)} USDC in the app UI (not a bank deposit)`,
+    `Rural revitalization project added to discovery`,
+    `Governance vote queued on amenities package — verify on-chain when live`,
   ];
   return pool[Math.floor(Math.random() * pool.length)];
 }
@@ -28,10 +28,10 @@ function randomLine(): string {
   const c = CITIES[Math.floor(Math.random() * CITIES.length)];
   if (Math.random() > 0.45) {
     const amt = 800 + Math.floor(Math.random() * 9200);
-    return `${n} from ${c} invested $${amt.toLocaleString("en-US")} (illustr.)`;
+    return `${n} from ${c} invested $${amt.toLocaleString("en-US")} (reference)`;
   }
   const shares = 12 + Math.floor(Math.random() * 400);
-  return `${n} from ${c} bought ${shares.toLocaleString("en-US")} shares (demo)`;
+  return `${n} from ${c} bought ${shares.toLocaleString("en-US")} shares (reference)`;
 }
 
 type Props = {
@@ -55,7 +55,7 @@ export function LiveActivityFeed({ variant = "list" }: Props) {
       <div className="glass-card overflow-hidden border-eco/20 py-0">
         <div className="flex items-center gap-4 border-b border-eco/15 px-4 py-3 sm:px-6">
           <p className="shrink-0 text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Live activity</p>
-          <p className="text-[10px] text-muted">Illustrative — demo only</p>
+          <p className="text-[10px] text-muted">Synthetic community feed</p>
         </div>
         <div className="relative overflow-hidden py-3 motion-reduce:animate-none">
           <div className="flex w-max animate-marquee gap-16 whitespace-nowrap pr-16 motion-reduce:animate-none">
@@ -74,7 +74,7 @@ export function LiveActivityFeed({ variant = "list" }: Props) {
     <div className="glass-card overflow-hidden border-eco/20">
       <div className="border-b border-eco/15 px-5 py-3">
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Live activity</p>
-        <p className="text-xs text-muted">Illustrative feed — demo only</p>
+        <p className="text-xs text-muted">Synthetic feed — not on-chain events</p>
       </div>
       <ul className="max-h-52 space-y-0 divide-y divide-eco/10 overflow-y-auto text-sm">
         {lines.map((line, i) => (

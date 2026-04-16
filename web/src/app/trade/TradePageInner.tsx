@@ -218,7 +218,7 @@ export function TradePageInner() {
         <a href="/how-it-works" className="text-brand hover:underline">
           How it works
         </a>
-        . Demo seeding assumes ~$<span className="text-zinc-400">1,000</span> notional per 1.0 whole share.
+        . Reference seeding assumes ~$<span className="text-zinc-400">1,000</span> notional per 1.0 whole share.
       </p>
 
       {unset ? (
