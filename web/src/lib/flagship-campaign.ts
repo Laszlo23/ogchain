@@ -18,7 +18,7 @@ export function getFlagshipHeroImage(): { src: string; alt: string } {
   const slide = demo?.imageGallery?.[0] ?? (demo ? { src: demo.imageSrc, alt: demo.imageAlt } : null);
   return (
     slide ?? {
-      src: "/extracted/water-side-keutschach-20220112/page-01.jpg",
+      src: "/partners/Keutschach-am-See-1b-1.jpg",
       alt: "Water Side Keutschach — flagship Culture Land preview",
     }
   );

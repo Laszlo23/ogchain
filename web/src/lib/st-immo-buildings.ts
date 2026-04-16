@@ -83,7 +83,7 @@ export const ST_IMMO_BUILDINGS: StImmoBuilding[] = [
     buildingTitle: "Jagdschlossgasse 81",
     location: "Vienna, Austria — opposite the historic Werkbundsiedlung; near the Lainzer Tiergarten recreational area",
     buildingType: "Residential",
-    demoPropertyId: 4,
+    demoPropertyId: 2,
     shortDescription:
       "A contemporary rental building in dialogue with modernist heritage: cubic forms, generous glazing, and openness to greenery on all sides.",
     buildingStory:

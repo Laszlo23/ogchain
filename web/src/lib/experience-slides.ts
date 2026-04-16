@@ -21,10 +21,17 @@ function truncateThesis(s: string, max: number): string {
   return `${t.slice(0, max).trim()}…`;
 }
 
+/**
+ * Demo ids excluded from `/experience` — interim listings whose carousel imagery is not suitable for the fullscreen story.
+ * Listing pages and registry UIs are unchanged.
+ */
+const EXPERIENCE_EXCLUDED_DEMO_IDS = new Set<number>([4]);
+
 /** Ordered slides — one hero image per property (first gallery frame). */
 export function getProjectExperienceSlides(): ExperienceSlide[] {
   const ids = Object.keys(DEMO_PROPERTY_DETAILS)
     .map(Number)
+    .filter((id) => !EXPERIENCE_EXCLUDED_DEMO_IDS.has(id))
     .sort((a, b) => a - b);
   return ids.map((propertyId) => {
     const d = DEMO_PROPERTY_DETAILS[propertyId]!;

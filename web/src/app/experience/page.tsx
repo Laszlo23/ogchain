@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ImmersiveExperience } from "@/components/experience/ImmersiveExperience";
 
-const ogImagePath = "/extracted/water-side-keutschach-20220112/page-01.jpg";
+const ogImagePath = "/partners/Keutschach-am-See-1b-1.jpg";
 
 export const metadata: Metadata = {
   title: "Immersive story — Building Culture | Community-owned cultural real estate",

@@ -8,7 +8,7 @@ import { usePropertyShareList } from "@/lib/usePropertyShareList";
 import { PropertyCardSkeleton } from "@/components/PropertyCardSkeleton";
 
 /** Culture Land–linked flagship demos (see `exploreHref` in `culture-land-portfolio`). */
-const SHOWCASE_IDS = [1, 3, 4, 5] as const;
+const SHOWCASE_IDS = [1, 2, 3, 5] as const;
 
 export function HomeFeaturedProperties() {
   const { rows, loading, unset } = usePropertyShareList();

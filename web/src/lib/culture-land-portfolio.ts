@@ -3,7 +3,6 @@
  * Reference figures are partner-sourced; verify all numbers with issuer disclosures. Not an offer.
  */
 
-import { BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
 import { ST_IMMO_HOMEPAGE, ST_IMMO_LAND_PHILOSOPHY } from "@/lib/st-immo-buildings";
 
 /** Short narrative: settlement layer + people-aligned ownership + path to dedicated RWA infrastructure. */
@@ -64,8 +63,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
     ],
     partnerNote:
       "Weinviertel reference architecture (external site — imagery may differ from this project): see link in the introduction.",
-    imageSrc: "/extracted/katzelsdorf-studie-auswechslung/page-02.jpg",
-    imageAlt: "Katzelsdorf study — masonry and reuse (PDF preview)",
+    imageSrc: "/partners/02katzelsdorf.png",
+    imageAlt: "AlterStadl Katzelsdorf — partner visualization",
   },
   {
     id: "whalewatching",
@@ -88,7 +87,7 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/STIX Wohnanlage Keutschacher See 2024-04-04_0312.jpg",
+    imageSrc: "/partners/keutschach-am-see.jpeg",
     imageAlt: "Waterfront architecture — coastal reference programme",
   },
   {
@@ -112,8 +111,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/extracted/altes-kaufhaus-prater/page-01.jpg",
-    imageAlt: "Former department store — plan preview (PDF)",
+    imageSrc: "/partners/04bernhardsthal.png",
+    imageAlt: "Former department store — Bernhardsthal partner imagery",
     exploreHref: "/properties/7",
   },
   {
@@ -137,8 +136,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/extracted/katzelsdorf-studie-auswechslung/page-01.jpg",
-    imageAlt: "Altes Presshaus — study PDF preview",
+    imageSrc: "/partners/01katzelsdorf.png",
+    imageAlt: "Altes Presshaus — partner visualization",
     exploreHref: "/properties/6",
   },
   {
@@ -168,8 +167,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "No unnecessary sealing of valuable land",
       "Conversion of grain storage into contemporary homes — high-quality reuse",
     ],
-    imageSrc: "/extracted/land-mark-bernhardsthal-20210625/page-01.jpg",
-    imageAlt: "Land-Mark Bernhardsthal — project PDF preview",
+    imageSrc: "/partners/01landmark.png",
+    imageAlt: "Land-Mark Bernhardsthal — partner visualization",
     exploreHref: "/properties/5",
   },
   {
@@ -194,8 +193,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces for all apartments",
       "Private lake access with jetty and bathhouse",
     ],
-    imageSrc: "/extracted/water-side-keutschach-20220112/page-01.jpg",
-    imageAlt: "Water Side Keutschach — project PDF preview",
+    imageSrc: "/partners/Keutschach-am-See-1b-1.jpg",
+    imageAlt: "Water Side Keutschach — partner imagery",
     exploreHref: "/properties/3",
   },
   {
@@ -220,9 +219,9 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces for all apartments",
       "Prime location beside the Lainzer Tiergarten — Vienna’s large recreational forest",
     ],
-    imageSrc: "/extracted/bau-land-kultur-20201113/page-01.jpg",
-    imageAlt: "Jagdschlossgasse — Bau–Land–Kultur PDF preview",
-    exploreHref: "/properties/4",
+    imageSrc: "/partners/Jagdschlossgasse-Projekte-Intro.jpg",
+    imageAlt: "Jagdschlossgasse — partner project imagery",
+    exploreHref: "/properties/2",
   },
   {
     id: "berggasse-35",
@@ -246,8 +245,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Central, vibrant residential quarter",
       "Conversion of office / telegraph use into contemporary homes — high-quality reuse",
     ],
-    imageSrc: BERGGASSE_HERO_STILL,
-    imageAlt: "Berggasse — exterior with tower (project imagery)",
+    imageSrc: "/partners/01berggasse.jpeg",
+    imageAlt: "Berggasse 35 — photography and partner still",
     exploreHref: "/properties/1",
   },
 ];

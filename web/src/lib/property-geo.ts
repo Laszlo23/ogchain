@@ -21,6 +21,9 @@ export const PROPERTY_GEO_BY_ID: Partial<Record<number, PropertyGeo>> = {
 
 const MAX_GALLERY_FRAMES = 10;
 
+/** Frames per project used for listing cards and `/experience` story beats (photo-first; no plan/PDF art). */
+export const IMMERSIVE_PROJECT_FRAMES = 3;
+
 /** @internal exported for tests */
 export function bboxFromCenter(geo: PropertyGeo): { minLon: number; minLat: number; maxLon: number; maxLat: number } {
   const z = geo.zoom ?? 15;

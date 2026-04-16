@@ -5,6 +5,7 @@
  */
 import { BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
 import type { PublicDocumentId } from "@/lib/public-documents";
+import { IMMERSIVE_PROJECT_FRAMES } from "@/lib/property-geo";
 import { getStImmoBuildingForDemoPropertyId, ST_IMMO_LAND_PHILOSOPHY } from "@/lib/st-immo-buildings";
 
 /** VKP 1169 plan set — Hietzing multi-unit demo (property 2). */
@@ -37,7 +38,7 @@ export type DemoPropertyDetail = {
   /** Primary image — first entry of `imageGallery` when present; used by thumbnails and NFT metadata. */
   imageSrc: string;
   imageAlt: string;
-  /** Up to three slides for property cards / detail hero (local `/...` or remote URLs). */
+  /** Exactly three photo-first slides for cards, detail hero, and `/experience` (no plan/PDF raster art). */
   imageGallery?: DemoImageSlide[];
   thesis: string;
   highlights: string[];
@@ -130,15 +131,15 @@ export function formatPropertyValueEur(d: DemoPropertyDetail): string {
   return new Intl.NumberFormat("de-AT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
 }
 
-/** Slides for carousel UIs; falls back to a single `imageSrc` / `imageAlt`. */
+/** Slides for carousel UIs; capped at `IMMERSIVE_PROJECT_FRAMES`; falls back to a single `imageSrc` / `imageAlt`. */
 export function getDemoImageSlides(d: DemoPropertyDetail): DemoImageSlide[] {
-  if (d.imageGallery?.length) return d.imageGallery;
+  if (d.imageGallery?.length) return d.imageGallery.slice(0, IMMERSIVE_PROJECT_FRAMES);
   return [{ src: d.imageSrc, alt: d.imageAlt }];
 }
 
 const st1 = getStImmoBuildingForDemoPropertyId(1)!;
+const st2 = getStImmoBuildingForDemoPropertyId(2)!;
 const st3 = getStImmoBuildingForDemoPropertyId(3)!;
-const st4 = getStImmoBuildingForDemoPropertyId(4)!;
 const st5 = getStImmoBuildingForDemoPropertyId(5)!;
 const st6 = getStImmoBuildingForDemoPropertyId(6)!;
 const st7 = getStImmoBuildingForDemoPropertyId(7)!;
@@ -153,15 +154,12 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
       "Located in Vienna's historic 9th district (Servitenviertel), Berggasse represents the typology of late 19th-century European residential architecture — Gründerzeit scale, courtyard life, and continuity with the city's urban fabric.\n\nThrough Building Culture, the property becomes a shared cultural asset: heritage preservation aligned with long-term community investment.\n\nInvestors do not only participate in yield. They join the stewardship of architectural culture — transparent rules, fractional access, and a narrative grounded in place.",
     unitCountLabel: "7 apartments",
     location: "Vienna · Multi-asset bundle (incl. one house abroad)",
-    imageSrc: BERGGASSE_HERO_STILL,
-    imageAlt: "Berggasse 35 — Servitenviertel tower and façade",
+    imageSrc: "/partners/01berggasse.jpeg",
+    imageAlt: "Berggasse 35 — partner project imagery (Servitenviertel)",
     imageGallery: [
-      { src: BERGGASSE_HERO_STILL, alt: "Berggasse 35 — façade and tower (Servitenviertel)" },
+      { src: "/partners/01berggasse.jpeg", alt: "Berggasse 35 — Servitenviertel (partner still)" },
+      { src: BERGGASSE_HERO_STILL, alt: "Berggasse 35 — façade and tower (photography)" },
       { src: "/_T1A1366.jpg", alt: "Berggasse 35 — street view toward tower" },
-      { src: "/Foto-©-AnnABlaU-_DSC0788.jpg", alt: "Berggasse 35 — exterior masonry and roofline" },
-      { src: "/Foto-©-AnnABlaU-_DSC0856.jpg", alt: "Berggasse 35 — courtyard / elevation detail" },
-      { src: "/Foto-©-AnnABlaU-_DSC0863.jpg", alt: "Berggasse 35 — architectural detail" },
-      { src: "/Foto-©-AnnABlaU-_DSC0971.jpg", alt: "Berggasse 35 — Gründerzeit fabric" },
     ],
     thesis:
       `This on-chain listing bundles Berggasse 35 with reference satellite holdings (see facility lines). Partner narrative — Berggasse 35: ${st1.shortDescription} ${st1.buildingStory}`,
@@ -191,50 +189,44 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     documentIds: ["droes-plans-221219"],
   },
   2: {
-    headline: "Hietzing — ten apartments",
-    investorCardTitle: "Hietzing Residences",
-    investorCardSubtitle: "Vienna XIII — New-build residential",
+    headline: "Building Culture — Jagdschlossgasse 81",
+    investorCardTitle: "Building Culture — Jagdschlossgasse 81",
+    investorCardSubtitle: "Vienna — Residential opposite Werkbundsiedlung",
     whyItMatters:
-      "A ten-unit building nearing completion in a mature Vienna residential belt — precision planning, durable envelopes, and lease-up economics suited to long maintenance cycles.\n\nParticipation here supports community-aligned housing stock: institutional clarity with design-forward interiors, not peripheral sprawl.",
-    location: "Hietzing · Vienna, Austria",
-    imageSrc: "/extracted/vkp-lageplan-20220622/page-01.jpg",
-    imageAlt: "Hietzing VKP 1169 — site plan (from plan set PDF)",
+      "Sited opposite the Werkbundsiedlung, the architecture advances daylight, proportion, and landscape relationship — new construction in dialogue with modernist heritage.\n\nThe asset speaks to design differentiation and stable rental product beside a canonical housing context.",
+    unitCountLabel: "9 apartments",
+    location: "Vienna, Austria · opposite Werkbundsiedlung; near Lainzer Tiergarten",
+    imageSrc: "/partners/Jagdschlossgasse-Projekte-Intro.jpg",
+    imageAlt: "Jagdschlossgasse 81 — partner project imagery",
     imageGallery: [
-      { src: "/extracted/vkp-lageplan-20220622/page-01.jpg", alt: "VKP 1169 — Lageplan" },
-      { src: "/extracted/vkp-haus-a-og-top3-20221102/page-01.jpg", alt: "VKP 1169 — Haus A OG Top 3" },
-      { src: "/extracted/vkp-haus-b-eg-top1-20220516/page-01.jpg", alt: "VKP 1169 — Haus B EG Top 1" },
-      { src: "/extracted/vkp-pool-20220308/page-01.jpg", alt: "VKP 1169 — pool / outdoor programme" },
-      { src: "/extracted/vkp-felsennest-eg-top1-20220315/page-01.jpg", alt: "VKP 1169 — Felsennest EG Top 1" },
-      { src: "/extracted/vkp-haus-c-eg-top2-20220308/page-01.jpg", alt: "VKP 1169 — Haus C EG Top 2" },
+      { src: "/partners/Jagdschlossgasse-Projekte-Intro.jpg", alt: "Jagdschlossgasse — project (partner)" },
+      { src: "/partners/jagdschloss123.jpg", alt: "Jagdschlossgasse — architecture (partner)" },
+      { src: "/partners/jagdschloss11.jpg", alt: "Jagdschlossgasse — context (partner)" },
     ],
-    thesis:
-      "Multi-family building with ten apartments — nearing completion (about three months to handover). Units are intended for lease-up after delivery. Aligned with Building Culture’s standard: precision planning, durable envelopes, and long-horizon stewardship for residents and backers.",
+    thesis: `${st2.shortDescription} ${st2.buildingStory}`,
     highlights: [
-      "10 apartments, completion in ~3 months",
-      "Lease-up after handover",
-      "Facility: €7.0M",
+      "9 rental apartments — cubist forms, generous glazing, greenery on all sides",
+      "Air-source heat pump and solar; terraces for all apartments",
+      "Reference (verify): ca. €8.3M acquisition; ca. €187k p.a. gross rent (partner brief)",
     ],
-    creditLines: ["€7.0M facility"],
-    targetRange: "Reference rental income after completion and letting.",
-    riskNote: "Construction and lease-up risk until stabilized — verify issuer disclosures.",
-    illustrativePropertyValueUsd: 7_000_000,
+    creditLines: ["Partner reference (verify): ca. €8.3M acquisition · ca. €187k p.a. rent"],
+    targetRange: "Reference rental income after takeover.",
+    riskNote: "Liquidity and interest-rate risk — not investment advice.",
+    illustrativePropertyValueUsd: 8_300_000,
     illustrativeShareUsd: 1000,
-    squareMeters: 1850,
-    units: 10,
-    annualRentalIncomeEur: 210_000,
-    estimatedYieldPercent: 3.0,
+    squareMeters: 553 + 106 + 429,
+    units: 9,
+    annualRentalIncomeEur: 187_000,
+    estimatedYieldPercent: 2.25,
     propertyType: "Multi-family residential",
     discoveryCategory: "Sustainable Housing",
-    vision:
-      "Deliver modern, efficient apartments near Hietzing for residents who want stable, well-managed homes — funded with clear on-chain rails for community participation. " +
-      ST_IMMO_LAND_PHILOSOPHY[1],
-    architectureNarrative:
-      "Ten-unit building nearing completion with modernist clarity — efficient cores, generous daylight, and calm interiors; renders shown are illustrative.",
-    communityUsers: ["Families", "Commuters", "Local landlords transitioning to institutional hold"],
+    vision: st2.investmentVision,
+    architectureNarrative: st2.architecturalValue,
+    communityUsers: ["Residents", "Design-conscious tenants", "Commuters near recreation"],
     ownershipModel:
-      "Property → SPV → share token → investors; lease-up risk until stabilized — see risk factors.",
-    fundingRoundNote: "Reference funding progress — verify against on-chain and issuer data.",
-    documentIds: HIETZING_VKP_DOCUMENT_IDS,
+      "SPV + tokenized shares for fractional exposure; distributions per issuer waterfall.",
+    fundingRoundNote: "Reference figures — not an offer.",
+    documentIds: ["bau-land-kultur-20201113"],
   },
   3: {
     headline: "Water Side",
@@ -244,17 +236,12 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
       "Water Side gathers housing into a single landscape idea: timber, glass, and orientation to Lake Keutschach and the Sattnitz range — regional modernism at environmental scale.\n\nInvestors align with a finite natural setting: hospitality-grade amenity with residential durability, disclosed issuer economics, and a culture-forward rural narrative.",
     unitCountLabel: "34 apartments",
     location: "Keutschach am See · Carinthia, Austria",
-    imageSrc: "/extracted/water-side-keutschach-20220112/page-01.jpg",
-    imageAlt: "Water Side Keutschach — project imagery (partner PDF)",
+    imageSrc: "/partners/Keutschach-am-See-1b-1.jpg",
+    imageAlt: "Water Side Keutschach — lake and scheme (partner imagery)",
     imageGallery: [
-      { src: "/extracted/water-side-keutschach-20220112/page-01.jpg", alt: "Water Side — Keutschach (PDF preview 1)" },
-      { src: "/extracted/water-side-keutschach-20220112/page-02.jpg", alt: "Water Side — Keutschach (PDF preview 2)" },
-      { src: "/extracted/water-side-keutschach-20220112/page-03.jpg", alt: "Water Side — Keutschach (PDF preview 3)" },
-      { src: "/extracted/stix-a3-klein/page-01.jpg", alt: "Stix A3 — scheme (PDF preview)" },
-      { src: "/extracted/stix-a3-klein/page-02.jpg", alt: "Stix A3 — plans (PDF preview)" },
-      { src: "/extracted/stix-baukultur-en-20221110/page-01.jpg", alt: "Stix building culture — PDF preview" },
-      { src: "/STIX Wohnanlage Keutschacher See 2024-04-04_0212.jpg", alt: "Keutschach — lakeside architecture (photography)" },
-      { src: "/STIX Wohnanlage Keutschacher See 2024-04-04_0239.jpg", alt: "Keutschach — lake and buildings (photography)" },
+      { src: "/partners/Keutschach-am-See-1b-1.jpg", alt: "Keutschach am See — partner project still" },
+      { src: "/partners/keutschach-am-see.jpeg", alt: "Keutschach — lake and architecture (photography)" },
+      { src: "/partners/keutschachamsee011.jpeg", alt: "Keutschach — lakeside (photography)" },
     ],
     thesis: `${st3.shortDescription} ${st3.buildingStory}`,
     highlights: [
@@ -283,44 +270,50 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     documentIds: ["stix-a3-klein", "stix-baukultur-en-20221110", "water-side-keutschach-20220112"],
   },
   4: {
-    headline: "Jagdschlossgasse 81",
-    investorCardTitle: "Jagdschlossgasse 81",
-    investorCardSubtitle: "Vienna — Residential opposite Werkbundsiedlung",
+    headline: "Hietzing — ten apartments (interim reference)",
+    investorCardTitle: "Hietzing VKP 1169 (reference)",
+    investorCardSubtitle: "Vienna XIII — Interim stills; plans on property page",
     whyItMatters:
-      "Sited opposite the Werkbundsiedlung, the architecture advances daylight, proportion, and landscape relationship — new construction in dialogue with modernist heritage.\n\nThe asset speaks to design differentiation and stable rental product beside a canonical housing context.",
-    unitCountLabel: "9 apartments",
-    location: "Vienna, Austria · opposite Werkbundsiedlung; near Lainzer Tiergarten",
-    imageSrc: "/extracted/bau-land-kultur-20201113/page-01.jpg",
-    imageAlt: "Jagdschlossgasse 81 — Bau–Land–Kultur (PDF preview)",
+      "A ten-unit building nearing completion in a mature Vienna residential belt — precision planning, durable envelopes, and lease-up economics suited to long maintenance cycles.\n\nParticipation here supports community-aligned housing stock: institutional clarity with design-forward interiors, not peripheral sprawl.",
+    location: "Hietzing · Vienna, Austria",
+    /**
+     * Interim: pool stills from VKP marketing PDFs. Floorplans and plan PDFs belong in documents only — replace carousel with partner photography when available.
+     */
+    imageSrc: "/extracted/vkp-pool-20220308/page-01.jpg",
+    imageAlt: "Hietzing VKP 1169 — outdoor pool (reference still; plans in documents)",
     imageGallery: [
-      { src: "/extracted/bau-land-kultur-20201113/page-01.jpg", alt: "Bau–Land–Kultur — project context (PDF 1)" },
-      { src: "/extracted/bau-land-kultur-20201113/page-02.jpg", alt: "Bau–Land–Kultur — drawings (PDF 2)" },
-      { src: "/extracted/bau-land-kultur-20201113/page-03.jpg", alt: "Bau–Land–Kultur — documentation (PDF 3)" },
+      { src: "/extracted/vkp-pool-20220308/page-01.jpg", alt: "Hietzing VKP 1169 — outdoor pool (reference)" },
+      { src: "/extracted/vkp-pool-20220308/page-01.jpg", alt: "Hietzing VKP 1169 — outdoor pool (reference)" },
+      { src: "/extracted/vkp-pool-20220308/page-01.jpg", alt: "Hietzing VKP 1169 — outdoor pool (reference)" },
     ],
-    thesis: `${st4.shortDescription} ${st4.buildingStory}`,
+    thesis:
+      "Multi-family building with ten apartments — nearing completion (about three months to handover). Units are intended for lease-up after delivery. Aligned with Building Culture’s standard: precision planning, durable envelopes, and long-horizon stewardship for residents and backers.",
     highlights: [
-      "9 rental apartments — cubist forms, generous glazing, greenery on all sides",
-      "Air-source heat pump and solar; terraces for all apartments",
-      "Reference (verify): ca. €8.3M acquisition; ca. €187k p.a. gross rent (partner brief)",
+      "10 apartments, completion in ~3 months",
+      "Lease-up after handover",
+      "Facility: €7.0M",
     ],
-    creditLines: ["Partner reference (verify): ca. €8.3M acquisition · ca. €187k p.a. rent"],
-    targetRange: "Reference rental income after takeover.",
-    riskNote: "Liquidity and interest-rate risk — not investment advice.",
-    illustrativePropertyValueUsd: 8_300_000,
+    creditLines: ["€7.0M facility"],
+    targetRange: "Reference rental income after completion and letting.",
+    riskNote: "Construction and lease-up risk until stabilized — verify issuer disclosures.",
+    illustrativePropertyValueUsd: 7_000_000,
     illustrativeShareUsd: 1000,
-    squareMeters: 553 + 106 + 429,
-    units: 9,
-    annualRentalIncomeEur: 187_000,
-    estimatedYieldPercent: 2.25,
+    squareMeters: 1850,
+    units: 10,
+    annualRentalIncomeEur: 210_000,
+    estimatedYieldPercent: 3.0,
     propertyType: "Multi-family residential",
     discoveryCategory: "Sustainable Housing",
-    vision: st4.investmentVision,
-    architectureNarrative: st4.architecturalValue,
-    communityUsers: ["Residents", "Design-conscious tenants", "Commuters near recreation"],
+    vision:
+      "Deliver modern, efficient apartments near Hietzing for residents who want stable, well-managed homes — funded with clear on-chain rails for community participation. " +
+      ST_IMMO_LAND_PHILOSOPHY[1],
+    architectureNarrative:
+      "Ten-unit building nearing completion with modernist clarity — efficient cores, generous daylight, and calm interiors; interim visuals are VKP collateral — verify on site.",
+    communityUsers: ["Families", "Commuters", "Local landlords transitioning to institutional hold"],
     ownershipModel:
-      "SPV + tokenized shares for fractional exposure; distributions per issuer waterfall.",
-    fundingRoundNote: "Reference figures — not an offer.",
-    documentIds: ["bau-land-kultur-20201113"],
+      "Property → SPV → share token → investors; lease-up risk until stabilized — see risk factors.",
+    fundingRoundNote: "Reference funding progress — verify against on-chain and issuer data.",
+    documentIds: HIETZING_VKP_DOCUMENT_IDS,
   },
   5: {
     headline: "LandMark",
@@ -330,12 +323,12 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
       "A rural–urban landmark converting agricultural storage into housing and a reactivated village heart — compacting the settlement inward rather than expanding its edge.\n\nInvestors gain diversified income potential (residential plus commercial and cultural ground plane) with a strong reuse and energy narrative.",
     unitCountLabel: "31 units",
     location: "Bernhardsthal · Weinviertel · Austria",
-    imageSrc: "/extracted/land-mark-bernhardsthal-20210625/page-01.jpg",
-    imageAlt: "Land-Mark Bernhardsthal — project PDF preview",
+    imageSrc: "/partners/01landmark.png",
+    imageAlt: "Land-Mark Bernhardsthal — partner visualization",
     imageGallery: [
-      { src: "/extracted/land-mark-bernhardsthal-20210625/page-01.jpg", alt: "Land-Mark Bernhardsthal — PDF preview 1" },
-      { src: "/extracted/land-mark-bernhardsthal-20210625/page-02.jpg", alt: "Land-Mark Bernhardsthal — PDF preview 2" },
-      { src: "/extracted/land-mark-bernhardsthal-20210625/page-03.jpg", alt: "Land-Mark Bernhardsthal — PDF preview 3" },
+      { src: "/partners/01landmark.png", alt: "Land-Mark — visualization" },
+      { src: "/partners/02landmark.png", alt: "Land-Mark — visualization" },
+      { src: "/partners/01bernhardsthal.png", alt: "Bernhardsthal — village context" },
     ],
     thesis: `${st5.shortDescription} ${st5.buildingStory}`,
     highlights: [
@@ -371,12 +364,12 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
       "Historic press-house fabric converted to loft-like living — visible half-timber and masonry as the design programme, not decoration.\n\nThis is place-led revitalisation: character stock with disciplined energy retrofit and community-oriented fractional pools.",
     unitCountLabel: "4 units",
     location: "Katzelsdorf · Weinviertel · Austria",
-    imageSrc: "/extracted/katzelsdorf-studie-auswechslung/page-01.jpg",
-    imageAlt: "Altes Presshaus Katzelsdorf — study PDF preview",
+    imageSrc: "/partners/01katzelsdorf.png",
+    imageAlt: "Altes Presshaus Katzelsdorf — partner imagery",
     imageGallery: [
-      { src: "/extracted/katzelsdorf-studie-auswechslung/page-01.jpg", alt: "Hausumbau Katzelsdorf — study (PDF 1)" },
-      { src: "/extracted/katzelsdorf-studie-auswechslung/page-02.jpg", alt: "Hausumbau Katzelsdorf — study (PDF 2)" },
-      { src: "/extracted/katzelsdorf-studie-auswechslung/page-03.jpg", alt: "Hausumbau Katzelsdorf — study (PDF 3)" },
+      { src: "/partners/01katzelsdorf.png", alt: "Katzelsdorf — partner visualization" },
+      { src: "/partners/02katzelsdorf.png", alt: "Katzelsdorf — partner visualization" },
+      { src: "/partners/03katzelsdorf.png", alt: "Katzelsdorf — partner visualization" },
     ],
     thesis: `${st6.shortDescription} ${st6.buildingStory}`,
     highlights: [
@@ -411,12 +404,12 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
       "A compact heritage retail building reborn as dwelling, hospitality, and townhouse living — high-street revitalisation without sprawl.\n\nInvestors participate in diversified micro-income streams and a heritage narrative compatible with transparent fractional models.",
     unitCountLabel: "3 units",
     location: "Bernhardsthal · Weinviertel · Austria · village centre",
-    imageSrc: "/extracted/altes-kaufhaus-prater/page-01.jpg",
-    imageAlt: "Former department store — Altes Kaufhaus plan preview",
+    imageSrc: "/partners/04bernhardsthal.png",
+    imageAlt: "Former department store — Bernhardsthal village centre (partner still)",
     imageGallery: [
-      { src: "/extracted/altes-kaufhaus-prater/page-01.jpg", alt: "Altes Kaufhaus — plan / context (PDF 1)" },
-      { src: "/extracted/altes-kaufhaus-prater/page-02.jpg", alt: "Altes Kaufhaus — documentation (PDF 2)" },
-      { src: "/extracted/altes-kaufhaus-prater/page-03.jpg", alt: "Altes Kaufhaus — documentation (PDF 3)" },
+      { src: "/partners/04bernhardsthal.png", alt: "Bernhardsthal — heritage department store and street front (partner still)" },
+      { src: "/partners/05bernhardsthal.png", alt: "Bernhardsthal village centre — retail fabric and public space (partner still)" },
+      { src: "/partners/02bernhardsthal.png", alt: "Bernhardsthal — historic commercial building, village-scale reuse (partner still)" },
     ],
     thesis: `${st7.shortDescription} ${st7.buildingStory}`,
     highlights: [
