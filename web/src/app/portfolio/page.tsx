@@ -25,7 +25,7 @@ export default function PortfolioPage() {
 
   const { data: nativeBal } = useBalance({ address, query: { enabled: !!address } });
 
-  const { rows, loading, unset } = usePropertyShareList();
+  const { chainRows: rows, loading, unset } = usePropertyShareList();
 
   const balanceReads = useMemo(
     () =>

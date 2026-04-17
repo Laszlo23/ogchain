@@ -25,7 +25,7 @@ export default function InvestPage() {
   const { address, isConnected } = useAccount();
   const { weth, staking } = useProtocolAddresses();
 
-  const { rows, loading, unset } = usePropertyShareList();
+  const { chainRows: rows, loading, unset } = usePropertyShareList();
 
   const { data: nativeBal } = useBalance({ address, query: { enabled: !!address } });
 

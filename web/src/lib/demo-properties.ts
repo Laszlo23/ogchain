@@ -444,3 +444,33 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     ],
   },
 };
+
+/** Token address used when the registry has no deployed share contracts yet — narrative-only grid. */
+export const DEMO_LISTING_PLACEHOLDER_TOKEN =
+  "0x0000000000000000000000000000000000000000" as const satisfies `0x${string}`;
+
+export type DemoListingFallbackRow = {
+  id: bigint;
+  tokenAddress: `0x${string}`;
+  name: string;
+  symbol: string;
+  demo?: DemoPropertyDetail;
+};
+
+/** When on-chain registry is empty (`nextPropertyId <= 1`), drive the discovery grid from demo copy (images + metrics). */
+export function getDemoListingFallbackRows(): DemoListingFallbackRow[] {
+  const ids = [1, 2, 3, 4, 5, 6, 7] as const;
+  const out: DemoListingFallbackRow[] = [];
+  for (const id of ids) {
+    const demo = DEMO_PROPERTY_DETAILS[id];
+    if (!demo) continue;
+    out.push({
+      id: BigInt(id),
+      tokenAddress: DEMO_LISTING_PLACEHOLDER_TOKEN,
+      name: demo.headline,
+      symbol: `OG${id}`,
+      demo,
+    });
+  }
+  return out;
+}

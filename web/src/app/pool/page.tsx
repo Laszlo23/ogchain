@@ -25,7 +25,7 @@ export default function PoolPage() {
   const { blocked } = useCompliance();
   const { router, weth } = useProtocolAddresses();
 
-  const { rows, loading, unset } = usePropertyShareList();
+  const { chainRows: rows, loading, unset } = usePropertyShareList();
   const [selectedId, setSelectedId] = useState("");
   const [amountWeth, setAmountWeth] = useState("1");
   const [amountShare, setAmountShare] = useState("1000");

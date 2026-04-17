@@ -6,7 +6,11 @@ import { useReadContract, useReadContracts } from "wagmi";
 import { erc20Abi, registryAbi, shareFactoryAbi } from "@/lib/contracts";
 import { areListingsConfigured, getListingsChainId } from "@/lib/listings-config";
 import { getProtocolAddresses } from "@/lib/protocol-addresses";
-import { DEMO_PROPERTY_DETAILS, type DemoPropertyDetail } from "@/lib/demo-properties";
+import {
+  DEMO_PROPERTY_DETAILS,
+  getDemoListingFallbackRows,
+  type DemoPropertyDetail,
+} from "@/lib/demo-properties";
 
 const listingsChainId = getListingsChainId();
 
@@ -28,7 +32,7 @@ export function usePropertyShareList() {
   const { registry, shareFactory } = useMemo(() => getProtocolAddresses(listingsChainId), []);
   const unset = !areListingsConfigured();
 
-  const { data: nextId } = useReadContract({
+  const { data: nextId, isPending: isPendingNextId } = useReadContract({
     chainId: listingsChainId,
     address: registry,
     abi: registryAbi,
@@ -55,7 +59,7 @@ export function usePropertyShareList() {
     [propertyIds, shareFactory],
   );
 
-  const { data: tokenRows, isPending: loadingTokens } = useReadContracts({
+  const { data: tokenRows, isPending: isPendingFactory } = useReadContracts({
     contracts: factoryReads,
     query: {
       enabled: !unset && factoryReads.length > 0,
@@ -93,12 +97,12 @@ export function usePropertyShareList() {
     [pairs],
   );
 
-  const { data: erc20Rows, isPending: loadingMeta } = useReadContracts({
+  const { data: erc20Rows, isPending: isPendingErc20 } = useReadContracts({
     contracts: erc20Reads,
     query: { enabled: erc20Reads.length > 0, ...listingQueryOpts },
   });
 
-  const rows: PropertyShareRow[] = useMemo(() => {
+  const chainRows: PropertyShareRow[] = useMemo(() => {
     if (!erc20Rows?.length || !pairs.length) return [];
     return pairs.map((p, i) => {
       const nameResult = erc20Rows[i * 2];
@@ -123,13 +127,30 @@ export function usePropertyShareList() {
     });
   }, [erc20Rows, pairs]);
 
-  const loading = unset || loadingTokens || (pairs.length > 0 && loadingMeta);
+  const loadingFactoryBatch = factoryReads.length > 0 && isPendingFactory;
+  const loadingErc20Batch = erc20Reads.length > 0 && isPendingErc20;
+  const loading =
+    unset || isPendingNextId || loadingFactoryBatch || loadingErc20Batch;
+
+  /** Merged rows for the discovery grid: on-chain tokens when present; otherwise demo previews if registry is still empty. */
+  const rows: PropertyShareRow[] = useMemo(() => {
+    if (chainRows.length > 0) return chainRows;
+    if (unset || loading) return [];
+    if (nextId === undefined) return [];
+    if (nextId > 1n) return [];
+    return getDemoListingFallbackRows();
+  }, [chainRows, unset, loading, nextId]);
+
+  const isDemoFallback =
+    chainRows.length === 0 && rows.length > 0 && nextId !== undefined && nextId <= 1n;
 
   return {
     unset,
     nextPropertyId: nextId,
     rows,
+    chainRows,
     loading,
+    isDemoFallback,
     propertyIds,
   };
 }

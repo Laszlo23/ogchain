@@ -16,7 +16,7 @@ import { usePropertyShareList } from "@/lib/usePropertyShareList";
 function PropertiesPageContent() {
   const unset = !areListingsConfigured();
 
-  const { rows: enriched, loading, nextPropertyId } = usePropertyShareList();
+  const { rows: enriched, loading, nextPropertyId, isDemoFallback } = usePropertyShareList();
   const globalFunding = getGlobalFundingMeter();
   const [category, setCategory] = useState<DiscoveryCategory | "all">("all");
 
@@ -44,6 +44,15 @@ function PropertiesPageContent() {
           </p>
         )}
       </header>
+
+      {isDemoFallback ? (
+        <p className="rounded-xl border border-amber-400/25 bg-amber-500/[0.08] px-4 py-3 text-sm leading-relaxed text-amber-100/90">
+          These cards use <span className="font-medium text-white">reference narratives and imagery</span> from the demo catalog. Your Base{" "}
+          <code className="font-mono text-xs text-white/90">PropertyRegistry</code> has not been seeded yet (
+          <code className="font-mono text-xs">nextPropertyId === 1</code>
+          ). After you run <code className="font-mono text-xs">SeedSevenProperties</code> (or your broadcast) on Base, refresh — live share tokens will replace these previews.
+        </p>
+      ) : null}
 
       {unset ? null : (
         <div className="grid gap-6 lg:grid-cols-2">

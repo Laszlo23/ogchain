@@ -32,7 +32,7 @@ export function TradePageInner() {
   const { blocked } = useCompliance();
   const { router, weth, proofNft, explorer: explorerBase } = useProtocolAddresses();
 
-  const { rows, loading, unset } = usePropertyShareList();
+  const { chainRows: rows, loading, unset } = usePropertyShareList();
   const [selectedId, setSelectedId] = useState<string>("");
   const [search, setSearch] = useState("");
   const [amountOg, setAmountOg] = useState("0.1");

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { zeroAddress } from "viem";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
 import { PropertyShareButton } from "@/components/PropertyShareButton";
 import {
@@ -26,6 +27,7 @@ type PropertyCardProps = {
 
 export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: PropertyCardProps) {
   const { explorer } = useProtocolAddresses();
+  const isPlaceholderToken = tokenAddress === zeroAddress;
   const explorerToken = `${explorer}/address/${tokenAddress}`;
   const goalUsd = demo?.illustrativePropertyValueUsd ?? 10_000_000;
   const funding = getFundingStats(propertyId, goalUsd);
@@ -133,12 +135,18 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
         {demo && <p className="line-clamp-2 text-sm leading-relaxed text-muted">{demo.thesis}</p>}
 
         <div className="mt-auto flex flex-col gap-3 border-t border-eco/10 pt-6 sm:flex-row sm:flex-wrap">
-          <Link
-            href={`/trade?property=${idStr}`}
-            className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-action px-6 py-2.5 text-center text-sm font-semibold text-[#0A0A0A] shadow-lg shadow-action/25 transition hover:bg-action-light sm:order-first sm:flex-none"
-          >
-            Invest in this building
-          </Link>
+          {isPlaceholderToken ? (
+            <span className="inline-flex min-h-[44px] flex-1 cursor-default items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-2.5 text-center text-sm font-semibold text-zinc-500 sm:order-first sm:flex-none">
+              Trading after on-chain seed
+            </span>
+          ) : (
+            <Link
+              href={`/trade?property=${idStr}`}
+              className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-action px-6 py-2.5 text-center text-sm font-semibold text-[#0A0A0A] shadow-lg shadow-action/25 transition hover:bg-action-light sm:order-first sm:flex-none"
+            >
+              Invest in this building
+            </Link>
+          )}
           <Link
             href={`/properties/${idStr}`}
             className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-eco/40 py-2.5 text-center text-sm font-semibold text-canvas transition hover:border-eco/70 hover:bg-eco/10 sm:flex-none sm:px-6"
@@ -147,14 +155,20 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
           </Link>
           {demo && <PropertyShareButton propertyId={idStr} title={demo.headline} variant="compact" />}
           <p className="w-full text-center text-[11px] text-muted sm:order-last">Buy a piece of the cake — community-owned slices.</p>
-          <Link
-            href={explorerToken}
-            target="_blank"
-            rel="noreferrer"
-            className="w-full py-2 text-center text-xs text-muted hover:text-canvas sm:w-auto sm:px-3"
-          >
-            Explorer
-          </Link>
+          {isPlaceholderToken ? (
+            <span className="w-full py-2 text-center text-[11px] text-amber-200/90 sm:w-auto">
+              Share token not deployed — explorer link available after seed.
+            </span>
+          ) : (
+            <Link
+              href={explorerToken}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-2 text-center text-xs text-muted hover:text-canvas sm:w-auto sm:px-3"
+            >
+              Explorer
+            </Link>
+          )}
         </div>
       </div>
     </article>

@@ -76,7 +76,7 @@ function AddressTable({
 }
 
 function PropertyShareTokens() {
-  const { rows, loading } = usePropertyShareList();
+  const { chainRows: rows, loading } = usePropertyShareList();
   const registry = addresses.registry;
 
   if (registry === zeroAddress) {

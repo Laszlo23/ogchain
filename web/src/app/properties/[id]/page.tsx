@@ -47,8 +47,8 @@ export default function PropertyDetailPage() {
   const unset = !areListingsConfigured();
   const listingsChainId = getListingsChainId();
 
-  const { rows, loading } = usePropertyShareList();
-  const row = rows.find((r) => r.id === propertyId);
+  const { chainRows, loading } = usePropertyShareList();
+  const row = chainRows.find((r) => r.id === propertyId);
 
   const [tab, setTab] = useState<"overview" | "financials" | "documents" | "blockchain">("overview");
 
