@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useAccount, useReadContract } from "wagmi";
 import { complianceAbi } from "@/lib/contracts";
 import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
@@ -82,6 +83,9 @@ export function ComplianceStatus() {
         updates on-chain status via webhook. A compliance admin may call{" "}
         <span className="font-mono">setWalletStatus</span>.
       </p>
+      <Link href="/kyc" className="mt-2 inline-block text-sm font-medium text-action hover:underline">
+        Verify with Veriff
+      </Link>
     </div>
   );
 }

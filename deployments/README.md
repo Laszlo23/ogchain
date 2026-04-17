@@ -213,6 +213,18 @@ docker compose build --no-cache && docker compose up -d
 
 On the server, pull the repo, copy or merge `.env`, rebuild, and restart the `web` container so the site serves both 0G and Base addresses baked into the client.
 
+### Base governance (Safe multisig)
+
+Set **`NEXT_PUBLIC_BASE_GOVERNANCE_SAFE`** to your Safe address on Base (e.g. from [Safe{Wallet}](https://app.safe.global)). The web app shows it on **`/contracts`** and **`/mission`** with links to Basescan and the Safe app. This is **protocol governance**, not an end-user wallet.
+
+**On-chain migration (operators):** After `DeployAll`, the deployer EOA typically holds `DEFAULT_ADMIN_ROLE` (and related roles) on core contracts. To move control to the Safe:
+
+1. From the current admin, **`grantRole`** the same roles to the Safe address, then **`revokeRole`** from the EOA (or batch via Safe Transaction Builder).
+2. Move **treasury** assets intended for the protocol from the EOA to the Safe where applicable.
+3. Verify on Basescan that admin roles point at the Safe.
+
+No new Solidity is required — use existing `AccessControl` methods.
+
 ## Security
 
 Do **not** commit `testnet.json` or `.env.local` with real keys. Keep `testnet.example.json` only as a template.

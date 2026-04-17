@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Roadmap — Building Culture",
   description:
-    "Milestones toward audits, liquidity, and ecosystem interoperability — partner- and regulator-dependent.",
+    "Strategic direction: a purpose-built appchain and a clear standard for tokenized real estate—plus milestones on audits, liquidity, and interoperability. Partner- and regulator-dependent; not a delivery guarantee.",
 };
 
 /**
@@ -50,6 +50,15 @@ const mainnetFundsJourney = [
 ];
 
 const phases = [
+  {
+    phase: "Direction",
+    title: "Appchain & standards (longer arc)",
+    items: [
+      "Research and design toward a purpose-built appchain that can carry tokenized real estate with explicit rules and auditability",
+      "Public-facing patterns for RWA share tokens: metadata, disclosures, and reference contracts—so wallets, indexers, and venues can integrate consistently where permitted",
+      "Governance and transparency hooks aligned with community participation, subject to jurisdiction and issuer structure",
+    ],
+  },
   {
     phase: "Now",
     title: "Live stack on 0G",
@@ -99,6 +108,7 @@ const phases = [
     items: [
       "Governance experiments where regulation permits",
       "Education and transparency as first-class product features",
+      "Clearer ownership rails so participation and capital formation are less dependent on opaque, concentrated gatekeeping",
     ],
   },
   {
@@ -107,6 +117,7 @@ const phases = [
     items: [
       "Document patterns so compatible share tokens can be supported by wallets, indexers, and venues that choose to list permitted instruments",
       "Explore collateral and credit use cases only with licensed partners — no guaranteed bank or CEX integration",
+      "Where regulation allows, reduce single-point reliance on traditional bank-led credit and custody pipelines by offering verifiable alternatives",
     ],
   },
 ];
@@ -120,7 +131,49 @@ export default function RoadmapPage() {
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           Honest milestones — not a promise of delivery dates. Priorities depend on audits, partners, and regulation.
         </p>
+        <p className="mt-4 text-sm leading-relaxed text-zinc-300">
+          Our long-term direction is infrastructure for tokenized real estate with explicit rules and interoperable
+          patterns—toward a purpose-built appchain that embodies that standard. The aim is to broaden access to
+          capital and ownership and to reduce excessive reliance on concentrated intermediation in legacy finance,
+          while staying inside applicable law and issuer obligations.
+        </p>
       </header>
+
+      <section
+        className="rounded-2xl border border-eco/25 bg-forest/25 p-6 sm:p-8"
+        aria-labelledby="strategic-direction-heading"
+      >
+        <h2 id="strategic-direction-heading" className="text-xl font-semibold tracking-tight text-white">
+          Strategic direction
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+          We are building toward a dedicated chain layer and a practical standard for tokenized property so communities
+          and investors can participate with transparent rails—ownership and liquidity aligned with{" "}
+          <strong className="font-medium text-zinc-300">people</strong> and place, not opaque pipelines alone. Outcomes
+          still depend on law, partners, audits, and market structure—not slogans.
+        </p>
+        <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-zinc-400">
+          <li>
+            <strong className="font-medium text-zinc-300">Appchain</strong> — a focused execution environment for RWA
+            workflows, compliance hooks, and governance where permitted.
+          </li>
+          <li>
+            <strong className="font-medium text-zinc-300">Standard</strong> — shared contracts, metadata, and disclosure
+            patterns so tokenized real estate can be read and integrated consistently across wallets and venues.
+          </li>
+          <li>
+            <strong className="font-medium text-zinc-300">Access</strong> — fewer choke points in how housing-linked
+            capital is raised and settled, without pretending regulation or risk disappear.
+          </li>
+        </ul>
+        <p className="mt-4 text-xs leading-relaxed text-zinc-500">
+          This is not investment or legal advice. See{" "}
+          <Link href="/legal/risk" className="text-action hover:underline">
+            Risks &amp; disclaimer
+          </Link>
+          .
+        </p>
+      </section>
 
       <section
         className="rounded-2xl border border-eco/25 bg-forest/25 p-6 sm:p-8"

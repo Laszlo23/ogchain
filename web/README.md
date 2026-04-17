@@ -73,6 +73,7 @@ Open [http://localhost:3000](http://localhost:3000). Connect via **injected** wa
 | `NEXT_PUBLIC_BASE_PROOF_NFT` | `PropertyShareProof` |
 | `NEXT_PUBLIC_BASE_STAKING` | `OgStaking` |
 | `NEXT_PUBLIC_BASE_GUESTBOOK` | `CommunityGuestbook` on Base (optional) |
+| `NEXT_PUBLIC_BASE_GOVERNANCE_SAFE` | Base **Safe** multisig for protocol governance (display + links; not a user wallet) |
 
 **Homepage community feed:** when `DATABASE_URL` is set and `platform_posts` has rows, the landing page shows **Platform updates** from the same API as `/community`.
 

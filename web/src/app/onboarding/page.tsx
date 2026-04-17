@@ -93,7 +93,15 @@ export default function OnboardingPage() {
             {isPending ? "Connecting…" : "Connect wallet"}
           </button>
         ) : (
-          <p className="text-sm text-eco-light">Wallet connected — proceed to KYC if your issuer requires it.</p>
+          <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
+            <p className="text-sm text-eco-light">Wallet connected — verify when your issuer requires it.</p>
+            <Link
+              href="/kyc"
+              className="rounded-full bg-gradient-to-r from-eco to-eco-light px-6 py-2.5 text-sm font-semibold text-[#0A0A0A] shadow-md shadow-eco/20"
+            >
+              Verify with Veriff
+            </Link>
+          </div>
         )}
         <Link href="/trade" className="text-sm text-zinc-400 hover:text-white">
           Skip to Buy →

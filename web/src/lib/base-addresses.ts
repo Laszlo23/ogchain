@@ -2,9 +2,10 @@ const zero = "0x0000000000000000000000000000000000000000" as const;
 
 type Addr = `0x${string}`;
 
-/** Base (or other L2) explorer base URL — no trailing slash. */
+/** Base (or other L2) explorer base URL — no trailing slash. Matches docker-compose default. */
 export const baseExplorerBase =
-  (process.env.NEXT_PUBLIC_BASE_EXPLORER as string | undefined)?.replace(/\/$/, "") ?? "";
+  (process.env.NEXT_PUBLIC_BASE_EXPLORER as string | undefined)?.replace(/\/$/, "") ||
+  "https://basescan.org";
 
 /** Optional second deployment on Base — mirror of `addresses` in contracts.ts */
 export const baseAddresses = {
@@ -20,7 +21,10 @@ export const baseAddresses = {
   guestbook: (process.env.NEXT_PUBLIC_BASE_GUESTBOOK as Addr | undefined) ?? zero,
 };
 
+/** True when Base registry + share factory are set (minimum for listings / verification). */
 export function isBaseConfigured(): boolean {
-  if (!baseExplorerBase) return false;
-  return Object.values(baseAddresses).some((a) => a !== zero);
+  return (
+    baseAddresses.registry !== zero &&
+    baseAddresses.shareFactory !== zero
+  );
 }

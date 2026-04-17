@@ -35,8 +35,14 @@ services:
         NEXT_PUBLIC_BASE_PROOF_NFT: ${NEXT_PUBLIC_BASE_PROOF_NFT:-}
         NEXT_PUBLIC_BASE_STAKING: ${NEXT_PUBLIC_BASE_STAKING:-}
         NEXT_PUBLIC_BASE_GUESTBOOK: ${NEXT_PUBLIC_BASE_GUESTBOOK:-}
+        NEXT_PUBLIC_BASE_GOVERNANCE_SAFE: ${NEXT_PUBLIC_BASE_GOVERNANCE_SAFE:-}
+        NEXT_PUBLIC_VERIFF_HOST: ${NEXT_PUBLIC_VERIFF_HOST:-https://api.veriff.me}
+        NEXT_PUBLIC_VERIFF_API_KEY: ${NEXT_PUBLIC_VERIFF_API_KEY:-}
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
+      # Server-only Veriff session API (see web/src/app/api/kyc/session/route.ts); override Base URL without rebuilding
+      - VERIFF_API_BASE=${VERIFF_API_BASE:-}
+      - VERIFF_API_KEY=${VERIFF_API_KEY:-}

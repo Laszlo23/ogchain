@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getBaseGovernanceSafeInfo } from "@/lib/governance-safe";
 
 export const metadata: Metadata = {
   title: "Mission — Building Culture",
@@ -8,6 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default function MissionPage() {
+  const baseGov = getBaseGovernanceSafeInfo();
+
   return (
     <div className="mx-auto max-w-2xl space-y-10 pb-16">
       <header>
@@ -46,6 +49,23 @@ export default function MissionPage() {
           </Link>{" "}
           one-pager — not a substitute for offering documents.
         </p>
+        {baseGov && (
+          <p>
+            On <strong className="text-zinc-200">Base</strong>, protocol governance is exercised through a{" "}
+            <a href={baseGov.safeAppUrl} className="font-medium text-brand hover:underline" target="_blank" rel="noreferrer">
+              Safe multisig
+            </a>{" "}
+            (
+            <a href={baseGov.explorerUrl} className="font-medium text-zinc-300 hover:underline" target="_blank" rel="noreferrer">
+              contract
+            </a>
+            ) — not your personal investing wallet. See also the{" "}
+            <Link href="/contracts" className="font-medium text-brand hover:underline">
+              Contracts
+            </Link>{" "}
+            page.
+          </p>
+        )}
       </section>
 
       <section className="glass-card border border-brand/20 bg-brand/[0.04] p-6">

@@ -5,6 +5,7 @@ import { zeroAddress } from "viem";
 import { CopyAddressButton } from "@/components/CopyAddressButton";
 import { addresses, explorerBase } from "@/lib/contracts";
 import { baseAddresses, baseExplorerBase, isBaseConfigured } from "@/lib/base-addresses";
+import { getBaseGovernanceSafeInfo } from "@/lib/governance-safe";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 type Row = { label: string; key: string; address: `0x${string}` };
@@ -162,6 +163,45 @@ const baseRows: Row[] = [
   { label: "Staking", key: "base-staking", address: baseAddresses.staking },
 ];
 
+function GovernanceSafeCard() {
+  const gov = getBaseGovernanceSafeInfo();
+  if (!gov) return null;
+
+  return (
+    <section className="space-y-4 rounded-xl border border-eco/25 bg-eco/[0.06] p-6">
+      <div>
+        <h2 className="text-xl font-semibold text-white">Governance (Base Safe)</h2>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+          Protocol admin actions on Base (access control, compliance updates, treasury-aligned operations) are intended to run
+          through this <strong className="text-zinc-300">Safe multisig</strong>. This is{" "}
+          <strong className="text-zinc-300">not</strong> a wallet you connect to buy shares — use your own wallet for
+          investing and trading.
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="font-mono text-xs text-zinc-300">{gov.address}</span>
+        <CopyAddressButton address={gov.address} />
+        <a
+          href={gov.explorerUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-md border border-white/10 px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-brand hover:bg-brand/10"
+        >
+          Basescan
+        </a>
+        <a
+          href={gov.safeAppUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-md border border-white/10 px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-eco-light hover:bg-eco/10"
+        >
+          Safe app
+        </a>
+      </div>
+    </section>
+  );
+}
+
 export function ContractsPageClient() {
   const baseOk = isBaseConfigured();
 
@@ -179,6 +219,8 @@ export function ContractsPageClient() {
         <p className="text-sm text-zinc-500">ERC-20 tokens minted per property — verify balances and transfers on-chain.</p>
         <PropertyShareTokens />
       </section>
+
+      <GovernanceSafeCard />
 
       {baseOk ? (
         <AddressTable
