@@ -4,11 +4,11 @@ import { useMemo } from "react";
 import { zeroAddress } from "viem";
 import { useReadContract, useReadContracts } from "wagmi";
 import { erc20Abi, registryAbi, shareFactoryAbi } from "@/lib/contracts";
-import { ogGalileo } from "@/lib/chain";
+import { areListingsConfigured, getListingsChainId } from "@/lib/listings-config";
 import { getProtocolAddresses } from "@/lib/protocol-addresses";
 import { DEMO_PROPERTY_DETAILS, type DemoPropertyDetail } from "@/lib/demo-properties";
 
-const listingsChainId = ogGalileo.id;
+const listingsChainId = getListingsChainId();
 
 /** TanStack Query options for on-chain listing data (stable until next deploy/seed). */
 const listingQueryOpts = {
@@ -26,7 +26,7 @@ export type PropertyShareRow = {
 
 export function usePropertyShareList() {
   const { registry, shareFactory } = useMemo(() => getProtocolAddresses(listingsChainId), []);
-  const unset = registry === zeroAddress || shareFactory === zeroAddress;
+  const unset = !areListingsConfigured();
 
   const { data: nextId } = useReadContract({
     chainId: listingsChainId,

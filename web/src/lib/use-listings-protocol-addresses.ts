@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-import { ogGalileo } from "@/lib/chain";
+import { getListingsChainId } from "@/lib/listings-config";
 import { getProtocolAddresses, type ProtocolAddresses } from "@/lib/protocol-addresses";
 
-/** Listings UI always reads 0G Galileo deployments (matches /properties copy). */
+/** Listings UI reads 0G when configured, otherwise Base mainnet when Base registry + factory are set. */
 export function useListingsProtocolAddresses(): ProtocolAddresses {
-  return useMemo(() => getProtocolAddresses(ogGalileo.id), []);
+  return useMemo(() => getProtocolAddresses(getListingsChainId()), []);
 }

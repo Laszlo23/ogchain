@@ -2,23 +2,19 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { zeroAddress } from "viem";
 import { FundingMeter } from "@/components/FundingMeter";
 import { PropertyCard } from "@/components/PropertyCard";
 import { PropertyCardSkeleton } from "@/components/PropertyCardSkeleton";
 import { PoolFinancierProgram } from "@/components/PoolFinancierProgram";
 import { TrustSection } from "@/components/TrustSection";
-import { useListingsProtocolAddresses } from "@/lib/use-listings-protocol-addresses";
+import { areListingsConfigured } from "@/lib/listings-config";
 import { DISCOVERY_CATEGORIES, type DiscoveryCategory } from "@/lib/demo-properties";
 import { getGlobalFundingMeter } from "@/lib/funding-stats";
 import { useHydrated } from "@/lib/use-hydrated";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 function PropertiesPageContent() {
-  const { registry, shareFactory } = useListingsProtocolAddresses();
-  const unset = registry === zeroAddress || shareFactory === zeroAddress;
-  const registryEnv = "NEXT_PUBLIC_REGISTRY";
-  const factoryEnv = "NEXT_PUBLIC_SHARE_FACTORY";
+  const unset = !areListingsConfigured();
 
   const { rows: enriched, loading, nextPropertyId } = usePropertyShareList();
   const globalFunding = getGlobalFundingMeter();
@@ -35,7 +31,7 @@ function PropertiesPageContent() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Discovery hub</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Community-owned places</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
-          Browse tokenized cultural and residential projects on 0G. Each listing has an on-chain share token; cards add a{" "}
+          Browse tokenized cultural and residential projects (0G testnet or Base mainnet, depending on deployment). Each listing has an on-chain share token; cards add a{" "}
           <span className="text-zinc-300">Culture Land narrative</span> (imagery, funding progress, yield) when metadata is present — not investment advice.{" "}
           <Link href="/how-it-works" className="text-brand hover:underline">
             How shares work →
@@ -58,11 +54,11 @@ function PropertiesPageContent() {
 
       {unset ? (
         <p className="text-zinc-400">
-          Set <code className="text-emerald-400">{registryEnv}</code> and{" "}
-          <code className="text-emerald-400">{factoryEnv}</code> in{" "}
-          <code className="text-emerald-400">web/.env.local</code> for local dev, or repo-root <code className="text-emerald-400">.env</code>{" "}
-          for <code className="text-zinc-300">docker compose build</code> (run{" "}
-          <code className="text-zinc-300">scripts/sync_web_env.py</code> from deployment JSON).
+          Set registry and share-factory env for the chain you use: on 0G, <code className="text-emerald-400">NEXT_PUBLIC_REGISTRY</code> and{" "}
+          <code className="text-emerald-400">NEXT_PUBLIC_SHARE_FACTORY</code>; on Base, <code className="text-emerald-400">NEXT_PUBLIC_BASE_REGISTRY</code> and{" "}
+          <code className="text-emerald-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code>. Use <code className="text-zinc-300">web/.env.local</code> locally or repo-root{" "}
+          <code className="text-zinc-300">.env</code> for <code className="text-zinc-300">docker compose build</code> (see <code className="text-zinc-300">.env.docker.example</code> and{" "}
+          <code className="text-zinc-300">scripts/sync_web_env.py</code> from your deployment JSON).
         </p>
       ) : loading && enriched.length === 0 ? (
         <section aria-label="Loading listings" className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">

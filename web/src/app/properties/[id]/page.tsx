@@ -10,7 +10,7 @@ import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { FundingMeter } from "@/components/FundingMeter";
 import { TrustSection } from "@/components/TrustSection";
 import { erc20Abi } from "@/lib/contracts";
-import { ogGalileo } from "@/lib/chain";
+import { areListingsConfigured, getListingsChainId } from "@/lib/listings-config";
 import { useListingsProtocolAddresses } from "@/lib/use-listings-protocol-addresses";
 import { demoAvailableShares } from "@/lib/demo-investment-math";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
@@ -43,9 +43,9 @@ export default function PropertyDetailPage() {
     }
   }, [idStr]);
 
-  const { registry, proofNft, explorer: explorerBase } = useListingsProtocolAddresses();
-  const unset = registry === zeroAddress;
-  const registryEnv = "NEXT_PUBLIC_REGISTRY";
+  const { proofNft, explorer: explorerBase } = useListingsProtocolAddresses();
+  const unset = !areListingsConfigured();
+  const listingsChainId = getListingsChainId();
 
   const { rows, loading } = usePropertyShareList();
   const row = rows.find((r) => r.id === propertyId);
@@ -53,7 +53,7 @@ export default function PropertyDetailPage() {
   const [tab, setTab] = useState<"overview" | "financials" | "documents" | "blockchain">("overview");
 
   const { data: totalSupplyWei } = useReadContract({
-    chainId: ogGalileo.id,
+    chainId: listingsChainId,
     address: row?.tokenAddress ?? zeroAddress,
     abi: erc20Abi,
     functionName: "totalSupply",
@@ -83,9 +83,10 @@ export default function PropertyDetailPage() {
   if (unset) {
     return (
       <p className="text-zinc-400">
-        Set <code className="text-gold-400">{registryEnv}</code> and{" "}
-        <code className="text-gold-400">NEXT_PUBLIC_SHARE_FACTORY</code> in{" "}
-        <code className="text-zinc-300">web/.env.local</code> (local) or repo-root <code className="text-zinc-300">.env</code> for Docker builds.
+        Set registry and share factory for your chain: on 0G, <code className="text-gold-400">NEXT_PUBLIC_REGISTRY</code> and{" "}
+        <code className="text-gold-400">NEXT_PUBLIC_SHARE_FACTORY</code>; on Base, <code className="text-gold-400">NEXT_PUBLIC_BASE_REGISTRY</code> and{" "}
+        <code className="text-gold-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code> in <code className="text-zinc-300">web/.env.local</code> or repo-root <code className="text-zinc-300">.env</code>{" "}
+        for Docker builds (see <code className="text-zinc-300">.env.docker.example</code>).
       </p>
     );
   }
