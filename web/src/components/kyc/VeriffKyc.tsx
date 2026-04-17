@@ -133,10 +133,10 @@ export function VeriffKyc() {
         <p className="rounded-md border border-red-900/60 bg-red-950/40 px-3 py-2 text-sm text-red-200">{error}</p>
       ) : null}
       <p className="text-xs text-zinc-500">
-        Sessions are created on our server using your Veriff API key and Base URL. If you see HTTP 401, open Veriff
-        Customer Portal → All Integrations → your integration → API keys and set{" "}
-        <span className="font-mono text-zinc-400">VERIFF_API_BASE</span> in <span className="font-mono text-zinc-400">web/.env.local</span>{" "}
-        to the <strong className="text-zinc-300">Base URL</strong> shown there (must match the key).
+        Sessions are created on our server (Station uses <span className="font-mono text-zinc-400">VERIFF_API_BASE</span>,{" "}
+        <span className="font-mono text-zinc-400">VERIFF_API_KEY</span>, and{" "}
+        <span className="font-mono text-zinc-400">VERIFF_SHARED_SECRET</span> for HMAC). If you see 401 or “integration not
+        found”, align Base URL and keys with one integration in the Veriff portal.
       </p>
       <button
         type="button"

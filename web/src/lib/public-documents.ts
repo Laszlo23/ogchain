@@ -14,6 +14,7 @@ export type PublicDocumentId =
   | "bau-land-kultur-20201113"
   | "stix-baukultur-en-20221110"
   | "water-side-keutschach-20220112"
+  | "teaser-biberstrasse-4-1010-wien"
   | "vkp-lageplan-20220622"
   | "vkp-pool-20220308"
   | "vkp-haus-a-og-top3-20221102"
@@ -93,6 +94,12 @@ export const PUBLIC_DOCUMENTS: readonly PublicDocument[] = [
     id: "water-side-keutschach-20220112",
     title: "Water Side — Keutschach am See (2022)",
     filePath: "/20220112_WATER-SIDE-Keutschach-am-See (1).pdf",
+    previewPages: 3,
+  },
+  {
+    id: "teaser-biberstrasse-4-1010-wien",
+    title: "Teaser — Biberstraße 4, 1010 Vienna (broker)",
+    filePath: "/Teaser-Biberstrasse-4-1010-Wien.pdf",
     previewPages: 3,
   },
   {

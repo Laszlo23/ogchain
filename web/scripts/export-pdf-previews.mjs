@@ -26,6 +26,7 @@ const MANIFEST = [
   { id: "bau-land-kultur-20201113", file: "20201113-Bau-Land-Kultur.pdf", pages: 3 },
   { id: "stix-baukultur-en-20221110", file: "20221110_Stix_Baukultur_EN_Web.pdf", pages: 3 },
   { id: "water-side-keutschach-20220112", file: "20220112_WATER-SIDE-Keutschach-am-See (1).pdf", pages: 3 },
+  { id: "teaser-biberstrasse-4-1010-wien", file: "Teaser-Biberstrasse-4-1010-Wien.pdf", pages: 3 },
   { id: "vkp-lageplan-20220622", file: "1169_VKP_Lageplan_2022-06-22.pdf", pages: 1 },
   { id: "vkp-pool-20220308", file: "1169_VKP_Pool_2022-03-08.pdf", pages: 1 },
   { id: "vkp-haus-a-og-top3-20221102", file: "1169_VKP_Haus A_OG_Top3_2022-11-02.pdf", pages: 1 },

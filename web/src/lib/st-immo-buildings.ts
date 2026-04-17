@@ -106,7 +106,6 @@ export const ST_IMMO_BUILDINGS: StImmoBuilding[] = [
     buildingTitle: "Water Side — Keutschach am See",
     location: "Keutschach am See, Carinthia, Austria — lakeside; views to Lake Keutschach and the Sattnitz range",
     buildingType: "Residential",
-    demoPropertyId: 3,
     shortDescription:
       "Six houses and thirty-four apartments where timber façades and full-height glazing set the architecture lightly into the landscape and orient daily life to water and mountains.",
     buildingStory:
@@ -215,8 +214,9 @@ export const ST_IMMO_BUILDINGS: StImmoBuilding[] = [
   {
     slug: "whalewatching-reference",
     buildingTitle: "Whalewatching lodge",
-    location: "Coastal location (reference programme — verify before issuance)",
+    location: "Canada — coastal reference programme (verify province and parcel before issuance)",
     buildingType: "Coastal reference programme",
+    demoPropertyId: 3,
     shortDescription:
       "A fully renovated coastal cottage where preservation of original structure and sea-ward orientation governed every design decision.",
     buildingStory:

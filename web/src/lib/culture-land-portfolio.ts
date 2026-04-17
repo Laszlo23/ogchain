@@ -42,7 +42,7 @@ export const BUILDING_CULTURE_LAND_PHILOSOPHY: string[] = ST_IMMO_LAND_PHILOSOPH
 export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
   {
     id: "alter-stadl",
-    title: "AlterStadl",
+    title: "BuildingCultureLand – AlterStadl",
     region: "Katzelsdorf · Weinviertel · northeast of Vienna",
     tagline: "Historic masonry, carefully renovated",
     narrative: [
@@ -63,16 +63,17 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
     ],
     partnerNote:
       "Weinviertel reference architecture (external site — imagery may differ from this project): see link in the introduction.",
-    imageSrc: "/partners/02katzelsdorf.png",
-    imageAlt: "AlterStadl Katzelsdorf — partner visualization",
+    imageSrc: "/stadl01.jpg",
+    imageAlt: "BuildingCultureLand – AlterStadl — Katzelsdorf",
   },
   {
     id: "whalewatching",
-    title: "Whalewatching lodge",
-    region: "Coastal concept · renovation narrative",
+    title: "BuildingCultureLand – Whalewatching",
+    region: "Canada · coastal lodge reference",
     tagline: "Preserved structure, orientation to the sea",
     narrative: [
       "The old cottage was extended and fully renovated. A priority was preserving the existing structure and its orientation toward the sea.",
+      "This narrative is pegged to Canadian coastal reference assets — not the Carinthia Water Side / Keutschach lakeside programme (see archive card below).",
       "Partners have also explored adapting a comparable programme to the Land-Mark warehouse context in the Weinviertel — a creative reuse conversation, not a committed plan.",
     ],
     factSheet: [
@@ -87,12 +88,13 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/partners/keutschach-am-see.jpeg",
-    imageAlt: "Waterfront architecture — coastal reference programme",
+    imageSrc: "/whale01.jpg",
+    imageAlt: "BuildingCultureLand – Whalewatching — Canada coastal lodge reference imagery",
+    exploreHref: "/properties/3",
   },
   {
     id: "old-department-store",
-    title: "Former department store",
+    title: "BuildingCultureLand – Former department store",
     region: "Bernhardsthal · village centre · Weinviertel",
     tagline: "New life for a historic retail building",
     narrative: [
@@ -111,13 +113,13 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/partners/04bernhardsthal.png",
-    imageAlt: "Former department store — Bernhardsthal partner imagery",
+    imageSrc: "/old01.jpg",
+    imageAlt: "BuildingCultureLand – Former department store — Bernhardsthal",
     exploreHref: "/properties/7",
   },
   {
     id: "altes-presshaus",
-    title: "Altes Presshaus",
+    title: "BuildingCultureLand – Altes Presshaus",
     region: "Katzelsdorf · Weinviertel",
     tagline: "Loft character, visible timber",
     narrative: [
@@ -136,13 +138,13 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Terraces",
       "No unnecessary sealing of valuable land",
     ],
-    imageSrc: "/partners/01katzelsdorf.png",
-    imageAlt: "Altes Presshaus — partner visualization",
+    imageSrc: "/press0.jpg",
+    imageAlt: "BuildingCultureLand – Altes Presshaus — Katzelsdorf",
     exploreHref: "/properties/6",
   },
   {
     id: "landmark-bernhardsthal",
-    title: "LandMark",
+    title: "BuildingCultureLand – LandMark",
     region: "Bernhardsthal · Weinviertel",
     tagline: "From warehouse to village quarter",
     narrative: [
@@ -167,17 +169,18 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "No unnecessary sealing of valuable land",
       "Conversion of grain storage into contemporary homes — high-quality reuse",
     ],
-    imageSrc: "/partners/01landmark.png",
-    imageAlt: "Land-Mark Bernhardsthal — partner visualization",
+    imageSrc: "/land0.jpg",
+    imageAlt: "BuildingCultureLand – LandMark — Bernhardsthal",
     exploreHref: "/properties/5",
   },
   {
     id: "water-side-keutschach",
-    title: "Water Side",
+    title: "Water Side — Keutschach (reference archive)",
     region: "Keutschach am See · Carinthia",
     tagline: "Six houses, thirty-four homes, lake panorama",
     narrative: [
-      "Water Side on Lake Keutschach: six buildings, thirty-four apartments (roughly 50–247 m²), with wooden façades and large glass walls that sit lightly in the landscape. Full-height glazing opens living space toward the water; the lake and the Sattnitz range form a panoramic backdrop. A calm place that invites you to stay.",
+      "Archived partner narrative for the large lakeside programme (not linked to the current on-chain listing slot). On-chain property #3 now carries the Whalewatching coastal reference — verify issuer mapping before investing.",
+      "Water Side on Lake Keutschach: six buildings, thirty-four apartments (roughly 50–247 m²), with wooden façades and large glass walls that sit lightly in the landscape.",
     ],
     factSheet: [
       { label: "Total rental area", value: "802 m²" },
@@ -195,11 +198,10 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
     ],
     imageSrc: "/partners/Keutschach-am-See-1b-1.jpg",
     imageAlt: "Water Side Keutschach — partner imagery",
-    exploreHref: "/properties/3",
   },
   {
     id: "jagdschlossgasse-81",
-    title: "Jagdschlossgasse 81",
+    title: "Building Culture City Jagdschlossgasse 81",
     region: "Vienna · opposite the historic Werkbundsiedlung",
     tagline: "Nine apartments, modernist clarity",
     narrative: [
@@ -225,7 +227,7 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
   },
   {
     id: "berggasse-35",
-    title: "Berggasse 35",
+    title: "Building Culture City Berggasse",
     region: "Vienna · Servitenviertel",
     tagline: "Gründerzeit fabric, adapted with care",
     narrative: [
@@ -245,8 +247,8 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
       "Central, vibrant residential quarter",
       "Conversion of office / telegraph use into contemporary homes — high-quality reuse",
     ],
-    imageSrc: "/partners/01berggasse.jpeg",
-    imageAlt: "Berggasse 35 — photography and partner still",
+    imageSrc: "/berg01.jpg",
+    imageAlt: "Building Culture City Berggasse — project photography",
     exploreHref: "/properties/1",
   },
 ];

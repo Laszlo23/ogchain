@@ -4,6 +4,8 @@ import Link from "next/link";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
 import { PropertyShareButton } from "@/components/PropertyShareButton";
 import {
+  REFERENCE_YIELD_BAND_LABEL,
+  REFERENCE_YIELD_DISCLAIMER,
   formatAnnualRentEur,
   formatPropertyValueEur,
   getDemoImageSlides,
@@ -89,11 +91,16 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
                 {formatAnnualRentEur(demo.annualRentalIncomeEur)}
               </dd>
             </div>
-            <div>
-              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted">Expected yield</dt>
-              <dd className="mt-1 font-mono text-lg font-semibold tabular-nums text-eco-light">
-                {yieldPct != null ? `${yieldPct.toFixed(1)}%` : "—"}
-              </dd>
+            <div className="sm:col-span-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted">Reference yield (illustrative)</dt>
+              <dd className="mt-1 font-mono text-lg font-semibold tabular-nums text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
+              <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
+              {yieldPct != null ? (
+                <p className="mt-2 text-[11px] text-muted">
+                  Modelled gross from reference rent ÷ reference value:{" "}
+                  <span className="font-mono text-canvas">{yieldPct.toFixed(1)}%</span>
+                </p>
+              ) : null}
             </div>
             <div>
               <dt className="text-[11px] font-medium uppercase tracking-wide text-muted">{unitsHeader}</dt>

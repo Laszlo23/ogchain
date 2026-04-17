@@ -1,11 +1,13 @@
+import { createHmac } from "node:crypto";
 import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/** Same shape as Veriff JS SDK 1.5 `createSession` (XHR) body. */
-function buildVerificationBody(vendorData: string) {
+/** Veriff POST /v1/sessions — includes callback for post-verification redirect to our site. */
+function buildVerificationBody(vendorData: string, callback: string) {
   return {
     verification: {
+      callback,
       person: {
         firstName: " ",
         lastName: " ",
@@ -14,6 +16,15 @@ function buildVerificationBody(vendorData: string) {
       timestamp: new Date().toISOString(),
     },
   };
+}
+
+/** Where Veriff redirects the end-user after verification — must be on your HTTPS origin (not Veriff marketing pages). */
+function getCallbackUrl(): string {
+  const explicit = process.env.VERIFF_CALLBACK_URL?.trim();
+  if (explicit) return explicit;
+  const site =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "").trim() || "https://buildingculture.capital";
+  return `${site}/kyc`;
 }
 
 function getVeriffEnv() {
@@ -25,19 +36,34 @@ function getVeriffEnv() {
     process.env.VERIFF_API_BASE?.replace(/\/$/, "").trim() ||
     process.env.NEXT_PUBLIC_VERIFF_HOST?.replace(/\/$/, "").trim() ||
     "https://api.veriff.me";
-  return { apiKey, base };
+  const sharedSecret = process.env.VERIFF_SHARED_SECRET?.trim() || "";
+  return { apiKey, base, sharedSecret };
+}
+
+function isStationBaseUrl(base: string): boolean {
+  return base.includes("stationapi.veriff.com");
 }
 
 /**
  * Creates a Veriff session server-side (POST /v1/sessions).
- * Use the **Base URL** shown in Veriff Customer Portal for this integration (All Integrations → your integration → API keys).
- * A 401 from Veriff almost always means the API key and Base URL are not from the same integration or the key was rotated.
+ * Station API (`stationapi.veriff.com`) requires `VERIFF_SHARED_SECRET` and `x-hmac-signature` on the raw JSON body.
+ * See https://devdocs.veriff.com/docs/hmac-authentication-and-endpoint-security
  */
 export async function POST(req: NextRequest) {
-  const { apiKey, base } = getVeriffEnv();
+  const { apiKey, base, sharedSecret } = getVeriffEnv();
   if (!apiKey) {
     return Response.json(
       { error: "Missing API key", hint: "Set VERIFF_API_KEY or NEXT_PUBLIC_VERIFF_API_KEY" },
+      { status: 503 }
+    );
+  }
+
+  if (isStationBaseUrl(base) && !sharedSecret) {
+    return Response.json(
+      {
+        error: "Missing shared secret for Station API",
+        hint: "Set VERIFF_SHARED_SECRET (master / signature key from Veriff Customer Portal). Station requires HMAC-SHA256 on the request body.",
+      },
       { status: 503 }
     );
   }
@@ -54,16 +80,24 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "vendorData is required" }, { status: 400 });
   }
 
-  const payload = buildVerificationBody(vendorData);
+  const callback = getCallbackUrl();
+  const payload = buildVerificationBody(vendorData, callback);
+  const bodyString = JSON.stringify(payload);
   const sessionUrl = `${base}/v1/sessions`;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "x-auth-client": apiKey,
+  };
+
+  if (sharedSecret) {
+    headers["x-hmac-signature"] = createHmac("sha256", sharedSecret).update(bodyString).digest("hex");
+  }
 
   const res = await fetch(sessionUrl, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-auth-client": apiKey,
-    },
-    body: JSON.stringify(payload),
+    headers,
+    body: bodyString,
   });
 
   const text = await res.text();
@@ -83,7 +117,7 @@ export async function POST(req: NextRequest) {
         veriff: data,
         hint:
           res.status === 401
-            ? "401 Unauthorized: use the API key and Base URL from the same integration in Veriff Customer Portal (All Integrations → integration → API keys). Set VERIFF_API_BASE to that Base URL if it differs from https://api.veriff.me (e.g. https://stationapi.veriff.com)."
+            ? "401: confirm API key, Base URL, and (for Station) VERIFF_SHARED_SECRET match one integration in Veriff Customer Portal. Verify HMAC signs the exact JSON body string."
             : undefined,
       },
       { status: res.status >= 400 && res.status < 600 ? res.status : 502 }

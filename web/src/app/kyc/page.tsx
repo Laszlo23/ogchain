@@ -15,6 +15,20 @@ export default function KycPage() {
           Verification is provided by Veriff. Your wallet address is sent as reference data (vendor data) for webhook and
           operational correlation — not legal advice; see terms and privacy.
         </p>
+        <p className="mx-auto mt-4 max-w-xl text-xs leading-relaxed text-zinc-500">
+          After you finish, Veriff redirects you back to{" "}
+          <strong className="font-medium text-zinc-400">this site</strong> (configured callback on our domain—not
+          Veriff&apos;s generic help URL). New to the flow? See Veriff&apos;s overview of document and selfie steps:{" "}
+          <a
+            href="https://www.veriff.com/get-verified?navigation=slim"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-action underline-offset-2 hover:underline"
+          >
+            How to get verified with Veriff
+          </a>
+          .
+        </p>
       </header>
 
       <div className="glass-card-strong p-6">

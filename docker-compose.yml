@@ -43,6 +43,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      # Server-only Veriff session API (see web/src/app/api/kyc/session/route.ts); override Base URL without rebuilding
+      # Veriff session API (see web/src/app/api/kyc/session/route.ts) — HMAC secret is runtime-only, not in client bundle
       - VERIFF_API_BASE=${VERIFF_API_BASE:-}
       - VERIFF_API_KEY=${VERIFF_API_KEY:-}
+      - VERIFF_SHARED_SECRET=${VERIFF_SHARED_SECRET:-}
+      - VERIFF_CALLBACK_URL=${VERIFF_CALLBACK_URL:-}

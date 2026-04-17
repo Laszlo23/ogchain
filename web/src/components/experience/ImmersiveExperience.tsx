@@ -7,6 +7,7 @@ import { ExperienceSocialLinks } from "@/components/experience/ExperienceSocialL
 import { TypewriterQuotes } from "@/components/experience/TypewriterQuotes";
 import {
   DEMO_PROPERTY_DETAILS,
+  REFERENCE_YIELD_BAND_LABEL,
   formatAnnualRentEur,
   formatIllustrativeEconomics,
   formatSquareMeters,
@@ -439,8 +440,9 @@ export function ImmersiveExperience() {
                   {economicsLine && <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">{economicsLine}</p>}
                   <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Expected yield</dt>
-                      <dd className="font-mono text-base text-eco-light">{yieldPct.toFixed(1)}%</dd>
+                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Reference yield (illustrative)</dt>
+                      <dd className="font-mono text-base text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
+                      <p className="mt-0.5 text-[8px] text-zinc-500">Modelled: {yieldPct.toFixed(1)}% gross</p>
                     </div>
                     <div>
                       <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Annual rental income</dt>

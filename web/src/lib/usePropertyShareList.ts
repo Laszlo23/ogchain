@@ -4,8 +4,17 @@ import { useMemo } from "react";
 import { zeroAddress } from "viem";
 import { useReadContract, useReadContracts } from "wagmi";
 import { erc20Abi, registryAbi, shareFactoryAbi } from "@/lib/contracts";
-import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
+import { ogGalileo } from "@/lib/chain";
+import { getProtocolAddresses } from "@/lib/protocol-addresses";
 import { DEMO_PROPERTY_DETAILS, type DemoPropertyDetail } from "@/lib/demo-properties";
+
+const listingsChainId = ogGalileo.id;
+
+/** TanStack Query options for on-chain listing data (stable until next deploy/seed). */
+const listingQueryOpts = {
+  staleTime: 60_000,
+  gcTime: 300_000,
+} as const;
 
 export type PropertyShareRow = {
   id: bigint;
@@ -16,14 +25,15 @@ export type PropertyShareRow = {
 };
 
 export function usePropertyShareList() {
-  const { registry, shareFactory } = useProtocolAddresses();
+  const { registry, shareFactory } = useMemo(() => getProtocolAddresses(listingsChainId), []);
   const unset = registry === zeroAddress || shareFactory === zeroAddress;
 
   const { data: nextId } = useReadContract({
+    chainId: listingsChainId,
     address: registry,
     abi: registryAbi,
     functionName: "nextPropertyId",
-    query: { enabled: !unset },
+    query: { enabled: !unset, ...listingQueryOpts },
   });
 
   const propertyIds = useMemo(() => {
@@ -36,6 +46,7 @@ export function usePropertyShareList() {
   const factoryReads = useMemo(
     () =>
       propertyIds.map((id) => ({
+        chainId: listingsChainId,
         address: shareFactory,
         abi: shareFactoryAbi,
         functionName: "tokenByPropertyId" as const,
@@ -48,6 +59,7 @@ export function usePropertyShareList() {
     contracts: factoryReads,
     query: {
       enabled: !unset && factoryReads.length > 0,
+      ...listingQueryOpts,
     },
   });
 
@@ -65,15 +77,25 @@ export function usePropertyShareList() {
   const erc20Reads = useMemo(
     () =>
       pairs.flatMap((p) => [
-        { address: p.addr, abi: erc20Abi, functionName: "name" as const },
-        { address: p.addr, abi: erc20Abi, functionName: "symbol" as const },
+        {
+          chainId: listingsChainId,
+          address: p.addr,
+          abi: erc20Abi,
+          functionName: "name" as const,
+        },
+        {
+          chainId: listingsChainId,
+          address: p.addr,
+          abi: erc20Abi,
+          functionName: "symbol" as const,
+        },
       ]),
     [pairs],
   );
 
   const { data: erc20Rows, isPending: loadingMeta } = useReadContracts({
     contracts: erc20Reads,
-    query: { enabled: erc20Reads.length > 0 },
+    query: { enabled: erc20Reads.length > 0, ...listingQueryOpts },
   });
 
   const rows: PropertyShareRow[] = useMemo(() => {

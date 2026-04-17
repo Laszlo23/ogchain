@@ -12,8 +12,10 @@ export type PropertyGeo = {
 export const PROPERTY_GEO_BY_ID: Partial<Record<number, PropertyGeo>> = {
   1: { lat: 48.2186, lng: 16.3608, zoom: 16 },
   2: { lat: 48.175, lng: 16.285, zoom: 15 },
-  3: { lat: 46.583, lng: 14.167, zoom: 14 },
-  4: { lat: 48.165, lng: 16.285, zoom: 15 },
+  /** Whalewatching demo — illustrative Canada coastal pin (not Keutschach / Water Side). */
+  3: { lat: 48.4284, lng: -123.3656, zoom: 12 },
+  /** Same asset narrative as id 2 (Jagdschlossgasse 81); duplicate demo token slot. */
+  4: { lat: 48.175, lng: 16.285, zoom: 15 },
   5: { lat: 48.499, lng: 16.816, zoom: 15 },
   6: { lat: 48.467, lng: 16.283, zoom: 15 },
   7: { lat: 48.499, lng: 16.816, zoom: 15 },

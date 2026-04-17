@@ -14,7 +14,7 @@ function narrativeLine(): string {
     `Community round reached ${52 + Math.floor(Math.random() * 15)}% of reference target`,
     `New property narrative submitted by an architect (review queue)`,
     `${n} from ${c} joined the founding investor waitlist`,
-    `Coworking hub allocation updated for ${flagshipCampaign.displayName.split("—")[0].trim()} (reference UI)`,
+    `Heritage allocation updated for ${flagshipCampaign.displayName.split("—")[0].trim()} (reference UI)`,
     `${n} reserved ${800 + Math.floor(Math.random() * 4200)} USDC in the app UI (not a bank deposit)`,
     `Rural revitalization project added to discovery`,
     `Governance vote queued on amenities package — verify on-chain when live`,

@@ -1,11 +1,11 @@
 import { DEMO_PROPERTY_DETAILS } from "@/lib/demo-properties";
 
-/** On-chain property id used for flagship imagery (Keutschach listing). */
-export const FLAGSHIP_PROPERTY_ID = 3n;
+/** On-chain property id used for flagship imagery (Berggasse demo listing). */
+export const FLAGSHIP_PROPERTY_ID = 1n;
 
 export const flagshipCampaign = {
-  displayName: "C3 Creative Village — Austria",
-  projectType: "Coworking + Café + Community Living",
+  displayName: "Building Culture City Berggasse — Vienna IX",
+  projectType: "Historic residential · mixed portfolio (reference)",
   /** Reference campaign metrics — not on-chain TVL. */
   targetRaiseEur: 1_200_000,
   raisedEur: 420_000,
@@ -18,8 +18,8 @@ export function getFlagshipHeroImage(): { src: string; alt: string } {
   const slide = demo?.imageGallery?.[0] ?? (demo ? { src: demo.imageSrc, alt: demo.imageAlt } : null);
   return (
     slide ?? {
-      src: "/partners/Keutschach-am-See-1b-1.jpg",
-      alt: "Water Side Keutschach — flagship Culture Land preview",
+      src: "/partners/01berggasse.jpeg",
+      alt: "Building Culture City Berggasse — Servitenviertel (Culture Land preview)",
     }
   );
 }

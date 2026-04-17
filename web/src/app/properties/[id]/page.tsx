@@ -4,18 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import { base } from "viem/chains";
 import { formatEther, zeroAddress } from "viem";
-import { useChainId, useReadContract } from "wagmi";
+import { useReadContract } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { FundingMeter } from "@/components/FundingMeter";
 import { TrustSection } from "@/components/TrustSection";
 import { erc20Abi } from "@/lib/contracts";
-import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
+import { ogGalileo } from "@/lib/chain";
+import { useListingsProtocolAddresses } from "@/lib/use-listings-protocol-addresses";
 import { demoAvailableShares } from "@/lib/demo-investment-math";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
 import { PropertyShareButton } from "@/components/PropertyShareButton";
 import {
+  REFERENCE_YIELD_BAND_LABEL,
+  REFERENCE_YIELD_DISCLAIMER,
   formatAnnualRentEur,
   formatIllustrativeEconomics,
   formatPropertyValueEur,
@@ -41,10 +43,9 @@ export default function PropertyDetailPage() {
     }
   }, [idStr]);
 
-  const chainId = useChainId();
-  const { registry, proofNft, explorer: explorerBase } = useProtocolAddresses();
+  const { registry, proofNft, explorer: explorerBase } = useListingsProtocolAddresses();
   const unset = registry === zeroAddress;
-  const registryEnv = chainId === base.id ? "NEXT_PUBLIC_BASE_REGISTRY" : "NEXT_PUBLIC_REGISTRY";
+  const registryEnv = "NEXT_PUBLIC_REGISTRY";
 
   const { rows, loading } = usePropertyShareList();
   const row = rows.find((r) => r.id === propertyId);
@@ -52,10 +53,15 @@ export default function PropertyDetailPage() {
   const [tab, setTab] = useState<"overview" | "financials" | "documents" | "blockchain">("overview");
 
   const { data: totalSupplyWei } = useReadContract({
+    chainId: ogGalileo.id,
     address: row?.tokenAddress ?? zeroAddress,
     abi: erc20Abi,
     functionName: "totalSupply",
-    query: { enabled: Boolean(row?.tokenAddress) },
+    query: {
+      enabled: Boolean(row?.tokenAddress),
+      staleTime: 60_000,
+      gcTime: 300_000,
+    },
   });
 
   const demo = row?.demo;
@@ -77,7 +83,8 @@ export default function PropertyDetailPage() {
   if (unset) {
     return (
       <p className="text-zinc-400">
-        Configure <code className="text-gold-400">{registryEnv}</code> in{" "}
+        Set <code className="text-gold-400">{registryEnv}</code> and{" "}
+        <code className="text-gold-400">NEXT_PUBLIC_SHARE_FACTORY</code> in{" "}
         <code className="text-zinc-300">web/.env.local</code> (local) or repo-root <code className="text-zinc-300">.env</code> for Docker builds.
       </p>
     );
@@ -132,7 +139,7 @@ export default function PropertyDetailPage() {
                 <PropertyShareButton propertyId={idStr} title={demo.headline} />
               </div>
               <PropertyImageCarousel
-                slides={getDemoImageSlides(demo)}
+                slides={getDemoImageSlides(demo, { limit: 48 })}
                 priorityFirst
                 aspectClassName="aspect-[5/3] min-h-[220px] w-full sm:min-h-[280px] sm:aspect-[2.2/1]"
                 sizes="100vw"
@@ -176,6 +183,32 @@ export default function PropertyDetailPage() {
           </div>
         </section>
       )}
+
+      {demo?.greenPrint && demo.greenPrint.length > 0 ? (
+        <section className="rounded-2xl border border-eco/20 bg-eco/[0.06] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">Green Print</h2>
+          <p className="mt-1 text-xs text-muted">Partner sustainability framing — verify against audits and issuer disclosure.</p>
+          <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-muted">
+            {demo.greenPrint.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {demo?.brokerOrDataRoomNotice ? (
+        <section className="rounded-2xl border border-amber-500/25 bg-amber-500/[0.06] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">Broker / data room notice (third party)</h2>
+          <p className="mt-1 text-xs text-amber-200/80">
+            Third-party brokerage text — verify deadlines, commissions, and contacts independently before relying on them.
+          </p>
+          <div className="mt-4 space-y-4 text-sm leading-relaxed text-muted">
+            {demo.brokerOrDataRoomNotice.split("\n\n").map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <ComplianceStatus />
 
@@ -268,9 +301,16 @@ export default function PropertyDetailPage() {
                 <dt className="text-xs uppercase tracking-wide text-muted">Share price ref.</dt>
                 <dd className="mt-1 font-mono text-sm text-white">{sharePrice}</dd>
               </div>
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Expected yield</dt>
-                <dd className="mt-1 font-mono text-sm text-brand">{demo ? `${getEstimatedYieldPercent(demo).toFixed(1)}%` : "—"}</dd>
+              <div className="sm:col-span-2">
+                <dt className="text-xs uppercase tracking-wide text-muted">Reference yield (illustrative)</dt>
+                <dd className="mt-1 font-mono text-sm text-brand">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
+                <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
+                {demo ? (
+                  <p className="mt-2 text-[11px] text-muted">
+                    Modelled gross from reference rent ÷ value:{" "}
+                    <span className="font-mono text-white">{getEstimatedYieldPercent(demo).toFixed(1)}%</span>
+                  </p>
+                ) : null}
               </div>
             </dl>
             {demo.fundingRoundNote && <p className="mt-4 text-xs text-muted">{demo.fundingRoundNote}</p>}
@@ -289,10 +329,15 @@ export default function PropertyDetailPage() {
           <p className="mt-1 font-mono text-lg text-white">{sharePrice}</p>
         </div>
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Expected yield</p>
-          <p className="mt-1 text-lg font-semibold text-brand">
-            {demo ? `${getEstimatedYieldPercent(demo).toFixed(1)}%` : "—"}
-          </p>
+          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Reference yield (illustrative)</p>
+          <p className="mt-1 text-lg font-semibold text-brand">{REFERENCE_YIELD_BAND_LABEL} p.a.</p>
+          <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
+          {demo ? (
+            <p className="mt-2 text-[11px] text-muted">
+              Modelled gross:{" "}
+              <span className="font-mono text-white">{getEstimatedYieldPercent(demo).toFixed(1)}%</span>
+            </p>
+          ) : null}
         </div>
         <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
           <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Total tokens (supply)</p>

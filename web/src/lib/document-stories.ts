@@ -315,6 +315,24 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
     ],
     disclaimer: "Illustrative documentation.",
   },
+  "teaser-biberstrasse-4-1010-wien": {
+    id: "teaser-biberstrasse-4-1010-wien",
+    label: "Biberstraße teaser",
+    title: "Teaser — Biberstraße 4, 1010 Vienna",
+    dek: "Broker teaser PDF referenced alongside the Whalewatching diligence narrative — third-party disposition process.",
+    sections: [
+      {
+        heading: "Purpose",
+        body: "Shows marketing / process framing supplied by an appointed Austrian broker for an inner-city asset. It is reproduced for investor orientation only.",
+      },
+      {
+        heading: "Independence",
+        body: "Building Culture does not sell the Biberstraße asset as part of this app; reconcile any purchase process directly with counsel and the broker identified in the PDF.",
+      },
+    ],
+    disclaimer:
+      "Broker materials are third-party communications — not an offer by Building Culture. Verify confidentiality, timelines, and commission terms independently.",
+  },
 };
 
 export function getStoryBySlug(slug: string): DocumentStory | undefined {

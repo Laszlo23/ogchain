@@ -2,25 +2,23 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { base } from "viem/chains";
 import { zeroAddress } from "viem";
-import { useChainId } from "wagmi";
 import { FundingMeter } from "@/components/FundingMeter";
 import { PropertyCard } from "@/components/PropertyCard";
 import { PropertyCardSkeleton } from "@/components/PropertyCardSkeleton";
+import { PoolFinancierProgram } from "@/components/PoolFinancierProgram";
 import { TrustSection } from "@/components/TrustSection";
-import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
+import { useListingsProtocolAddresses } from "@/lib/use-listings-protocol-addresses";
 import { DISCOVERY_CATEGORIES, type DiscoveryCategory } from "@/lib/demo-properties";
 import { getGlobalFundingMeter } from "@/lib/funding-stats";
 import { useHydrated } from "@/lib/use-hydrated";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 function PropertiesPageContent() {
-  const chainId = useChainId();
-  const { registry, shareFactory } = useProtocolAddresses();
+  const { registry, shareFactory } = useListingsProtocolAddresses();
   const unset = registry === zeroAddress || shareFactory === zeroAddress;
-  const registryEnv = chainId === base.id ? "NEXT_PUBLIC_BASE_REGISTRY" : "NEXT_PUBLIC_REGISTRY";
-  const factoryEnv = chainId === base.id ? "NEXT_PUBLIC_BASE_SHARE_FACTORY" : "NEXT_PUBLIC_SHARE_FACTORY";
+  const registryEnv = "NEXT_PUBLIC_REGISTRY";
+  const factoryEnv = "NEXT_PUBLIC_SHARE_FACTORY";
 
   const { rows: enriched, loading, nextPropertyId } = usePropertyShareList();
   const globalFunding = getGlobalFundingMeter();
@@ -124,6 +122,7 @@ function PropertiesPageContent() {
               ))}
             </section>
           )}
+          {!unset && enriched.length > 0 ? <PoolFinancierProgram /> : null}
         </>
       )}
     </div>
