@@ -3,6 +3,7 @@ cache/
 broadcast/
 .env
 .env.*
+!.env.docker.example
 web/.next/
 web/node_modules/
 node_modules/

@@ -238,7 +238,7 @@ export function ImmersiveExperience() {
               <div className="mt-5 flex flex-col gap-3">
                 <button
                   type="button"
-                  className="inline-flex w-full min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 text-sm font-semibold text-white shadow-lg backdrop-blur-sm transition hover:bg-white/15"
+                  className="inline-flex w-full min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/30 bg-white px-4 text-sm font-semibold text-zinc-900 shadow-lg transition hover:bg-zinc-100 active:bg-zinc-200"
                   aria-expanded={storyDetailsOpen}
                   aria-controls="immersive-story-details"
                   onClick={() => setStoryDetailsOpen(true)}
@@ -468,7 +468,7 @@ export function ImmersiveExperience() {
               </Link>
               <Link
                 href={`/properties/${idStr}`}
-                className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/25 bg-white/5 px-4 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/40 bg-black/35 px-4 text-center text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-black/50"
               >
                 View property details
               </Link>

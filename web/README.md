@@ -37,6 +37,8 @@ Open [http://localhost:3000](http://localhost:3000). Connect via **injected** wa
 
 ## Environment variables
 
+**Production (Docker):** `NEXT_PUBLIC_*` values are inlined at **image build** time. Copy [`.env.docker.example`](../.env.docker.example) to repo-root `.env` and run `docker compose build` (see [deployments/README.md](../deployments/README.md)).
+
 | Variable | Purpose |
 |----------|---------|
 | `NEXT_PUBLIC_OG_RPC` | 0G JSON-RPC URL |

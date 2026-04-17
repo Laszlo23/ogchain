@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
+import { base } from "viem/chains";
 import { formatEther, zeroAddress } from "viem";
-import { useReadContract } from "wagmi";
+import { useChainId, useReadContract } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { FundingMeter } from "@/components/FundingMeter";
 import { TrustSection } from "@/components/TrustSection";
@@ -40,8 +41,10 @@ export default function PropertyDetailPage() {
     }
   }, [idStr]);
 
+  const chainId = useChainId();
   const { registry, proofNft, explorer: explorerBase } = useProtocolAddresses();
   const unset = registry === zeroAddress;
+  const registryEnv = chainId === base.id ? "NEXT_PUBLIC_BASE_REGISTRY" : "NEXT_PUBLIC_REGISTRY";
 
   const { rows, loading } = usePropertyShareList();
   const row = rows.find((r) => r.id === propertyId);
@@ -74,8 +77,8 @@ export default function PropertyDetailPage() {
   if (unset) {
     return (
       <p className="text-zinc-400">
-        Configure <code className="text-gold-400">NEXT_PUBLIC_REGISTRY</code> in{" "}
-        <code className="text-zinc-300">.env.local</code>.
+        Configure <code className="text-gold-400">{registryEnv}</code> in{" "}
+        <code className="text-zinc-300">web/.env.local</code> (local) or repo-root <code className="text-zinc-300">.env</code> for Docker builds.
       </p>
     );
   }

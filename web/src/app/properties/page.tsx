@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { base } from "viem/chains";
 import { zeroAddress } from "viem";
+import { useChainId } from "wagmi";
 import { FundingMeter } from "@/components/FundingMeter";
 import { PropertyCard } from "@/components/PropertyCard";
 import { PropertyCardSkeleton } from "@/components/PropertyCardSkeleton";
@@ -14,8 +16,11 @@ import { useHydrated } from "@/lib/use-hydrated";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 function PropertiesPageContent() {
+  const chainId = useChainId();
   const { registry, shareFactory } = useProtocolAddresses();
   const unset = registry === zeroAddress || shareFactory === zeroAddress;
+  const registryEnv = chainId === base.id ? "NEXT_PUBLIC_BASE_REGISTRY" : "NEXT_PUBLIC_REGISTRY";
+  const factoryEnv = chainId === base.id ? "NEXT_PUBLIC_BASE_SHARE_FACTORY" : "NEXT_PUBLIC_SHARE_FACTORY";
 
   const { rows: enriched, loading, nextPropertyId } = usePropertyShareList();
   const globalFunding = getGlobalFundingMeter();
@@ -55,10 +60,11 @@ function PropertiesPageContent() {
 
       {unset ? (
         <p className="text-zinc-400">
-          Set <code className="text-emerald-400">NEXT_PUBLIC_REGISTRY</code> and{" "}
-          <code className="text-emerald-400">NEXT_PUBLIC_SHARE_FACTORY</code> in{" "}
-          <code className="text-emerald-400">.env.local</code> (run{" "}
-          <code className="text-zinc-300">scripts/sync_web_env.py</code>).
+          Set <code className="text-emerald-400">{registryEnv}</code> and{" "}
+          <code className="text-emerald-400">{factoryEnv}</code> in{" "}
+          <code className="text-emerald-400">web/.env.local</code> for local dev, or repo-root <code className="text-emerald-400">.env</code>{" "}
+          for <code className="text-zinc-300">docker compose build</code> (run{" "}
+          <code className="text-zinc-300">scripts/sync_web_env.py</code> from deployment JSON).
         </p>
       ) : loading && enriched.length === 0 ? (
         <section aria-label="Loading listings" className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">

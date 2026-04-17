@@ -164,15 +164,28 @@ Optional: add `siteUrl` to `deployments/testnet.json` (public origin, no trailin
 
 ### Base mainnet (chain id 8453)
 
-The same Foundry [`DeployAll.s.sol`](../script/DeployAll.s.sol) stack can be broadcast on Base. Fund the deployer with **ETH on Base** for gas, set a public **`NFT_BASE_URI`** (HTTPS, trailing `/`) for proof NFT metadata, and avoid **`KYC_BYPASS_ON_DEPLOY`** on mainnet unless intended.
+The same Foundry [`DeployAll.s.sol`](../script/DeployAll.s.sol) stack can be broadcast on Base. Fund the deployer wallet with **ETH on Base** for gas. [`foundry.toml`](../foundry.toml) loads **`PRIVATE_KEY`** from the repo root **`.env`** (same deploy wallet you use for 0G testnet only works if that key controls an address funded on Base).
+
+Set a public **`NFT_BASE_URI`** (HTTPS URL ending with `/`) so `PropertyShareProof` metadata resolves (e.g. `https://buildingculture.capital/api/nft/`). Do **not** set **`KYC_BYPASS_ON_DEPLOY`** on mainnet unless you intentionally want the compliance bypass.
+
+Helper script (5s delay before broadcast):
 
 ```bash
+export NFT_BASE_URI=https://buildingculture.capital/api/nft/
+# Optional: export BASE_RPC_URL=https://...   if mainnet.base.org rate-limits
+./scripts/deploy-base-mainnet.sh
+```
+
+Or invoke Foundry directly:
+
+```bash
+export NFT_BASE_URI=https://buildingculture.capital/api/nft/
 forge script script/DeployAll.s.sol:DeployAllScript \
   --rpc-url https://mainnet.base.org \
   --broadcast
 ```
 
-Use a dedicated RPC (Alchemy, Infura, etc.) via `--rpc-url` if the public endpoint rate-limits broadcasts. Copy addresses from `broadcast/DeployAll.s.sol/8453/` into [`base-mainnet.json`](base-mainnet.json) (same schema as [`testnet.example.json`](testnet.example.json)).
+Use a dedicated RPC (Alchemy, Infura, etc.) via `BASE_RPC_URL` or `--rpc-url` if the public endpoint rate-limits broadcasts. Copy addresses from the script output or `broadcast/DeployAll.s.sol/8453/` into [`base-mainnet.json`](base-mainnet.json) (same schema as [`testnet.example.json`](testnet.example.json)).
 
 Append Base env lines to `web/.env.local` (merge with 0G lines from `testnet.json`):
 
@@ -187,6 +200,18 @@ Or copy manually from [web/.env.local.example](../web/.env.local.example).
 ```bash
 cd web && npm run dev
 ```
+
+### Docker production build
+
+Next.js inlines **`NEXT_PUBLIC_*` at image build time**. Set contract addresses in a repo-root **`.env`** (see [`.env.docker.example`](../.env.docker.example)), then build — runtime `environment:` in Compose does **not** fix missing client bundle env.
+
+```bash
+cp .env.docker.example .env
+# Edit .env: set 0G addresses from `python3 scripts/sync_web_env.py deployments/testnet.json` (and optional guestbook).
+docker compose build --no-cache && docker compose up -d
+```
+
+On the server, pull the repo, copy or merge `.env`, rebuild, and restart the `web` container so the site serves both 0G and Base addresses baked into the client.
 
 ## Security
 
