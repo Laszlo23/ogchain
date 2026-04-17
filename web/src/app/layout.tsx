@@ -4,7 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { SiteChrome } from "@/components/SiteChrome";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://buildingculture.capital";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -6,6 +6,16 @@ import { createSiweMessage } from "viem/siwe";
 import type { SiweVerifyResponse } from "@/lib/siwe-verify-types";
 import { SessionSetupBanner } from "@/components/SessionSetupBanner";
 
+const FALLBACK_SITE_ORIGIN =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://buildingculture.capital";
+const FALLBACK_SITE_HOST = (() => {
+  try {
+    return new URL(FALLBACK_SITE_ORIGIN).host;
+  } catch {
+    return "buildingculture.capital";
+  }
+})();
+
 type Props = {
   onSuccess?: () => void;
   /** Called with full verify payload (use for session banners). */
@@ -30,9 +40,9 @@ export function SiweSignInButton({ onSuccess, onVerify, className, label = "Sign
     const message = createSiweMessage({
       address,
       chainId: chainId || 16602,
-      domain: typeof window !== "undefined" ? window.location.host : "localhost",
+      domain: typeof window !== "undefined" ? window.location.host : FALLBACK_SITE_HOST,
       nonce,
-      uri: typeof window !== "undefined" ? window.location.origin : "http://localhost:3000",
+      uri: typeof window !== "undefined" ? window.location.origin : FALLBACK_SITE_ORIGIN,
       version: "1",
       statement: "Sign in with Ethereum to Building Culture.",
     });

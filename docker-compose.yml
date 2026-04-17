@@ -5,8 +5,11 @@ services:
     build:
       context: .
       dockerfile: web/Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: https://buildingculture.capital
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - NEXT_PUBLIC_SITE_URL=https://buildingculture.capital
