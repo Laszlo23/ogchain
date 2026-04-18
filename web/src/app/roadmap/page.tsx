@@ -17,7 +17,7 @@ const mainnetFundsJourney = [
     title: "Mainnet deployment",
     when: "After audited contracts are deployed and addresses are published",
     detail:
-      "The protocol and property share contracts are deployed on Base mainnet for production traffic. Optional 0G Galileo rehearsal remains — use only test funds and verify network settings.",
+      "The protocol and property share contracts are deployed on Base mainnet for production traffic. Verify you are on Base (chain id 8453) in your wallet before sending funds.",
   },
   {
     step: "2",
@@ -65,7 +65,7 @@ const phases = [
     items: [
       "Registry + share factory + AMM swap + staking + portfolio flows with published addresses",
       "Culture Land property metadata, funding UI, and transparency pages",
-      "Optional 0G Galileo testnet for developer rehearsal — not production capital",
+      "Operator runbooks and environment sync for reproducible deployments",
     ],
   },
   {

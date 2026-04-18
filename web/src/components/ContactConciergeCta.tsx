@@ -19,7 +19,7 @@ export function ContactConciergeCta({ variant = "card" }: Props) {
       <div className="min-w-0">
         <p className="font-semibold text-white">Questions on diligence or allocations?</p>
         <p className="mt-1 text-xs text-zinc-500">
-          Reference figures here are illustrative — speak with the team before any commitment.
+          Published figures are for orientation — confirm details with the team before any commitment.
         </p>
       </div>
       <div className="flex shrink-0 flex-wrap gap-2">

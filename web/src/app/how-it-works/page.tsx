@@ -5,7 +5,7 @@ import { InvestorJourney } from "@/components/InvestorJourney";
 export const metadata: Metadata = {
   title: "How it works — Building Culture",
   description:
-    "Connect, verify, fund with ETH/USDC on Base (or test assets on 0G), and buy fractional property shares.",
+    "Connect, verify, fund with ETH/USDC on Base, and buy fractional property shares.",
 };
 
 export default function HowItWorksPage() {

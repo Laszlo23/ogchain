@@ -2,12 +2,9 @@
 
 import Link from "next/link";
 import { zeroAddress } from "viem";
-import { base } from "viem/chains";
 import { CopyAddressButton } from "@/components/CopyAddressButton";
-import { addresses, explorerBase } from "@/lib/contracts";
 import { baseAddresses, baseExplorerBase, isBaseConfigured } from "@/lib/base-addresses";
 import { getBaseGovernanceSafeInfo } from "@/lib/governance-safe";
-import { getListingsChainId } from "@/lib/listings-config";
 import { getProtocolAddresses } from "@/lib/protocol-addresses";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
@@ -79,8 +76,7 @@ function AddressTable({
 }
 
 function PropertyShareTokens() {
-  const listingsChainId = getListingsChainId();
-  const { explorer: listingsExplorer, registry } = getProtocolAddresses(listingsChainId);
+  const { explorer: listingsExplorer, registry } = getProtocolAddresses();
   const { chainRows: rows, loading } = usePropertyShareList();
 
   if (registry === zeroAddress) {
@@ -142,18 +138,6 @@ function PropertyShareTokens() {
     </div>
   );
 }
-
-const ogRows: Row[] = [
-  { label: "Property registry", key: "registry", address: addresses.registry },
-  { label: "Property share factory", key: "shareFactory", address: addresses.shareFactory },
-  { label: "Compliance registry", key: "compliance", address: addresses.compliance },
-  { label: "WETH (wrapped OG)", key: "weth", address: addresses.weth },
-  { label: "Router (AMM)", key: "router", address: addresses.router },
-  { label: "Lending pool", key: "lendingPool", address: addresses.lendingPool },
-  { label: "Prediction market", key: "predictionMarket", address: addresses.predictionMarket },
-  { label: "Proof NFT", key: "proofNft", address: addresses.proofNft },
-  { label: "Staking", key: "staking", address: addresses.staking },
-];
 
 const baseRows: Row[] = [
   { label: "Property registry", key: "base-registry", address: baseAddresses.registry },
@@ -237,21 +221,12 @@ export function ContractsPageClient() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold text-white">Property share tokens</h2>
         <p className="text-sm text-zinc-500">
-          ERC-20 tokens minted per property on the{" "}
-          <strong className="text-zinc-400">
-            {getListingsChainId() === base.id ? "Base" : "configured"} chain
-          </strong>{" "}
+          ERC-20 tokens minted per property on{" "}
+          <strong className="text-zinc-400">Base</strong>{" "}
           — verify balances and transfers on-chain.
         </p>
         <PropertyShareTokens />
       </section>
-
-      <AddressTable
-        title="0G Galileo (testnet)"
-        subtitle={`Explorer: ${explorerBase} · for developer rehearsal`}
-        explorer={explorerBase}
-        rows={ogRows}
-      />
     </div>
   );
 }

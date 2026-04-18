@@ -1,5 +1,5 @@
 import { base } from "viem/chains";
-import { addresses, explorerBase } from "@/lib/contracts";
+import { explorerBase } from "@/lib/contracts";
 import { baseAddresses, baseExplorerBase } from "@/lib/base-addresses";
 
 /** Protocol contract bundle + explorer base URL (no trailing slash) for the active chain. */
@@ -24,18 +24,6 @@ function stripSlash(s: string) {
   return s.replace(/\/$/, "");
 }
 
-const zeroAddr = "0x0000000000000000000000000000000000000000" as `0x${string}`;
-
-function bundleOg(): ProtocolAddresses {
-  return {
-    ...addresses,
-    platformToken: zeroAddr,
-    purchaseEscrowErc20: zeroAddr,
-    governanceSafe: zeroAddr,
-    explorer: stripSlash(explorerBase),
-  };
-}
-
 function bundleBase(): ProtocolAddresses {
   return {
     registry: baseAddresses.registry,
@@ -55,10 +43,9 @@ function bundleBase(): ProtocolAddresses {
   };
 }
 
-/** Resolve env-configured contracts for a chain id (Base vs 0G). Unknown chains fall back to 0G bundle. */
-export function getProtocolAddresses(chainId: number): ProtocolAddresses {
-  if (chainId === base.id) return bundleBase();
-  return bundleOg();
+/** Production protocol bundle from Base env vars (`NEXT_PUBLIC_BASE_*`). */
+export function getProtocolAddresses(): ProtocolAddresses {
+  return bundleBase();
 }
 
 export { base as baseChain };

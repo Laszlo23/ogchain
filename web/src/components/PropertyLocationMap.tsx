@@ -9,7 +9,7 @@ type Props = {
 };
 
 /**
- * OpenStreetMap iframe embed — no API keys; illustrative positioning only.
+ * OpenStreetMap iframe embed — no API keys; approximate map position for orientation.
  */
 export function PropertyLocationMap({ geo, label = "Approximate location map", className = "" }: Props) {
   const src = getOsmEmbedUrl(geo);
@@ -27,7 +27,7 @@ export function PropertyLocationMap({ geo, label = "Approximate location map", c
         />
       </div>
       <p className="text-[10px] text-muted">
-        Map position is illustrative — verify against legal surveys and issuer disclosures.{" "}
+        Map position is approximate — verify against legal surveys and issuer disclosures.{" "}
         <a href={external} target="_blank" rel="noopener noreferrer" className="text-eco-light/90 underline-offset-2 hover:underline">
           Open in OpenStreetMap
         </a>

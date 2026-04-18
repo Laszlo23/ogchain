@@ -1,4 +1,3 @@
-import { addresses, explorerBase } from "@/lib/contracts";
 import { baseAddresses, baseExplorerBase, isBaseConfigured } from "@/lib/base-addresses";
 import { formatRagBlock, type RagChunk } from "@/lib/rag/retrieve";
 
@@ -14,20 +13,12 @@ Mandatory safety and compliance:
 `;
 
 function baseDeploymentBlock(): string {
-  const og = `
-Optional 0G Galileo testnet (chain id 16602) — developer rehearsal; addresses may be zero if unset:
-- Registry: ${addresses.registry}
-- Share factory: ${addresses.shareFactory}
-- Compliance: ${addresses.compliance}
-- WETH (wrapped native): ${addresses.weth}
-- Router: ${addresses.router}
-- Lending pool: ${addresses.lendingPool}
-- Prediction market: ${addresses.predictionMarket}
-- Proof NFT: ${addresses.proofNft}
-- Staking: ${addresses.staking}
-- Explorer: ${explorerBase}
+  if (!isBaseConfigured()) {
+    return `
+Deployment addresses are not fully configured in this environment. When Base env vars are set, use:
+- Registry, share factory, compliance, router, pools, proof NFT, staking — see /contracts and Basescan.
 `;
-  if (!isBaseConfigured()) return og;
+  }
   return `
 Primary deployment (Base mainnet, chain id 8453) — use these addresses when answering production questions:
 - Registry: ${baseAddresses.registry}
@@ -42,14 +33,14 @@ Primary deployment (Base mainnet, chain id 8453) — use these addresses when an
 - Proof NFT: ${baseAddresses.proofNft}
 - Staking: ${baseAddresses.staking}
 - Explorer: ${baseExplorerBase}
-${og}`;
+`;
 }
 
 export function buildSystemPrompt(mode: ChatMode, ragChunks: RagChunk[]): string {
   const rag = formatRagBlock(ragChunks);
 
   const education = `
-You are the Building Culture assistant for Culture Land — real-estate tokenization on Base (EVM mainnet, chain id 8453). The app may also connect to 0G Galileo testnet for rehearsals.
+You are the Building Culture assistant for Culture Land — real-estate tokenization on Base (EVM mainnet, chain id 8453).
 Explain concepts clearly. Use the knowledge excerpts below when relevant.
 ${SAFETY}
 Facts:

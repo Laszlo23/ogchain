@@ -1,7 +1,7 @@
 /**
- * Curated PDFs under `public/` for Architecture / Documents tabs.
- * Paths use encodeURI when rendered in href (spaces, double extensions).
- * Previews: `scripts/export-pdf-previews.mjs` → `public/extracted/{id}/page-NN.jpg`
+ * Curated PDFs for Architecture / Documents tabs.
+ * `filePath` is either a site-relative path under `public/` or an absolute `https://` URL (e.g. 4everbucket).
+ * Relative paths use encodeURI in `publicDocumentHref`. Previews: `scripts/export-pdf-previews.mjs` → `public/extracted/{id}/page-NN.jpg` (skipped for remote URLs).
  */
 export type PublicDocumentId =
   | "droes-plans-221219"
@@ -23,12 +23,16 @@ export type PublicDocumentId =
   | "vkp-haus-e-eg-top1-20220308"
   | "vkp-haus-e-eg-top3-20230316"
   | "vkp-haus-e-up-tg-kg-20230621"
-  | "vkp-felsennest-eg-top1-20220315";
+  | "vkp-felsennest-eg-top1-20220315"
+  | "berggasse-brochure-en";
+
+/** Hosted PDFs on 4everbucket (Building Culture). */
+export const EVERBUCKET_BASE = "https://buildingculture.4everbucket.com";
 
 export type PublicDocument = {
   id: PublicDocumentId;
   title: string;
-  /** Path under public/ (may contain spaces — encode in UI) */
+  /** Path under `public/` or absolute `https://` URL */
   filePath: string;
   /** Pages exported to `/extracted/{id}/page-NN.jpg` (run export script). */
   previewPages: 1 | 2 | 3;
@@ -37,9 +41,8 @@ export type PublicDocument = {
 export const PUBLIC_DOCUMENTS: readonly PublicDocument[] = [
   {
     id: "droes-plans-221219",
-    title: "Plan set — Droeß (reference)",
-    // Poppler-readable export; sibling `377-DROES-100-P-S-221219.pdf` is a damaged xref in tooling.
-    filePath: "/377-DROES-100-P-S-221219 (1).pdf",
+    title: "Plan set — Droeß",
+    filePath: `${EVERBUCKET_BASE}/377-DROES-100-P-S-221219.pdf`,
     previewPages: 3,
   },
   {
@@ -75,13 +78,13 @@ export const PUBLIC_DOCUMENTS: readonly PublicDocument[] = [
   {
     id: "land-mark-bernhardsthal-20210625",
     title: "Land-Mark — Bernhardsthal (2021)",
-    filePath: "/20210625_Land-Mark-Bernhardsthal.pdf",
+    filePath: `${EVERBUCKET_BASE}/20210625_Land-Mark-Bernhardsthal.pdf`,
     previewPages: 3,
   },
   {
     id: "bau-land-kultur-20201113",
     title: "Bau — Land — Kultur (2020)",
-    filePath: "/20201113-Bau-Land-Kultur.pdf",
+    filePath: `${EVERBUCKET_BASE}/20201113-Bau-Land-Kultur.pdf`,
     previewPages: 3,
   },
   {
@@ -99,7 +102,7 @@ export const PUBLIC_DOCUMENTS: readonly PublicDocument[] = [
   {
     id: "teaser-biberstrasse-4-1010-wien",
     title: "Teaser — Biberstraße 4, 1010 Vienna (broker)",
-    filePath: "/Teaser-Biberstrasse-4-1010-Wien.pdf",
+    filePath: `${EVERBUCKET_BASE}/Teaser_Biberstrasse_4_1010_Wien.pdf`,
     previewPages: 3,
   },
   {
@@ -153,7 +156,13 @@ export const PUBLIC_DOCUMENTS: readonly PublicDocument[] = [
   {
     id: "vkp-felsennest-eg-top1-20220315",
     title: "VKP 1169 — Felsennest EG Top 1 (2022)",
-    filePath: "/1169_VKP_Felsennest_EG_Top 1_2022-03-15.pdf",
+    filePath: `${EVERBUCKET_BASE}/1169_VKP_Felsennest_EG_Top%201_2022-03-15.pdf`,
+    previewPages: 1,
+  },
+  {
+    id: "berggasse-brochure-en",
+    title: "Berggasse 35 — brochure (EN)",
+    filePath: `${EVERBUCKET_BASE}/Broschuere_BERGGASSE_35_EN.pdf`,
     previewPages: 1,
   },
 ];
@@ -162,14 +171,16 @@ export function getPublicDocumentById(id: PublicDocumentId): PublicDocument | un
   return PUBLIC_DOCUMENTS.find((d) => d.id === id);
 }
 
-/** Safe href for Next/static public files */
+/** Safe href for static files or passthrough for absolute PDF URLs */
 export function publicDocumentHref(filePath: string): string {
+  if (filePath.startsWith("https://") || filePath.startsWith("http://")) return filePath;
   if (!filePath.startsWith("/")) return encodeURI(`/${filePath}`);
   return encodeURI(filePath);
 }
 
-/** Raster previews under `public/extracted/` (see export script). */
+/** Raster previews under `public/extracted/` (see export script). Empty when `filePath` is remote-only. */
 export function getPublicDocumentPreviewPaths(doc: PublicDocument): string[] {
+  if (doc.filePath.startsWith("https://") || doc.filePath.startsWith("http://")) return [];
   const n = doc.previewPages;
   return Array.from({ length: n }, (_, i) => `/extracted/${doc.id}/page-${String(i + 1).padStart(2, "0")}.jpg`);
 }

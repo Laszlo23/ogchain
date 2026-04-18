@@ -14,9 +14,14 @@ import {
   getEstimatedYieldPercent,
 } from "@/lib/demo-properties";
 import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portfolio";
+import {
+  EUR_USD_TEASER,
+  formatEurReferenceCompact,
+  formatUsdTeaserApprox,
+} from "@/lib/experience-portfolio-totals";
 import { flagshipCampaign, FLAGSHIP_PROPERTY_ID } from "@/lib/flagship-campaign";
-import { getProjectExperienceSlides } from "@/lib/experience-slides";
-import { getStoryBeatsForProperty } from "@/lib/experience-story-beats";
+import { getExperienceSlides } from "@/lib/experience-slides";
+import { getIntroPortfolioBeats, getStoryBeatsForProperty } from "@/lib/experience-story-beats";
 import { markIntroSeen } from "@/lib/first-visit-intro";
 
 const BEAT_MS = 11500;
@@ -26,7 +31,7 @@ const PROJECT_PAUSE_MS = 3200;
 const flagshipId = Number(FLAGSHIP_PROPERTY_ID);
 
 export function ImmersiveExperience() {
-  const projects = useMemo(() => getProjectExperienceSlides(), []);
+  const projects = useMemo(() => getExperienceSlides(), []);
   const n = projects.length;
 
   const [projectIndex, setProjectIndex] = useState(0);
@@ -41,9 +46,13 @@ export function ImmersiveExperience() {
   const innerAdvanceRef = useRef<number | undefined>(undefined);
 
   const slide = projects[projectIndex]!;
-  const storyBeats = useMemo(() => getStoryBeatsForProperty(slide.propertyId), [slide.propertyId]);
+  const storyBeats = useMemo(() => {
+    if (slide.kind === "intro") return getIntroPortfolioBeats(slide.totals);
+    return getStoryBeatsForProperty(slide.propertyId);
+  }, [slide]);
   const beat = storyBeats[beatIndex] ?? storyBeats[0]!;
   const beatCount = storyBeats.length;
+  const slideVisualKey = slide.kind === "intro" ? "intro" : slide.propertyId;
 
   const collapseMobileHero = useCallback(() => {
     if (typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches) {
@@ -142,8 +151,8 @@ export function ImmersiveExperience() {
     else goProject(-1);
   };
 
-  const detail = DEMO_PROPERTY_DETAILS[slide.propertyId];
-  const isFlagship = slide.propertyId === flagshipId;
+  const detail = slide.kind === "property" ? DEMO_PROPERTY_DETAILS[slide.propertyId] : undefined;
+  const isFlagship = slide.kind === "property" && slide.propertyId === flagshipId;
 
   const progress = Math.min(1, flagshipCampaign.raisedEur / flagshipCampaign.targetRaiseEur);
   const targetFmt = new Intl.NumberFormat("de-AT", {
@@ -157,7 +166,7 @@ export function ImmersiveExperience() {
     maximumFractionDigits: 0,
   }).format(flagshipCampaign.raisedEur);
 
-  const idStr = slide.propertyId.toString();
+  const idStr = slide.kind === "property" ? slide.propertyId.toString() : "";
   const yieldPct = detail ? getEstimatedYieldPercent(detail) : 0;
   const economicsLine = detail ? formatIllustrativeEconomics(detail) : null;
 
@@ -166,18 +175,27 @@ export function ImmersiveExperience() {
   };
 
   const showFullStoryChrome = !isMobileViewport || storyDetailsOpen;
-  const clDisplay = getCultureLandDisplayForDemoPropertyId(slide.propertyId);
-  const heroHeadline = clDisplay?.title ?? detail?.headline ?? slide.title;
-  const heroSupporting = clDisplay
-    ? `${clDisplay.region} · ${clDisplay.tagline}`
-    : (detail?.location ?? slide.subtitle);
+  const clDisplay =
+    slide.kind === "property" ? getCultureLandDisplayForDemoPropertyId(slide.propertyId) : null;
+
+  const introTotals = slide.kind === "intro" ? slide.totals : null;
+  const heroHeadline =
+    slide.kind === "intro"
+      ? "Your tour starts at portfolio scale."
+      : (clDisplay?.title ?? detail?.headline ?? slide.title);
+  const heroSupporting =
+    slide.kind === "intro" && introTotals
+      ? `${formatUsdTeaserApprox(introTotals.sumReferenceValueUsdApprox)} reference value · ${formatUsdTeaserApprox(introTotals.sumAnnualRentUsdApprox)} gross rent p.a. (USD illustrative @ ${EUR_USD_TEASER}) · ${introTotals.propertyCount} places`
+      : clDisplay
+        ? `${clDisplay.region} · ${clDisplay.tagline}`
+        : (detail?.location ?? (slide.kind === "property" ? slide.subtitle : ""));
 
   return (
     <div
       className="fixed inset-0 z-[40] bg-black"
       role="region"
       aria-roledescription="carousel"
-      aria-label={`Immersive stories — project ${projectIndex + 1} of ${n}, beat ${beatIndex + 1} of ${beatCount}`}
+      aria-label={`Immersive stories — slide ${projectIndex + 1} of ${n}, beat ${beatIndex + 1} of ${beatCount}`}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -189,7 +207,7 @@ export function ImmersiveExperience() {
             : "transition-[opacity,filter,-webkit-filter] duration-[2000ms] ease-[cubic-bezier(0.22,0.94,0.36,1)]";
           return (
             <div
-              key={`${slide.propertyId}-${i}-${b.imageSrc}`}
+              key={`${slideVisualKey}-${i}-${b.imageSrc}`}
               className={`absolute inset-0 ${layerMotion} ${
                 active
                   ? "z-[1] opacity-100 blur-0"
@@ -198,11 +216,11 @@ export function ImmersiveExperience() {
               aria-hidden={!active}
             >
               <div
-                key={active ? `enter-${projectIndex}-${beatIndex}-${i}` : `idle-${slide.propertyId}-${i}`}
+                key={active ? `enter-${projectIndex}-${beatIndex}-${i}` : `idle-${slideVisualKey}-${i}`}
                 className={`absolute inset-0 ${active && !reduceMotion ? "immersive-bg-enter" : ""}`}
               >
                 <div
-                  key={active ? `ken-${projectIndex}-${beatIndex}-${i}` : `idle-k-${slide.propertyId}-${i}`}
+                  key={active ? `ken-${projectIndex}-${beatIndex}-${i}` : `idle-k-${slideVisualKey}-${i}`}
                   className={`absolute inset-0 ${active ? "immersive-ken-burns" : ""}`}
                 >
                   <Image
@@ -298,7 +316,7 @@ export function ImmersiveExperience() {
         {/* Band 3: story + panel — scroll on small screens; opaque story tray on mobile */}
         <div className="pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:items-end md:justify-between md:overflow-visible md:gap-12">
           <div
-            key={`story-${slide.propertyId}-${beatIndex}`}
+            key={`story-${slideVisualKey}-${beatIndex}`}
             className="pointer-events-auto relative z-20 max-w-2xl space-y-3 rounded-2xl bg-black/85 px-3 py-3 shadow-[0_8px_40px_rgba(0,0,0,0.75)] backdrop-blur-md md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none immersive-beat-enter"
           >
             <div className="flex flex-col items-start gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
@@ -306,7 +324,9 @@ export function ImmersiveExperience() {
                 {beat.roleLabel}
               </p>
               <span className="hidden text-[10px] text-white/45 sm:inline">·</span>
-              <p className="text-[10px] uppercase tracking-widest text-white/80 drop-shadow sm:text-[10px]">Property #{idStr}</p>
+              <p className="text-[10px] uppercase tracking-widest text-white/80 drop-shadow sm:text-[10px]">
+                {slide.kind === "intro" ? "Portfolio teaser" : `Property #${idStr}`}
+              </p>
             </div>
 
             <div className="flex items-center gap-2" role="tablist" aria-label="Story beats">
@@ -387,13 +407,54 @@ export function ImmersiveExperience() {
                 </Link>
               </p>
             )}
+            {slide.kind === "intro" && introTotals && (
+              <p className="text-[11px] text-white/70 drop-shadow">
+                <Link href="/culture-land" className="font-medium text-eco-light/95 underline underline-offset-2 hover:text-white">
+                  Culture Land portfolio
+                </Link>
+                <span className="text-white/40"> · </span>
+                <Link href="/properties" className="font-medium text-white underline underline-offset-2 hover:text-eco-light">
+                  All listings
+                </Link>
+              </p>
+            )}
           </div>
 
           <aside
-            key={`panel-${slide.propertyId}`}
+            key={`panel-${slideVisualKey}`}
             className="pointer-events-auto relative z-20 mt-0 w-full max-w-md shrink-0 rounded-2xl border border-white/12 bg-black/70 px-5 py-5 shadow-2xl shadow-black/50 backdrop-blur-md immersive-panel-enter md:mt-0 md:w-[min(100%,380px)] md:bg-black/55"
           >
-            {isFlagship ? (
+            {slide.kind === "intro" && introTotals ? (
+              <>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-action-light/90">Reference scale</p>
+                <p className="mt-1 text-lg font-semibold text-white">Curated Culture Land listings</p>
+                <p className="mt-0.5 text-xs text-zinc-500">
+                  Aggregated illustrative economics for {introTotals.propertyCount} properties in this story (demo
+                  catalogue).
+                </p>
+                <dl className="mt-4 space-y-4 text-sm">
+                  <div>
+                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Total reference value (USD approx.)</dt>
+                    <dd className="mt-1 font-mono text-2xl font-semibold text-white">
+                      {formatUsdTeaserApprox(introTotals.sumReferenceValueUsdApprox)}
+                    </dd>
+                    <p className="mt-1 text-[10px] text-zinc-500">
+                      EUR reference: {formatEurReferenceCompact(introTotals.sumReferenceValueEur)} · illustrative{" "}
+                      {EUR_USD_TEASER} USD/EUR
+                    </p>
+                  </div>
+                  <div>
+                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Gross rental income p.a. (USD approx.)</dt>
+                    <dd className="mt-1 font-mono text-2xl font-semibold text-eco-light">
+                      {formatUsdTeaserApprox(introTotals.sumAnnualRentUsdApprox)}
+                    </dd>
+                    <p className="mt-1 text-[10px] text-zinc-500">
+                      EUR reference: {formatEurReferenceCompact(introTotals.sumAnnualRentEur)}
+                    </p>
+                  </div>
+                </dl>
+              </>
+            ) : isFlagship ? (
               <>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Flagship round</p>
                 <p className="mt-1 text-lg font-semibold text-white">{flagshipCampaign.displayName}</p>
@@ -431,8 +492,7 @@ export function ImmersiveExperience() {
                   </div>
                 </div>
               </>
-            ) : (
-              detail && (
+            ) : detail ? (
                 <>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Culture Land listing</p>
                   <p className="mt-1 text-lg font-semibold leading-snug text-white">{detail.headline}</p>
@@ -440,7 +500,7 @@ export function ImmersiveExperience() {
                   {economicsLine && <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">{economicsLine}</p>}
                   <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Reference yield (illustrative)</dt>
+                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Reference yield band</dt>
                       <dd className="font-mono text-base text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
                       <p className="mt-0.5 text-[8px] text-zinc-500">Modelled: {yieldPct.toFixed(1)}% gross</p>
                     </div>
@@ -459,25 +519,47 @@ export function ImmersiveExperience() {
                   </dl>
                 </>
               )
+            : null}
+
+            {slide.kind === "intro" ? (
+              <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+                <Link
+                  href="/properties"
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
+                >
+                  Explore listings
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => goProject(1)}
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/40 bg-black/35 px-4 text-center text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-black/50"
+                >
+                  Continue to stories
+                </button>
+              </div>
+            ) : (
+              <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+                <Link
+                  href={`/trade?property=${idStr}`}
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
+                >
+                  Invest in this building
+                </Link>
+                <Link
+                  href={`/properties/${idStr}`}
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/40 bg-black/35 px-4 text-center text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-black/50"
+                >
+                  View property details
+                </Link>
+              </div>
             )}
 
-            <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-              <Link
-                href={`/trade?property=${idStr}`}
-                className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
-              >
-                Invest in this building
-              </Link>
-              <Link
-                href={`/properties/${idStr}`}
-                className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/40 bg-black/35 px-4 text-center text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-black/50"
-              >
-                View property details
-              </Link>
-            </div>
-
             <p className="mt-3 text-[10px] leading-relaxed text-zinc-500">
-              {isFlagship ? "Reference figures — not on-chain TVL. " : "Reference financials — verify issuer docs. "}
+              {slide.kind === "intro"
+                ? "Illustrative sums from partner reference fields — not on-chain TVL or a prospectus. "
+                : isFlagship
+                  ? "Reference figures — not on-chain TVL. "
+                  : "Reference financials — verify issuer docs. "}
               <Link href="/legal/risk" className="underline underline-offset-2 hover:text-zinc-400">
                 Risks
               </Link>
@@ -507,18 +589,22 @@ export function ImmersiveExperience() {
           >
             {projects.map((s, i) => (
               <button
-                key={s.propertyId}
+                key={s.kind === "intro" ? "intro" : s.propertyId}
                 type="button"
                 role="tab"
                 aria-selected={i === projectIndex}
-                aria-label={`Project ${s.propertyId}, ${i + 1} of ${n}`}
+                aria-label={
+                  s.kind === "intro"
+                    ? `Portfolio intro, ${i + 1} of ${n}`
+                    : `Project ${s.propertyId}, ${i + 1} of ${n}`
+                }
                 onClick={() => {
                   setProjectIndex(i);
                   setBeatIndex(0);
                   collapseMobileHero();
                 }}
                 className={`h-2.5 w-2.5 shrink-0 rounded-full transition ${i === projectIndex ? "scale-125 bg-white" : "bg-white/35 hover:bg-white/60"}`}
-                title={`#${s.propertyId}`}
+                title={s.kind === "intro" ? "Portfolio intro" : `#${s.propertyId}`}
               />
             ))}
           </div>

@@ -248,7 +248,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Cross-check areas and services with the latest drawings.",
       },
     ],
-    disclaimer: "Illustrative documentation.",
+    disclaimer: "Supporting documentation — verify with issuer materials.",
   },
   "vkp-haus-c-eg-top2-20220308": {
     id: "vkp-haus-c-eg-top2-20220308",
@@ -261,7 +261,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Cross-check areas and services with the latest drawings.",
       },
     ],
-    disclaimer: "Illustrative documentation.",
+    disclaimer: "Supporting documentation — verify with issuer materials.",
   },
   "vkp-haus-e-eg-top1-20220308": {
     id: "vkp-haus-e-eg-top1-20220308",
@@ -274,7 +274,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Cross-check areas and services with the latest drawings.",
       },
     ],
-    disclaimer: "Illustrative documentation.",
+    disclaimer: "Supporting documentation — verify with issuer materials.",
   },
   "vkp-haus-e-eg-top3-20230316": {
     id: "vkp-haus-e-eg-top3-20230316",
@@ -287,7 +287,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Verify revision date against subscription documents.",
       },
     ],
-    disclaimer: "Illustrative documentation.",
+    disclaimer: "Supporting documentation — verify with issuer materials.",
   },
   "vkp-haus-e-up-tg-kg-20230621": {
     id: "vkp-haus-e-up-tg-kg-20230621",
@@ -300,7 +300,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Parking and storage allocations are issuer-specific; confirm against contracts.",
       },
     ],
-    disclaimer: "Illustrative documentation.",
+    disclaimer: "Supporting documentation — verify with issuer materials.",
   },
   "vkp-felsennest-eg-top1-20220315": {
     id: "vkp-felsennest-eg-top1-20220315",
@@ -313,7 +313,29 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Cross-check areas and services with the latest drawings.",
       },
     ],
-    disclaimer: "Illustrative documentation.",
+    disclaimer: "Supporting documentation — verify against issuer materials and cadastral records.",
+  },
+  "berggasse-brochure-en": {
+    id: "berggasse-brochure-en",
+    label: "Berggasse 35 brochure",
+    title: "Berggasse 35 — Servitenviertel (English brochure)",
+    dek: "Project brochure for Building Culture City Berggasse — heritage residential in Vienna’s 9th district.",
+    sections: [
+      {
+        heading: "Place",
+        body: "Berggasse sits in the Servitenviertel: Gründerzeit fabric, courtyards, and long horizons for careful renewal — aligned with how Building Culture stewards real assets alongside the community.",
+      },
+      {
+        heading: "How to use this PDF",
+        body: "Use it alongside issuer disclosures and land-register excerpts. Economic terms follow offering documents and on-chain programs — not summarized marketing alone.",
+      },
+      {
+        heading: "Integrity",
+        body: "Canonical files are mirrored on resilient storage (4everbucket); pin or hash commitments can be recorded on-chain for tamper-evidence as programs mature.",
+      },
+    ],
+    disclaimer:
+      "Marketing brochure — not a securities offering memorandum. Jurisdiction-specific rules apply; consult qualified advisers before any commitment.",
   },
   "teaser-biberstrasse-4-1010-wien": {
     id: "teaser-biberstrasse-4-1010-wien",

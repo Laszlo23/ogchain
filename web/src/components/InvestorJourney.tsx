@@ -9,7 +9,7 @@ const steps = [
   {
     n: 3,
     title: "Fund wallet",
-    hint: "ETH + USDC on Base; OG faucet on 0G testnet",
+    hint: "ETH + USDC on Base",
     href: "/invest",
   },
   { n: 4, title: "Invest", hint: "Pick a property", href: "/properties" },

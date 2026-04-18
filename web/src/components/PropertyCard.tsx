@@ -94,7 +94,7 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
               </dd>
             </div>
             <div className="sm:col-span-2">
-              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted">Reference yield (illustrative)</dt>
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted">Reference yield band</dt>
               <dd className="mt-1 space-y-2">
                 <div className="font-mono text-lg font-semibold tabular-nums text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</div>
                 <p className="text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>

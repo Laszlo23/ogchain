@@ -37,7 +37,7 @@ export async function completeOpenAI(
 }
 
 /**
- * Optional 0G Compute–compatible HTTP inference endpoint.
+ * Optional remote HTTP inference endpoint (OpenAI-compatible or custom).
  * Set OG_COMPUTE_INFERENCE_URL to a service that accepts POST JSON:
  * { "model": string, "messages": [{ "role": "system"|"user"|"assistant", "content": string }], "temperature": number, "max_tokens": number }
  * and returns either OpenAI-shaped { choices[0].message.content } or { reply: string }.

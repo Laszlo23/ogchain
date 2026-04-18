@@ -270,6 +270,7 @@ export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobile = useCallback(() => setMobileOpen(false), []);
   const interactive = useHydrated();
+  const logoActive = pathname === "/experience" || pathname.startsWith("/experience/");
 
   return (
     <header data-nav-interactive={interactive ? "true" : "false"} className="sticky top-0 z-50 border-b border-eco/10 bg-surface/95 backdrop-blur-xl">
@@ -287,8 +288,20 @@ export function Nav() {
               <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
             </svg>
           </button>
-          <Link href="/" className="group flex min-w-0 items-baseline gap-1">
-            <span className="bg-gradient-to-r from-canvas to-eco-light bg-clip-text text-base font-semibold tracking-tight text-transparent sm:text-lg">
+          <Link
+            href="/experience"
+            className={`group flex min-w-0 items-baseline gap-1 rounded-md px-1 py-0.5 transition-colors ${
+              logoActive ? "bg-eco/10 ring-1 ring-eco/25" : "hover:bg-white/[0.04]"
+            }`}
+            aria-current={logoActive ? "page" : undefined}
+          >
+            <span
+              className={`text-base font-semibold tracking-tight sm:text-lg ${
+                logoActive
+                  ? "bg-gradient-to-r from-eco-light to-eco bg-clip-text text-transparent"
+                  : "bg-gradient-to-r from-canvas to-eco-light bg-clip-text text-transparent"
+              }`}
+            >
               Building Culture
             </span>
             <span className="hidden text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500 sm:inline">

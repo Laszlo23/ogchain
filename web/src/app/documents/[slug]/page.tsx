@@ -37,9 +37,10 @@ export default async function DocumentStoryPage({ params }: Props) {
 
   const pdfHref = publicDocumentHref(doc.filePath);
   const previews = getPublicDocumentPreviewPaths(doc);
+  const isRemotePdf = pdfHref.startsWith("https://") || pdfHref.startsWith("http://");
 
   return (
-    <article className="mx-auto max-w-[720px] space-y-10 pb-16">
+    <article className="mx-auto max-w-[min(100%,56rem)] space-y-10 pb-16">
       <nav className="text-sm text-zinc-500">
         <Link href="/documents" className="text-brand hover:underline">
           ← Plan library
@@ -52,21 +53,38 @@ export default async function DocumentStoryPage({ params }: Props) {
         <p className="text-lg text-zinc-300">{story.dek}</p>
       </header>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <div className="space-y-2">
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Viewer</p>
+        <div className="overflow-hidden rounded-xl border border-white/[0.08] bg-zinc-950 shadow-lg shadow-black/40">
+          <iframe title={story.title} src={pdfHref} className="min-h-[75vh] w-full border-0 bg-zinc-900" />
+        </div>
+        <p className="text-xs text-zinc-500">
+          The PDF loads in your browser&apos;s embedded viewer{isRemotePdf ? " (hosted file)" : ""}. If this area stays
+          blank, use{" "}
+          <a href={pdfHref} target="_blank" rel="noreferrer" className="text-brand hover:underline">
+            open in new tab
+          </a>
+          .
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        {!isRemotePdf ? (
+          <a
+            href={pdfHref}
+            download
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-brand px-6 py-2.5 text-sm font-semibold text-[#0A0A0A] hover:bg-brand-light"
+          >
+            Download
+          </a>
+        ) : null}
         <a
           href={pdfHref}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-brand px-6 py-2.5 text-sm font-semibold text-[#0A0A0A] hover:bg-brand-light"
-        >
-          Open PDF (new tab)
-        </a>
-        <a
-          href={pdfHref}
-          download
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/15 px-6 py-2.5 text-sm font-medium text-zinc-200 hover:border-brand/40"
         >
-          Download
+          Open PDF (new tab)
         </a>
       </div>
 

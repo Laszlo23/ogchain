@@ -223,14 +223,14 @@ export default function PoolPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Liquidity</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">Liquidity pool</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          Supply both sides of the market (wrapped OG + property shares). You earn a share of trading fees — similar to
+          Supply both sides of the market (wrapped ETH as WETH + property shares). You earn a share of trading fees — similar to
           being a market maker, simplified in this interface.
         </p>
       </header>
       <div className="glass-card border border-brand/20 bg-brand/[0.04] p-4 text-sm text-zinc-300">
         <p className="font-medium text-white">Simple summary</p>
         <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-zinc-400">
-          <li>Wrap native OG to WETH, then deposit WETH + shares together.</li>
+          <li>Wrap native ETH to WETH, then deposit WETH + shares together.</li>
           <li>You receive LP tokens representing your share of the pool.</li>
           <li>Remove liquidity anytime to get your tokens back (plus fees earned).</li>
         </ul>
@@ -315,7 +315,7 @@ export default function PoolPage() {
           <div className="glass-card space-y-3 p-5">
             <h2 className="text-sm font-medium text-zinc-200">Add liquidity</h2>
             <label className="block text-xs text-zinc-500">
-              WETH amount (wrap OG first)
+              WETH amount (wrap ETH first)
               <input
                 className="mt-1 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 font-mono text-sm"
                 value={amountWeth}

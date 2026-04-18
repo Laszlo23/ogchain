@@ -93,7 +93,7 @@ export function PropertyInvestmentCalculator({ propertyId, demo, symbol, tradeHr
     <section id="invest" className="glass-card scroll-mt-28 p-6">
       <h2 className="text-lg font-semibold text-white">Investment simulator</h2>
       <p className="mt-1 text-xs text-zinc-500">
-        Illustrative model only — not an offer, forecast, or tax advice. Actual economics follow issuer documents and
+        Educational model only — not an offer, forecast, or tax advice. Actual economics follow issuer documents and
         on-chain execution. {REFERENCE_YIELD_DISCLAIMER}
       </p>
 
@@ -151,7 +151,7 @@ export function PropertyInvestmentCalculator({ propertyId, demo, symbol, tradeHr
           </p>
           <p className="mt-2 text-[11px] text-zinc-500">
             Scaled from reference gross rent × (your allocation ÷ reference asset value). Yield band{" "}
-            {yieldPct.toFixed(1)}% gross illustrative.
+            {yieldPct.toFixed(1)}% gross (model).
           </p>
         </div>
       </div>

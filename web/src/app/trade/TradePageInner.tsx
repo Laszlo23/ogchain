@@ -7,7 +7,6 @@ import { formatEther, parseEther } from "viem";
 import {
   useAccount,
   useBalance,
-  useChainId,
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
@@ -18,7 +17,6 @@ import { TransparencyCrossLink } from "@/components/TransparencyCrossLink";
 import { Web3TradeGuard } from "@/components/Web3TradeGuard";
 import { TradePrimarySalePanel } from "@/components/trade/TradePrimarySalePanel";
 import { erc20Abi, pairAbi, proofNftAbi, routerAbi } from "@/lib/contracts";
-import { getListingsChainId } from "@/lib/listings-config";
 import { nativeCurrencySymbol } from "@/lib/native-currency-label";
 import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { formatIllustrativeEconomics } from "@/lib/demo-properties";
@@ -38,9 +36,7 @@ export function TradePageInner() {
   const marketFromUrl = searchParams.get("market");
 
   const { address, isConnected } = useAccount();
-  const walletChainId = useChainId();
-  const listingsChainId = getListingsChainId();
-  const nativeSym = nativeCurrencySymbol(walletChainId ?? listingsChainId);
+  const nativeSym = nativeCurrencySymbol();
   const { blocked } = useCompliance();
   const { router, weth, proofNft, explorer: explorerBase } = useProtocolAddresses();
 
@@ -278,16 +274,19 @@ export function TradePageInner() {
         </p>
       ) : loading && rows.length === 0 ? (
         <div className="grid gap-8 lg:grid-cols-5">
-          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] lg:col-span-3">
-            <div className="min-w-[720px] space-y-0 p-4">
-              <div className="mb-4 h-4 w-48 animate-pulse rounded bg-zinc-800" />
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex gap-4 border-b border-white/[0.04] py-3">
-                  <div className="h-10 w-40 animate-pulse rounded-md bg-zinc-800/80" />
-                  <div className="h-4 flex-1 animate-pulse rounded bg-zinc-800/60" />
-                  <div className="h-8 w-16 animate-pulse rounded-full bg-zinc-800/80" />
-                </div>
-              ))}
+          <div className="space-y-4 lg:col-span-3">
+            <div className="h-10 w-full animate-pulse rounded-xl bg-zinc-800/80" />
+            <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
+              <div className="min-w-[720px] space-y-0 p-4">
+                <div className="mb-4 h-4 w-48 animate-pulse rounded bg-zinc-800" />
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex gap-4 border-b border-white/[0.04] py-3">
+                    <div className="h-10 w-40 animate-pulse rounded-md bg-zinc-800/80" />
+                    <div className="h-4 flex-1 animate-pulse rounded bg-zinc-800/60" />
+                    <div className="h-8 w-16 animate-pulse rounded-full bg-zinc-800/80" />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <div className="space-y-4 lg:col-span-2">
@@ -324,8 +323,8 @@ export function TradePageInner() {
             </button>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-5">
-            <div className="space-y-6 lg:col-span-3">
+          <div className="grid gap-8 lg:grid-cols-5 lg:items-start">
+            <div className="flex min-h-0 min-w-0 flex-col space-y-6 lg:col-span-3">
               <label className="block text-left text-xs font-medium uppercase tracking-wide text-muted">
                 Search
                 <input
@@ -372,6 +371,82 @@ export function TradePageInner() {
                     </button>
                   );
                 })}
+              </div>
+
+              <div className="hidden min-h-0 flex-1 flex-col space-y-3 md:flex">
+                <p className="text-xs text-muted">
+                  <strong className="text-zinc-400">Choose a property</strong> — the highlighted row is what the Primary /
+                  Secondary panel on the right applies to. Click a row or <span className="text-zinc-400">Select</span>.
+                </p>
+                <div className="max-h-[min(52vh,28rem)] overflow-x-auto overflow-y-auto rounded-2xl border border-white/[0.08] lg:max-h-[min(70vh,36rem)]">
+                  <table className="w-full min-w-[640px] text-left text-sm">
+                    <thead className="sticky top-0 z-[1] border-b border-white/[0.08] bg-zinc-950/95 text-muted backdrop-blur-sm">
+                      <tr>
+                        <th className="px-4 py-3 font-medium">Property token</th>
+                        <th className="px-4 py-3 font-medium">Venue note</th>
+                        <th className="px-4 py-3 font-medium">24h</th>
+                        <th className="px-4 py-3 font-medium">Volume</th>
+                        <th className="px-4 py-3 font-medium">Liquidity</th>
+                        <th className="px-4 py-3 text-right font-medium">Select</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredRows.map((r) => {
+                        const active = selected?.id === r.id;
+                        return (
+                          <tr
+                            key={r.id.toString()}
+                            className={`cursor-pointer border-b border-white/[0.04] transition hover:bg-white/[0.03] ${
+                              active ? "bg-brand/10 ring-1 ring-inset ring-brand/25" : ""
+                            }`}
+                            onClick={() => setSelectedId(r.id.toString())}
+                          >
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                {r.demo?.imageSrc ? (
+                                  <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md bg-zinc-800">
+                                    <Image
+                                      src={r.demo.imageSrc}
+                                      alt={r.demo.imageAlt ?? r.name}
+                                      fill
+                                      className="object-cover"
+                                      sizes="56px"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="h-10 w-14 shrink-0 rounded-md bg-zinc-800" />
+                                )}
+                                <div>
+                                  <p className="font-medium text-white">{r.demo?.headline ?? r.name}</p>
+                                  <p className="text-xs text-muted">{r.symbol}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 font-mono text-muted">AMM</td>
+                            <td className="px-4 py-3 text-muted">—</td>
+                            <td className="px-4 py-3 text-muted">—</td>
+                            <td className="px-4 py-3 text-muted">Pool</td>
+                            <td className="px-4 py-3 text-right">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedId(r.id.toString());
+                                }}
+                                className="rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-[#0A0A0A] hover:bg-brand-light"
+                              >
+                                Select
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-[10px] text-muted">
+                  24h, volume, and liquidity are not indexed here — connect a subgraph for live market stats.
+                </p>
               </div>
             </div>
 
@@ -545,78 +620,6 @@ export function TradePageInner() {
               ) : null}
               </Web3TradeGuard>
             </div>
-          </div>
-
-          <div className="space-y-3">
-            <p className="text-xs text-muted">
-              Browse listings — <strong className="text-zinc-400">selection only</strong>; execute buys in Primary or Secondary
-              panels above.
-            </p>
-            <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
-              <table className="w-full min-w-[720px] text-left text-sm">
-                <thead>
-                  <tr className="border-b border-white/[0.08] text-muted">
-                    <th className="px-4 py-3 font-medium">Property token</th>
-                    <th className="px-4 py-3 font-medium">Venue note</th>
-                    <th className="px-4 py-3 font-medium">24h</th>
-                    <th className="px-4 py-3 font-medium">Volume</th>
-                    <th className="px-4 py-3 font-medium">Liquidity</th>
-                    <th className="px-4 py-3 font-medium text-right">Select</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredRows.map((r) => {
-                    const active = selected?.id === r.id;
-                    return (
-                      <tr
-                        key={r.id.toString()}
-                        className={`border-b border-white/[0.04] transition hover:bg-white/[0.03] ${
-                          active ? "bg-brand/10" : ""
-                        }`}
-                      >
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            {r.demo?.imageSrc ? (
-                              <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md bg-zinc-800">
-                                <Image
-                                  src={r.demo.imageSrc}
-                                  alt={r.demo.imageAlt ?? r.name}
-                                  fill
-                                  className="object-cover"
-                                  sizes="56px"
-                                />
-                              </div>
-                            ) : (
-                              <div className="h-10 w-14 shrink-0 rounded-md bg-zinc-800" />
-                            )}
-                            <div>
-                              <p className="font-medium text-white">{r.demo?.headline ?? r.name}</p>
-                              <p className="text-xs text-muted">{r.symbol}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 font-mono text-muted">AMM</td>
-                        <td className="px-4 py-3 text-muted">—</td>
-                        <td className="px-4 py-3 text-muted">—</td>
-                        <td className="px-4 py-3 text-muted">Pool</td>
-                        <td className="px-4 py-3 text-right">
-                          <button
-                            type="button"
-                            onClick={() => setSelectedId(r.id.toString())}
-                            className="rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-[#0A0A0A] hover:bg-brand-light"
-                          >
-                            Select
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <p className="text-[10px] text-muted">
-              24h, volume, and liquidity are not indexed here — connect a subgraph for live market stats.
-            </p>
           </div>
 
           <button

@@ -110,8 +110,8 @@ function PropertiesPageContent() {
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Investment Opportunities</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
           Compare tokenized places, reference yields, and funding progress — then open a property to diligence or move to{" "}
-          <span className="text-zinc-200">Invest</span> / <span className="text-zinc-200">Trade</span>. Figures are illustrative
-          unless bound on-chain; not investment advice.{" "}
+          <span className="text-zinc-200">Invest</span> / <span className="text-zinc-200">Trade</span>. Figures are reference
+          unless verified on-chain; not investment advice.{" "}
           <Link href="/how-it-works" className="text-emerald-400/90 hover:underline">
             How shares work →
           </Link>
@@ -127,7 +127,7 @@ function PropertiesPageContent() {
 
       {isDemoFallback ? (
         <p className="rounded-xl border border-amber-400/25 bg-amber-500/[0.08] px-4 py-3 text-sm leading-relaxed text-amber-100/90">
-          These cards use <span className="font-medium text-white">reference narratives and imagery</span> from the demo catalog.
+          These cards use <span className="font-medium text-white">reference narratives and imagery</span> from the curated listing catalog.
           Your <code className="font-mono text-xs text-white/90">PropertyRegistry</code> has not been seeded yet (
           <code className="font-mono text-xs">nextPropertyId === 1</code>). After you seed properties on-chain, refresh — live share
           tokens replace these previews.
@@ -136,9 +136,8 @@ function PropertiesPageContent() {
 
       {unset ? (
         <p className="text-zinc-400">
-          Set registry and share-factory env for the chain you use: on Base, <code className="text-emerald-400">NEXT_PUBLIC_BASE_REGISTRY</code>{" "}
-          and <code className="text-emerald-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code>; on 0G testnet,{" "}
-          <code className="text-emerald-400">NEXT_PUBLIC_REGISTRY</code> and <code className="text-emerald-400">NEXT_PUBLIC_SHARE_FACTORY</code>.
+          Set Base registry and share-factory env: <code className="text-emerald-400">NEXT_PUBLIC_BASE_REGISTRY</code> and{" "}
+          <code className="text-emerald-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code>.
           Use <code className="text-zinc-300">web/.env.local</code> locally or repo-root <code className="text-zinc-300">.env</code> for Docker builds (
           <code className="text-zinc-300">.env.docker.example</code>).
         </p>
@@ -166,7 +165,7 @@ function PropertiesPageContent() {
                 </h2>
                 <p className="text-sm leading-relaxed text-zinc-400">
                   Snapshot across the listings visible for <span className="text-zinc-200">{selectedMarket}</span> market —
-                  blended reference TVL and demo funding narrative. Switch markets below to filter the grid.
+                  blended reference TVL and community funding narrative. Switch markets below to filter the grid.
                 </p>
               </div>
               <div className="grid w-full gap-3 sm:grid-cols-3 lg:max-w-xl lg:shrink-0">
@@ -180,7 +179,7 @@ function PropertiesPageContent() {
                   <p className="mt-1 font-mono text-2xl font-semibold tabular-nums text-emerald-300/95">
                     {overview.avgYield != null ? `${overview.avgYield.toFixed(1)}%` : "—"}
                   </p>
-                  <p className="mt-0.5 text-[11px] text-zinc-500">Illustrative gross</p>
+                  <p className="mt-0.5 text-[11px] text-zinc-500">Modelled gross (ref.)</p>
                 </div>
                 <div className="rounded-2xl border border-white/[0.06] bg-black/30 px-4 py-3">
                   <p className="text-[10px] font-semibold uppercase tracking-wide text-zinc-500">Ref. TVL (visible)</p>
@@ -215,7 +214,7 @@ function PropertiesPageContent() {
                 <span className="font-mono text-zinc-400">
                   {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(globalFunding.fundedUsd)}
                 </span>{" "}
-                across demo stories · {globalFunding.investors.toLocaleString()} investors (illustrative).
+                across active listings · {globalFunding.investors.toLocaleString()} participants (reference narrative).
               </p>
             </div>
           </section>

@@ -90,8 +90,8 @@ export default function Home() {
         </p>
 
         <p className="text-xs text-muted">
-          Not investment advice. Primary deployment on Base; reference figures — verify issuer disclosures before relying on
-          economics.
+          Not investment advice. Primary deployment on Base. Economics are issuer-led — verify disclosures and contracts before allocating
+          capital.
         </p>
 
         <div className="mx-auto w-full max-w-3xl space-y-4 text-left text-sm leading-relaxed text-muted sm:text-center">

@@ -4,7 +4,7 @@ import { ContractsPageClient } from "@/components/contracts/ContractsPageClient"
 
 export const metadata: Metadata = {
   title: "Contracts — Building Culture",
-  description: "Verify core protocol and property share token addresses on Base mainnet (and optional 0G testnet).",
+  description: "Verify core protocol and property share token addresses on Base mainnet.",
 };
 
 export default function ContractsPage() {

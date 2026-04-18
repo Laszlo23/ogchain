@@ -17,7 +17,7 @@ const steps = [
   { title: "Verification", body: "Compliance bypass or admin verification may apply on early deployments.", href: "/onboarding" },
   {
     title: "Fund wallet",
-    body: "On Base: ETH for gas and USDC (or quoted settlement token). On 0G testnet: OG from the faucet if rehearsing.",
+    body: "On Base: ETH for gas and USDC (or the quoted settlement token) for purchases and pool flows.",
     href: "/invest",
   },
   {

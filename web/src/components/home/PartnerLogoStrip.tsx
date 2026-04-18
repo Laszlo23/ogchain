@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { explorerBase } from "@/lib/contracts";
 import { baseExplorerBase } from "@/lib/base-addresses";
 
 /**
@@ -19,15 +18,6 @@ export function PartnerLogoStrip() {
         >
           <Image src="/partners/base-logo.svg" alt="" width={130} height={36} className="h-8 w-auto" />
         </a>
-        <a
-          href="https://0g.ai"
-          target="_blank"
-          rel="noreferrer"
-          className="transition opacity-80 hover:opacity-100"
-          aria-label="0G Network"
-        >
-          <Image src="/partners/0g-logo.svg" alt="" width={120} height={36} className="h-8 w-auto" />
-        </a>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-6">
         <a
@@ -37,14 +27,6 @@ export function PartnerLogoStrip() {
           className="text-sm font-medium text-canvas/90 underline-offset-4 transition hover:text-action"
         >
           Basescan
-        </a>
-        <a
-          href={explorerBase}
-          target="_blank"
-          rel="noreferrer"
-          className="text-sm font-medium text-canvas/90 underline-offset-4 transition hover:text-action"
-        >
-          0G testnet explorer
         </a>
         <Link href="/contracts" className="text-sm font-medium text-canvas/90 underline-offset-4 transition hover:text-action">
           Contracts

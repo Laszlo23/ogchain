@@ -18,7 +18,7 @@ export default function BuildWithUsPage() {
         </h1>
         <p className="text-sm leading-relaxed text-zinc-400">
           We help teams structure tokenized ownership and community funding rounds for coworking, cultural, and housing
-          projects — testnet-first; production requires issuer, legal, and jurisdiction fit. Not an offer to sell
+          projects — production pilots require issuer, legal, and jurisdiction fit. Not an offer to sell
           securities.
         </p>
       </header>
@@ -37,8 +37,8 @@ export default function BuildWithUsPage() {
         <h2 className="text-lg font-semibold text-white">How it works</h2>
         <ol className="mt-4 list-inside list-decimal space-y-3 text-sm text-zinc-400">
           <li>Submit project — high-level site, use, and jurisdiction.</li>
-          <li>Structure tokenization — SPV, share instrument, compliance path (illustrative workshop).</li>
-          <li>Launch community funding — illustrative round UI; real raises need legal docs.</li>
+          <li>Structure tokenization — SPV, share instrument, compliance path (working-session templates).</li>
+          <li>Launch community funding — round UI patterns; regulated raises require counsel-approved docs.</li>
           <li>Build and operate — delivery and governance per issuer charter.</li>
         </ol>
       </section>

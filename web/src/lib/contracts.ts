@@ -1,8 +1,8 @@
 import { parseAbi } from "viem";
 
-/** Block explorer base URL (no trailing slash). */
+/** Block explorer base URL (no trailing slash). Production defaults to Base; override with `NEXT_PUBLIC_EXPLORER`. */
 export const explorerBase =
-  process.env.NEXT_PUBLIC_EXPLORER ?? "https://chainscan-galileo.0g.ai";
+  process.env.NEXT_PUBLIC_EXPLORER ?? "https://basescan.org";
 
 const zero = "0x0000000000000000000000000000000000000000" as const;
 

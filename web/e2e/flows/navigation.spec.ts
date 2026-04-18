@@ -10,6 +10,9 @@ test.describe("Desktop header navigation", () => {
 
   test("primary nav links reach expected URLs", async ({ page }) => {
     await page.goto("/");
+    await expect(page.locator("header[data-nav-interactive]")).toHaveAttribute("data-nav-interactive", "true", {
+      timeout: 30_000,
+    });
 
     const mainNav = page.locator("header").getByRole("navigation", { name: "Main" });
 
@@ -42,9 +45,9 @@ test.describe("Desktop header navigation", () => {
     }
   });
 
-  test("logo returns home from /mission", async ({ page }) => {
+  test("logo opens immersive story from /mission", async ({ page }) => {
     await page.goto("/mission");
     await page.getByRole("link", { name: /Building Culture/i }).click();
-    await expect(page).toHaveURL(/\/$/);
+    await expect(page).toHaveURL(/\/experience$/);
   });
 });

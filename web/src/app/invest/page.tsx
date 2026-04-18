@@ -190,7 +190,7 @@ function InvestPageInner() {
       <div className="mx-auto max-w-[1280px] space-y-6 pb-16">
         <InvestHero />
         <InvestPropertySwitcher rows={rows} selectedId={selected.id.toString()} onSelect={onSelectProperty} />
-        <p className="text-zinc-400">No demo metadata for this listing — open the property page or Trade for execution.</p>
+        <p className="text-zinc-400">No listing narrative on file for this property — open the property page or Trade for execution details.</p>
         <Link href={`/trade?property=${selected.id.toString()}`} className="text-brand hover:underline">
           Go to Trade →
         </Link>

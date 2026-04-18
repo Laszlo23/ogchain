@@ -1,7 +1,7 @@
 /**
- * Curated presentation for seeded demo properties (chain metadata URIs are placeholders).
- * Not financial advice — illustrative only. Sustainability claims in copy should match verifiable ops/audit data.
- * Long-form narrative is aligned with ST-IMMO / BuildingCulture partner briefs (`st-immo-buildings.ts`).
+ * Curated listing narratives for registered properties (chain metadata may still use placeholder URIs).
+ * Not financial advice. Sustainability claims in copy should match verifiable operations and audit data.
+ * Long-form narrative aligns with ST-IMMO / BuildingCulture partner briefs (`st-immo-buildings.ts`).
  */
 import { BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
 import { demoWholeTokenSupply } from "@/lib/demo-investment-math";
@@ -9,11 +9,11 @@ import type { PublicDocumentId } from "@/lib/public-documents";
 import { IMMERSIVE_PROJECT_FRAMES } from "@/lib/property-geo";
 import { getStImmoBuildingForDemoPropertyId } from "@/lib/st-immo-buildings";
 
-/** Illustrative target band shown on listings — not a guarantee (see disclaimer). */
+/** Target yield band shown on listings — not a guarantee (see disclaimer). */
 export const REFERENCE_YIELD_BAND_LABEL = "7–10%";
 
 export const REFERENCE_YIELD_DISCLAIMER =
-  "Illustrative target band only — not guaranteed. Actual results depend on issuer terms, occupancy, leverage, taxes, currency, and market conditions.";
+  "Target band for orientation only — not guaranteed. Actual results depend on issuer terms, occupancy, leverage, taxes, currency, and market conditions.";
 
 export type DemoImageSlide = { src: string; alt: string };
 
@@ -203,7 +203,7 @@ const DEMO_JAGDSCHLOSSGASSE_81: DemoPropertyDetail = {
   liquidityRulesBullets: [
     "Investment lock period — reference 30 days after purchase (verify issuer program).",
     "Sell / buyback request cooldown — reference 7 days before buyback execution (if offered).",
-    "Buyback capacity — reference up to 15% of treasury processed per cycle (illustrative cap).",
+    "Buyback capacity — reference up to 15% of treasury processed per cycle (program cap; verify issuer).",
     "Secondary trading — when AMM pools exist and rules allow (depth varies).",
   ],
   investorCardTitle: "Building Culture City Jagdschlossgasse 81",
@@ -274,7 +274,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     liquidityRulesBullets: [
       "Investment lock period — reference 30 days after purchase (verify issuer program).",
       "Sell / buyback request cooldown — reference 7 days before buyback execution (if offered).",
-      "Buyback capacity — reference up to 15% of treasury processed per cycle (illustrative cap).",
+      "Buyback capacity — reference up to 15% of treasury processed per cycle (program cap; verify issuer).",
       "Secondary trading — when AMM pools exist and rules allow (depth varies).",
     ],
     investorCardTitle: "Building Culture City Berggasse",
@@ -282,7 +282,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     whyItMattersTitle: "Why Berggasse matters",
     whyItMatters:
       "Located in Vienna's historic 9th district (Servitenviertel), Berggasse represents the typology of late 19th-century European residential architecture — Gründerzeit scale, courtyard life, and continuity with the city's urban fabric.\n\nThrough Building Culture, the property becomes a shared cultural asset: heritage preservation aligned with long-term community investment.\n\nInvestors participate in yield and in the stewardship of architectural culture — transparent rules, fractional access, and a narrative grounded in place.",
-    unitCountLabel: "7 apartments",
+    unitCountLabel: "3 apartments",
     location: "Vienna · Multi-asset bundle (incl. one house abroad)",
     imageSrc: "/partners/01berggasse.jpeg",
     imageAlt: "Building Culture City Berggasse — Servitenviertel (partner still)",
@@ -316,7 +316,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     illustrativePropertyValueUsd: 13_675_000 + 3_900_000,
     illustrativeShareUsd: 1000,
     squareMeters: 3200,
-    units: 7,
+    units: 3,
     annualRentalIncomeEur: 422_000,
     propertyType: "Mixed residential",
     discoveryCategory: "Sustainable Housing",
@@ -326,7 +326,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     ownershipModel:
       "Assets held in issuer structures off-chain; economic exposure via on-chain share tokens — revenue rules are issuer-specific.",
     fundingRoundNote: "Reference metrics — not a live securities offering.",
-    documentIds: ["droes-plans-221219"],
+    documentIds: ["berggasse-brochure-en"],
   },
   2: DEMO_JAGDSCHLOSSGASSE_81,
   3: {

@@ -7,8 +7,8 @@ import { DEMO_PROPERTY_DETAILS } from "@/lib/demo-properties";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 import { PropertyCardSkeleton } from "@/components/PropertyCardSkeleton";
 
-/** Culture Land–linked flagship demos (see `exploreHref` in `culture-land-portfolio`). */
-const SHOWCASE_IDS = [1, 2, 3, 5] as const;
+/** Culture Land–linked flagship demos — IDs must exist in `DEMO_PROPERTY_DETAILS`. */
+const SHOWCASE_IDS = [1, 3, 5, 7] as const;
 
 export function HomeFeaturedProperties() {
   const { rows, loading, unset } = usePropertyShareList();
@@ -16,6 +16,10 @@ export function HomeFeaturedProperties() {
   const showChainCards = !unset && rows.length > 0;
   /** When registry is unset, `loading` stays true — still show demo cards. */
   const showLoading = !unset && loading && rows.length === 0;
+
+  const showcaseDemoCount = SHOWCASE_IDS.filter((id) => DEMO_PROPERTY_DETAILS[id]).length;
+  /** While chain listings load, rows are still empty — skeleton count matches demo strip (four cards). */
+  const skeletonCount = showLoading ? showcaseDemoCount : 0;
 
   return (
     <section className="relative z-10 mx-auto max-w-[1280px] px-0">
@@ -32,11 +36,11 @@ export function HomeFeaturedProperties() {
         </Link>
       </div>
 
-      <div className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
         {showLoading
-          ? Array.from({ length: 3 }).map((_, i) => <PropertyCardSkeleton key={i} />)
+          ? Array.from({ length: skeletonCount }).map((_, i) => <PropertyCardSkeleton key={i} />)
           : showChainCards
-            ? rows.slice(0, 3).map((row) => (
+            ? rows.slice(0, 4).map((row) => (
                 <PropertyCard
                   key={row.id.toString()}
                   propertyId={row.id}

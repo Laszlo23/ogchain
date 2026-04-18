@@ -37,7 +37,7 @@ export function InvestCoreMetrics({ demo, sharePriceLabel, sharePriceSub }: Prop
           {sharePriceSub ? <p className="mt-1 text-[10px] text-zinc-500">{sharePriceSub}</p> : null}
         </div>
         <div className="rounded-xl border border-white/[0.06] bg-black/25 px-4 py-3 sm:col-span-2 lg:col-span-2">
-          <dt className="text-[10px] font-medium uppercase tracking-wide text-zinc-500">Est. gross yield (illustrative)</dt>
+          <dt className="text-[10px] font-medium uppercase tracking-wide text-zinc-500">Est. gross yield (reference)</dt>
           <dd className="mt-1 font-mono text-lg text-brand">{yieldPct.toFixed(2)}% p.a.</dd>
           <dd className="mt-1 text-[10px] text-zinc-500">
             Band shown elsewhere: {REFERENCE_YIELD_BAND_LABEL}. {REFERENCE_YIELD_DISCLAIMER}

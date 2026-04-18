@@ -6,12 +6,10 @@ import { formatEther, parseEther, zeroAddress } from "viem";
 import {
   useAccount,
   useBalance,
-  useChainId,
   useReadContract,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-import { base } from "viem/chains";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { TrustSection } from "@/components/TrustSection";
 import { Card } from "@/components/ui/Card";
@@ -22,8 +20,7 @@ const SECONDS_PER_YEAR = 365n * 24n * 60n * 60n;
 
 export default function StakePage() {
   const { address, isConnected } = useAccount();
-  const chainId = useChainId();
-  const nativeLabel = chainId === base.id ? "ETH" : "OG";
+  const nativeLabel = "ETH";
   const { staking, explorer: explorerBase } = useProtocolAddresses();
   const configured = staking !== zeroAddress;
 
@@ -187,13 +184,11 @@ export default function StakePage() {
   return (
     <div className="mx-auto max-w-[1280px] space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">
-          Native {nativeLabel} (Base: ETH · 0G test: OG)
-        </p>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Native {nativeLabel} (Base)</p>
         <h1 className="text-3xl font-bold tracking-tight text-white">Stake</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Lock the chain&apos;s native currency to earn rewards. On Base this is ETH; on 0G testnet it is OG. See
-          estimated APY, total staked, and pending rewards — unstaking uses a cooldown before principal is released.
+          Lock {nativeLabel} to earn rewards. See estimated APY, total staked, and pending rewards — unstaking uses a
+          cooldown before principal is released.
         </p>
       </header>
       <ComplianceStatus />
@@ -213,7 +208,7 @@ export default function StakePage() {
         <Card hover className="border-brand/10">
           <h3 className="text-sm font-semibold text-white">Earn</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Pending rewards are claimable anytime. Estimated APY is illustrative — it assumes the current reward rate
+            Pending rewards are claimable anytime. Estimated APY is directional — it assumes the current reward rate
             holds for a year and emissions may end after the reward period.
           </p>
         </Card>
@@ -254,7 +249,7 @@ export default function StakePage() {
               <p className="mt-2 font-mono text-2xl text-gradient-gold">
                 {estApyPct != null ? `${estApyPct.toFixed(2)}%` : "—"}
               </p>
-              <p className="mt-2 text-[11px] text-muted">Illustrative if current rate held 1y; emissions stop after period ends.</p>
+              <p className="mt-2 text-[11px] text-muted">Model outcome if current rate held 1y; emissions stop after period ends.</p>
             </div>
             <div className="glass-card-strong rounded-2xl border border-white/[0.08] p-6 sm:col-span-2 lg:col-span-1">
               <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted">Reward rate</p>

@@ -29,7 +29,7 @@ export function TradePrimarySalePanel({ selected, title, explorer }: Props) {
   const { address, isConnected } = useAccount();
   const walletChain = useChainId();
   const listingsChainId = getListingsChainId();
-  const listingsNative = nativeCurrencySymbol(listingsChainId);
+  const listingsNative = nativeCurrencySymbol();
   const { blocked } = useCompliance();
   const [wholeStr, setWholeStr] = useState("1");
 

@@ -64,7 +64,8 @@ export default function TransparencyPage() {
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-white">Transparency</h1>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           Fees, treasury policy, and Base contract addresses. Property-level economics follow separate offering documents.
-          Nothing here is investment advice.
+          Liquidity programmes and trading hooks are disclosed per deployment; AI-assisted operations (where enabled) follow human-defined
+          guardrails and audit trails. Nothing here is investment advice.
         </p>
       </div>
 

@@ -12,7 +12,7 @@ export function InvestGlobalInvestorsStrip({ propertyId, funding }: Props) {
   return (
     <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] px-5 py-5 sm:px-8" aria-labelledby="global-investors-heading">
       <h2 id="global-investors-heading" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
-        Global investors (illustrative)
+        Global investors (reference narrative)
       </h2>
       <p className="mt-2 text-sm text-zinc-400">
         Reference campaign context — not live indexed geography.{" "}

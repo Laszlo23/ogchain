@@ -1,6 +1,6 @@
 /**
  * ST-IMMO / BuildingCulture editorial catalog — production-ready structured copy.
- * Source: partner email briefs. Figures are illustrative until verified in issuer disclosures.
+ * Source: partner email briefs. Figures are reference until verified in issuer disclosures.
  * Not financial advice. Demo on-chain listings may bundle or rename assets for testnet UX.
  *
  * Workflow: raw emails → extraction runbook → map fields → edit this file.
@@ -44,7 +44,7 @@ export type StImmoBuilding = {
   investmentVision: string;
   /** Optional link to seeded demo property id when narratives align */
   demoPropertyId?: 1 | 2 | 3 | 4 | 5 | 6 | 7;
-  /** Illustrative metrics from emails — verify in issuer docs */
+  /** Reference metrics from emails — verify in issuer docs */
   referenceMetrics?: {
     rentalAreaM2?: number;
     terraceM2?: number;

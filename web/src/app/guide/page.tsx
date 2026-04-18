@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { GuideChat } from "@/components/GuideChat";
-import { explorerBase } from "@/lib/contracts";
+import { baseExplorerBase } from "@/lib/base-addresses";
 
 const steps = [
   {
     title: "Gas & settlement",
-    body: "Production listings use Base: fund ETH for gas and USDC (or the issuer's quoted token) for trades. For 0G Galileo rehearsal only, use the official OG faucet (chain id 16602).",
-    href: "https://faucet.0g.ai/",
+    body: "Listings use Base: hold ETH for gas and USDC (or the issuer's quoted token) for trades and primary sales where configured.",
+    href: "https://www.base.org",
   },
   {
     title: "Deploy contracts",
@@ -15,18 +15,18 @@ const steps = [
   },
   {
     title: "Configure the web app",
-    body: "Copy deployments/base-mainnet.json (and optional testnet JSON) into web/.env.local, or run scripts/sync_web_env.py.",
+    body: "Copy deployments/base-mainnet.json fields into web/.env.local, or run scripts/sync_web_env.py deployments/base-mainnet.json.",
     href: "/",
   },
   {
     title: "Connect wallet",
-    body: "Use an injected wallet (e.g. MetaMask). Add Base mainnet for production; add 0G Galileo only if you are rehearsing on testnet.",
+    body: "Use an injected wallet (e.g. MetaMask) on Base mainnet (chain id 8453).",
     href: "/properties",
   },
   {
     title: "Explore",
-    body: "Open Basescan (Base) or your configured NEXT_PUBLIC_EXPLORER to verify registerProperty and createPropertyShare transactions.",
-    href: explorerBase,
+    body: "Open Basescan to verify registerProperty, createPropertyShare, and pool transactions.",
+    href: baseExplorerBase,
   },
 ];
 

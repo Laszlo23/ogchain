@@ -50,7 +50,7 @@ export default function PropertyDetailPage() {
   const { proofNft, explorer: explorerBase } = useListingsProtocolAddresses();
   const unset = !areListingsConfigured();
   const listingsChainId = getListingsChainId();
-  const listingsNative = nativeCurrencySymbol(listingsChainId);
+  const listingsNative = nativeCurrencySymbol();
 
   const { chainRows, loading } = usePropertyShareList();
   const row = chainRows.find((r) => r.id === propertyId);
@@ -88,10 +88,8 @@ export default function PropertyDetailPage() {
   if (unset) {
     return (
       <p className="text-zinc-400">
-        Set registry and share factory in <code className="text-zinc-300">web/.env.local</code> (or repo-root <code className="text-zinc-300">.env</code> for Docker): on{" "}
-        <strong className="text-zinc-300">Base</strong>, <code className="text-gold-400">NEXT_PUBLIC_BASE_REGISTRY</code> and{" "}
-        <code className="text-gold-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code>; on <strong className="text-zinc-300">0G testnet</strong>,{" "}
-        <code className="text-gold-400">NEXT_PUBLIC_REGISTRY</code> and <code className="text-gold-400">NEXT_PUBLIC_SHARE_FACTORY</code> (see{" "}
+        Set registry and share factory in <code className="text-zinc-300">web/.env.local</code> (or repo-root <code className="text-zinc-300">.env</code> for Docker):{" "}
+        <code className="text-gold-400">NEXT_PUBLIC_BASE_REGISTRY</code> and <code className="text-gold-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code> (see{" "}
         <code className="text-zinc-300">.env.docker.example</code>).
       </p>
     );
@@ -255,7 +253,7 @@ export default function PropertyDetailPage() {
           <div>
             <h2 className="text-lg font-semibold text-white">Financial breakdown (reference)</h2>
             <p className="mt-1 text-xs text-muted">
-              Illustrative economics for discovery — not an offer. {REFERENCE_YIELD_DISCLAIMER}
+              Reference economics for discovery — not an offer. {REFERENCE_YIELD_DISCLAIMER}
             </p>
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
@@ -267,7 +265,7 @@ export default function PropertyDetailPage() {
                 <dd className="mt-1 font-mono text-sm text-white">{formatAnnualRentEur(demo.annualRentalIncomeEur)}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Modelled gross yield (illustrative)</dt>
+                <dt className="text-xs uppercase tracking-wide text-muted">Modelled gross yield</dt>
                 <dd className="mt-1 font-mono text-sm text-brand">{getEstimatedYieldPercent(demo).toFixed(1)}% p.a.</dd>
               </div>
               <div>
@@ -292,7 +290,7 @@ export default function PropertyDetailPage() {
               <p className="mt-1 font-mono text-lg text-white">{refPriceFormatted}</p>
             </div>
             <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-4">
-              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Reference yield (illustrative)</p>
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Reference yield band</p>
               <p className="mt-1 text-lg font-semibold text-brand">{REFERENCE_YIELD_BAND_LABEL} p.a.</p>
               <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
               <p className="mt-2 text-[11px] text-muted">
@@ -333,7 +331,7 @@ export default function PropertyDetailPage() {
 
       {demo?.exitOptionsBullets && demo.exitOptionsBullets.length > 0 ? (
         <section id="exit" className="scroll-mt-28 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
-          <h2 className="text-lg font-semibold text-white">Exit &amp; liquidity (illustrative)</h2>
+          <h2 className="text-lg font-semibold text-white">Exit &amp; liquidity (reference paths)</h2>
           <p className="mt-1 text-xs text-muted">Not a promise of liquidity, timing, or price — paths depend on issuer terms and markets.</p>
           <ul className="mt-4 list-inside list-disc space-y-2 text-sm leading-relaxed text-muted">
             {demo.exitOptionsBullets.map((line) => (
@@ -431,17 +429,17 @@ export default function PropertyDetailPage() {
                     return (
                       <li key={docId} className="space-y-2 rounded-xl border border-white/[0.06] bg-black/20 p-3 sm:p-4">
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                          <Link
+                          <Link href={`/documents/${docId}`} className="text-sm font-medium text-brand hover:underline">
+                            {doc.title} — View reader →
+                          </Link>
+                          <a
                             href={publicDocumentHref(doc.filePath)}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-sm font-medium text-brand hover:underline"
+                            className="text-sm text-muted hover:text-brand hover:underline"
                           >
-                            {doc.title} (PDF) →
-                          </Link>
-                          <Link href={`/documents/${docId}`} className="text-sm text-muted hover:text-brand hover:underline">
-                            Story page →
-                          </Link>
+                            Open PDF (new tab)
+                          </a>
                         </div>
                         {previewSrc ? (
                           <Link
@@ -462,7 +460,9 @@ export default function PropertyDetailPage() {
                   })}
                 </ul>
               ) : null}
-              <p className="mt-3 text-xs text-muted">Plans are reference documents — not a title report.</p>
+              <p className="mt-3 text-xs text-muted">
+                Plans support diligence — verify dimensions and legal descriptions against issuer materials and the land register.
+              </p>
             </section>
           )}
         </div>
@@ -588,17 +588,17 @@ export default function PropertyDetailPage() {
                     if (!doc) return null;
                     return (
                       <li key={docId} className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                        <Link
+                        <Link href={`/documents/${docId}`} className="text-sm font-medium text-brand hover:underline">
+                          {doc.title} — View reader →
+                        </Link>
+                        <a
                           href={publicDocumentHref(doc.filePath)}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-sm font-medium text-brand hover:underline"
+                          className="text-sm text-muted hover:text-brand hover:underline"
                         >
-                          {doc.title} (PDF) →
-                        </Link>
-                        <Link href={`/documents/${docId}`} className="text-sm text-muted hover:text-brand hover:underline">
-                          Story →
-                        </Link>
+                          Open PDF (new tab)
+                        </a>
                       </li>
                     );
                   })}

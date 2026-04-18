@@ -87,8 +87,8 @@ export function FundingMeter({
         </div>
       </div>
       <p className="mt-4 text-[11px] leading-relaxed text-muted">
-        Illustrative momentum metrics for demos and grants — not live offering data. Replace with oracle-backed
-        metrics for production.
+        Community funding snapshot for the product narrative — not a live offering or performance track record. Wire
+        oracle-backed metrics for your own reporting.
       </p>
     </div>
   );

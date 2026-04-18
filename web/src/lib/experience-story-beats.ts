@@ -4,9 +4,26 @@
  */
 import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portfolio";
 import { DEMO_PROPERTY_DETAILS, getDemoImageSlides } from "@/lib/demo-properties";
+import {
+  EUR_USD_TEASER,
+  formatEurReferenceCompact,
+  formatUsdTeaserApprox,
+  type ExperiencePortfolioTotals,
+} from "@/lib/experience-portfolio-totals";
 import { IMMERSIVE_PROJECT_FRAMES } from "@/lib/property-geo";
 
-export type StoryBeatRole = "mission" | "vision" | "place" | "gallery" | "why" | "how" | "partners" | "solution";
+const INTRO_HERO_IMAGE = "/partners/Keutschach-am-See-1b-1.jpg";
+
+export type StoryBeatRole =
+  | "mission"
+  | "vision"
+  | "place"
+  | "gallery"
+  | "why"
+  | "how"
+  | "partners"
+  | "solution"
+  | "portfolio";
 
 export type StoryBeat = {
   role: StoryBeatRole;
@@ -27,6 +44,7 @@ const ROLE_LABELS: Record<StoryBeatRole, string> = {
   how: "The build",
   partners: "Partners & craft",
   solution: "The protocol",
+  portfolio: "Portfolio overview",
 };
 
 const PARTNERS_BLURB =
@@ -38,6 +56,31 @@ function trunc(s: string, max: number): string {
   const t = s.trim();
   if (t.length <= max) return t;
   return `${t.slice(0, max - 1).trim()}…`;
+}
+
+/** Single beat — paired with economics panel totals; keeps carousel pacing aligned with property slides. */
+export function getIntroPortfolioBeats(totals: ExperiencePortfolioTotals): StoryBeat[] {
+  const usdVal = formatUsdTeaserApprox(totals.sumReferenceValueUsdApprox);
+  const usdRent = formatUsdTeaserApprox(totals.sumAnnualRentUsdApprox);
+  const eurVal = formatEurReferenceCompact(totals.sumReferenceValueEur);
+  const eurRent = formatEurReferenceCompact(totals.sumAnnualRentEur);
+
+  return [
+    {
+      role: "portfolio",
+      roleLabel: ROLE_LABELS.portfolio,
+      title: "The Culture Land universe — by the numbers",
+      subtitle: trunc(
+        `${usdVal} reference portfolio · ${usdRent} gross rent p.a. (USD illustrative at ${EUR_USD_TEASER} USD/EUR). ` +
+          `EUR reference: ${eurVal} asset value · ${eurRent} rent. ` +
+          `${totals.propertyCount} curated listings in this story — swipe for each place.`,
+        320,
+      ),
+      imageSrc: INTRO_HERO_IMAGE,
+      imageAlt:
+        "Portfolio teaser — illustrative reference economics across Culture Land listings; partner imagery, not investment advice.",
+    },
+  ];
 }
 
 /** Three beats only: slide 0 = place + thesis, slide 1 = build narrative, slide 2 = protocol + partners. */

@@ -7,8 +7,8 @@ export function PlatformEcosystemSection() {
       <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Platform</p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">One ecosystem</h2>
       <p className="mt-3 max-w-2xl text-sm text-muted">
-        One stack for community-funded cultural real estate — from discovery to trade — production on Base; optional 0G
-        testnet for rehearsal. Behaviour depends on deployment and issuer configuration.
+        One stack for community-funded cultural real estate — from discovery to trade — on Base. Behaviour depends on
+        deployment and issuer configuration.
       </p>
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
         {PLATFORM_LINKS.map((item) => (

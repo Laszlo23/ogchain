@@ -1,16 +1,16 @@
 # Building Culture web app
 
-Next.js 15 app (App Router) for **0G Galileo**: browse properties, **buy** share tokens with native OG, **investor hub** (`/invest`), **stake** native OG (`/stake`), **market** (AMM + roadmap secondary), **pool** liquidity (WETH + shares), **portfolio**, **onboarding**, **lend**, **admin** (role-gated), KYC-aware flows, optional **WalletConnect**, and optional **proof NFT** certificates.
+Next.js 15 app (App Router) for **Base mainnet**: browse properties, buy share tokens, **investor hub** (`/invest`), **stake** native ETH (`/stake`), **trade** (primary + AMM), **pool** liquidity (WETH + shares), **portfolio**, **onboarding**, **admin** (role-gated), KYC-aware flows, optional **WalletConnect**, and optional **proof NFT** certificates.
 
 ## Grant / demo checklist
 
 Use this before submitting a grant or recording a demo video:
 
 1. **Build:** `npm run build` completes with no errors.
-2. **Env:** `cp .env.local.example .env.local` and fill addresses from [deployments/README.md](../deployments/README.md) (or `scripts/sync_web_env.py`).
-3. **Chain:** Wallet on 0G testnet with faucet OG; wrap to WETH when testing pool/add liquidity.
+2. **Env:** `cp .env.local.example .env.local` and fill `NEXT_PUBLIC_BASE_*` from [deployments/README.md](../deployments/README.md) (or `scripts/sync_web_env.py deployments/base-mainnet.json`).
+3. **Chain:** Wallet on **Base** with ETH for gas and USDC (or issuer settlement token) for trades.
 4. **Narrative:** Call out **illustrative** funding/yield UI vs **on-chain** swaps/LP — see [docs/grants.md](../docs/grants.md).
-5. **Legal:** Show the in-app **Legal** page; state testnet / not investment advice in voiceover or README.
+5. **Legal:** Show the in-app **Legal** page; state not investment advice in voiceover or README.
 
 ## PDF plan previews
 
@@ -24,14 +24,13 @@ Raster previews for plan PDFs live under `public/extracted/{documentId}/` (JPEG)
 ```bash
 cd web
 cp .env.local.example .env.local
-# Fill contract addresses from deployment, or from repo root:
-# python3 scripts/sync_web_env.py deployments/testnet.json > web/.env.local
-# Optional Base mainnet: append with `python3 scripts/sync_web_env.py deployments/base-mainnet.json >> web/.env.local`
+# From repo root — merge Base deployment addresses:
+# python3 scripts/sync_web_env.py deployments/base-mainnet.json >> web/.env.local
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Connect via **injected** wallets or **WalletConnect** when `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` is set.
+Open [http://localhost:3000](http://localhost:3000). Use **Connect** (Privy) for embedded and linked wallets, or connect via **Browser** / **WalletConnect** when `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` is set.
 
 **Mobile / X (Twitter) in-app browser:** embedded browsers often block wallet deep links. The app shows a **banner** suggesting you open the site in Safari or Chrome. For QR / mobile pairing, set `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`. Set **`NEXT_PUBLIC_SITE_URL`** to your public origin (production: `https://buildingculture.capital`) so Open Graph / X link previews resolve correctly.
 
@@ -39,47 +38,51 @@ Open [http://localhost:3000](http://localhost:3000). Connect via **injected** wa
 
 **Production (Docker):** `NEXT_PUBLIC_*` values are inlined at **image build** time. Copy [`.env.docker.example`](../.env.docker.example) to repo-root `.env` and run `docker compose build` (see [deployments/README.md](../deployments/README.md)).
 
-| Variable | Purpose |
-|----------|---------|
-| `NEXT_PUBLIC_OG_RPC` | 0G JSON-RPC URL |
-| `NEXT_PUBLIC_EXPLORER` | Block explorer base (tx + address links) |
-| `NEXT_PUBLIC_REGISTRY` | `PropertyRegistry` |
-| `NEXT_PUBLIC_SHARE_FACTORY` | `PropertyShareFactory` |
-| `NEXT_PUBLIC_COMPLIANCE_REGISTRY` | `ComplianceRegistry` (KYC gate for restricted shares) |
-| `NEXT_PUBLIC_WETH` | `WETH9` (routing + pool) |
-| `NEXT_PUBLIC_ROUTER` | `OgRouter` |
-| `NEXT_PUBLIC_LENDING_POOL` | `SimpleLendingPool` (optional) |
-| `NEXT_PUBLIC_PREDICTION_MARKET` | `BinaryPredictionMarket` |
-| `NEXT_PUBLIC_PROOF_NFT` | `PropertyShareProof` ERC-721 (optional certificates) |
-| `NEXT_PUBLIC_STAKING` | `OgStaking` native staking + rewards |
-| `NEXT_PUBLIC_GUESTBOOK` | `CommunityGuestbook` (on-chain guestbook; deploy via `script/DeployGuestbook.s.sol`) |
-| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect Cloud project id (optional; browser wallets work without it) |
-| `NEXT_PUBLIC_ADMIN_PREVIEW` | Set to `1` to show `/admin` layout without on-chain roles (testnet only) |
-| `NEXT_PUBLIC_SITE_URL` | Public site origin (NFT metadata `external_url`) |
-
-**Base mainnet (optional second deployment)** — separate AMM and liquidity from 0G; merge env from `scripts/sync_web_env.py deployments/base-mainnet.json`:
+### Privy (wallet connection)
 
 | Variable | Purpose |
 |----------|---------|
-| `NEXT_PUBLIC_BASE_RPC` | Base JSON-RPC URL (defaults to `https://mainnet.base.org` in app if unset) |
-| `NEXT_PUBLIC_BASE_EXPLORER` | Block explorer base for Base (e.g. `https://basescan.org`) |
-| `NEXT_PUBLIC_BASE_REGISTRY` | `PropertyRegistry` on Base |
+| `NEXT_PUBLIC_PRIVY_APP_ID` | Privy application id — **required for the Privy Connect button**; when unset, the nav falls back to Browser / WalletConnect only (omit for CI/static builds without Privy) |
+| `NEXT_PUBLIC_PRIVY_CLIENT_ID` | Optional Privy **app client** id from the dashboard; a default is applied in code when unset |
+| `PRIVY_APP_SECRET` | Server-only — for Privy server SDK or REST **if** you call Privy from API routes; never prefix with `NEXT_PUBLIC_` |
+
+Your app’s JWKS URL (`https://auth.privy.io/api/v1/apps/<app_id>/jwks.json`) is for **verifying Privy-issued JWTs on the server** (for example `Authorization: Bearer` on API routes). It is **not** passed to `PrivyProvider`.
+
+### Base mainnet (required for production UI)
+
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_BASE_RPC` | Base JSON-RPC URL (defaults to `https://mainnet.base.org` if unset) |
+| `NEXT_PUBLIC_BASE_EXPLORER` | Block explorer base (e.g. `https://basescan.org`) |
+| `NEXT_PUBLIC_BASE_REGISTRY` | `PropertyRegistry` |
 | `NEXT_PUBLIC_BASE_SHARE_FACTORY` | `PropertyShareFactory` |
 | `NEXT_PUBLIC_BASE_COMPLIANCE_REGISTRY` | `ComplianceRegistry` |
 | `NEXT_PUBLIC_BASE_WETH` | `WETH9` |
 | `NEXT_PUBLIC_BASE_ROUTER` | `OgRouter` |
-| `NEXT_PUBLIC_BASE_LENDING_POOL` | `SimpleLendingPool` |
+| `NEXT_PUBLIC_BASE_LENDING_POOL` | `SimpleLendingPool` (optional) |
 | `NEXT_PUBLIC_BASE_PREDICTION_MARKET` | `BinaryPredictionMarket` |
 | `NEXT_PUBLIC_BASE_PROOF_NFT` | `PropertyShareProof` |
 | `NEXT_PUBLIC_BASE_STAKING` | `OgStaking` |
-| `NEXT_PUBLIC_BASE_GUESTBOOK` | `CommunityGuestbook` on Base (optional) |
-| `NEXT_PUBLIC_BASE_GOVERNANCE_SAFE` | Base **Safe** multisig for protocol governance (display + links; not a user wallet) |
+| `NEXT_PUBLIC_BASE_PLATFORM_TOKEN` | Settlement token when deployed |
+| `NEXT_PUBLIC_BASE_PURCHASE_ESCROW_ERC20` | Escrow when deployed |
+| `NEXT_PUBLIC_BASE_GUESTBOOK` | `CommunityGuestbook` (optional) |
+| `NEXT_PUBLIC_BASE_GOVERNANCE_SAFE` | Protocol **Safe** multisig (display only; not an investor wallet) |
+
+Legacy globals without `BASE_` prefix (`NEXT_PUBLIC_REGISTRY`, etc.) are **not** used by the production bundle resolution — prefer syncing **Base** addresses only.
+
+Optional: `NEXT_PUBLIC_ENABLE_LEGACY_TESTNET=1` adds a second chain to Wagmi for internal QA (requires `NEXT_PUBLIC_OG_RPC`).
+
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect Cloud project id (optional) |
+| `NEXT_PUBLIC_ADMIN_PREVIEW` | Set to `1` to show `/admin` layout without on-chain roles (staging only) |
+| `NEXT_PUBLIC_SITE_URL` | Public site origin (NFT metadata `external_url`) |
 
 **Homepage community feed:** when `DATABASE_URL` is set and `platform_posts` has rows, the landing page shows **Platform updates** from the same API as `/community`.
 
-Server-only — Guide AI (`/guide`): `OPENAI_API_KEY`, optional `OPENAI_MODEL`. Alternatively `INFERENCE_BACKEND=og_compute` with `OG_COMPUTE_INFERENCE_URL` (and optional `OG_COMPUTE_API_KEY`) for [0G Compute](https://docs.0g.ai/developer-hub/building-on-0g/compute-network/overview)–compatible endpoints.
+Server-only — Guide AI (`/guide`): `OPENAI_API_KEY`, optional `OPENAI_MODEL`. Alternatively `INFERENCE_BACKEND=og_compute` with `OG_COMPUTE_INFERENCE_URL` for custom HTTP inference backends.
 
-**RAG + safety:** `npm run rag:build` regenerates `src/lib/rag/corpus.json` from repo markdown (runs automatically before `npm run build`). Optional `RAG_CORPUS_URL` merges remote JSON chunks (e.g. hosted on [0G Storage](https://docs.0g.ai/developer-hub/building-on-0g/storage/sdk)). `CHAT_AUDIT_LOG=1` logs structured JSON; `CHAT_AUDIT_LOG_PATH` appends to a file (Node only). `CHAT_RAG_TOP_K`, `CHAT_RATE_LIMIT_PER_MIN` tune retrieval and rate limits.
+**RAG + safety:** `npm run rag:build` regenerates `src/lib/rag/corpus.json` from repo markdown (runs automatically before `npm run build`). Optional `RAG_CORPUS_URL` merges remote JSON chunks. `CHAT_AUDIT_LOG=1` logs structured JSON; `CHAT_AUDIT_LOG_PATH` appends to a file (Node only). `CHAT_RAG_TOP_K`, `CHAT_RATE_LIMIT_PER_MIN` tune retrieval and rate limits.
 
 **Risk:** `POST /api/risk/score` returns heuristic scores for admin tools. `ADMIN_RISK_WEBHOOK_URL` receives alerts when scores exceed `ADMIN_RISK_WEBHOOK_MIN_SCORE` (default 75).
 
@@ -108,12 +111,12 @@ Backend (optional): `DATABASE_URL`, `RELAYER_PRIVATE_KEY`, `COMPLIANCE_REGISTRY_
 | `/u/[slug]` | Public profile when visibility is public |
 | `/properties` | On-chain listings + demo cards |
 | `/properties/[id]` | Property detail + buy CTA |
-| `/trade` | Buy shares (OG → share); `?property=` supported |
-| `/market` | Secondary / AMM narrative + roadmap CLOB |
+| `/trade` | Primary & secondary execution |
+| `/market` | Secondary / AMM narrative + roadmap |
 | `/pool` | Add/remove liquidity (WETH + property share) |
 | `/portfolio` | Wallet balances + diversification (demo USD) |
 | `/invest` | Investor hub: overview, property links, liquidity shortcuts |
-| `/stake` | Native OG staking, rewards, cooldown unstake |
+| `/stake` | Native ETH staking, rewards, cooldown unstake |
 | `/admin` | Deployment health, registrar readout, compliance `setWalletStatus` (gated by roles) |
 | `/lend` | Lending pool UI |
 | `/issuer` | Issuer intake form |

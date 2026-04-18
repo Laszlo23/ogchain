@@ -3,17 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   BLOCKCHAIN_HOMEPAGE_LINES,
+  BUILDING_CULTURE_CITY_PIPELINE,
   BUILDING_CULTURE_LAND_PHILOSOPHY,
   CULTURE_LAND_CHAIN_MANIFESTO,
   CULTURE_LAND_PROJECTS,
   HOLZBAUER_REFERENCE_URL,
 } from "@/lib/culture-land-portfolio";
+import { PipelineProjectsSection } from "@/components/culture-land/PipelineProjectsSection";
 import { ButtonLink } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Building Culture Land — Portfolio",
   description:
-    "Partner portfolio: revitalised villages, lakefront living, and Vienna landmarks — reference economics and sustainability notes. Not investment advice.",
+    "Partner portfolio: Vienna acquisition pipeline (BuildingCultureCity), revitalised villages, lakefront living, and landmarks — reference economics and sustainability notes. Not investment advice.",
 };
 
 export default function CultureLandPage() {
@@ -90,6 +92,8 @@ export default function CultureLandPage() {
         </div>
       </section>
 
+      <PipelineProjectsSection projects={BUILDING_CULTURE_CITY_PIPELINE} />
+
       {/* Jump nav */}
       <nav
         aria-label="Projects on this page"
@@ -99,6 +103,24 @@ export default function CultureLandPage() {
           Jump to project
         </p>
         <ul className="flex flex-wrap justify-center gap-2">
+          <li>
+            <a
+              href="#bcc-pipeline-heading"
+              className="inline-block rounded-full border border-action/35 bg-action/10 px-3 py-1.5 text-xs font-medium text-action-light transition hover:border-action/50 hover:bg-action/15"
+            >
+              Acquisition pipeline
+            </a>
+          </li>
+          {BUILDING_CULTURE_CITY_PIPELINE.map((p) => (
+            <li key={`pipe-${p.id}`}>
+              <a
+                href={`#${p.id}`}
+                className="inline-block rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-zinc-300 transition hover:border-eco/40 hover:text-white"
+              >
+                {p.title.replace(/^BuildingCultureCity — /i, "").trim()}
+              </a>
+            </li>
+          ))}
           {CULTURE_LAND_PROJECTS.map((p) => (
             <li key={p.id}>
               <a

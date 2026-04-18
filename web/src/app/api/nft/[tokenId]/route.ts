@@ -1,6 +1,5 @@
 import { base } from "viem/chains";
 import { createPublicClient, http } from "viem";
-import { ogGalileo } from "@/lib/chain";
 import { baseAddresses } from "@/lib/base-addresses";
 import { addresses, proofNftAbi } from "@/lib/contracts";
 import { DEMO_PROPERTY_DETAILS } from "@/lib/demo-properties";
@@ -12,11 +11,11 @@ const zero = "0x0000000000000000000000000000000000000000" as const;
 export async function GET(_req: Request, { params }: { params: Promise<{ tokenId: string }> }) {
   const { tokenId } = await params;
 
-  const useBase = baseAddresses.proofNft !== zero;
-  const nft = useBase ? baseAddresses.proofNft : addresses.proofNft;
+  const nft =
+    baseAddresses.proofNft !== zero ? baseAddresses.proofNft : addresses.proofNft;
 
   if (nft === zero) {
-    return Response.json({ error: "NEXT_PUBLIC_PROOF_NFT / NEXT_PUBLIC_BASE_PROOF_NFT not set" }, { status: 503 });
+    return Response.json({ error: "NEXT_PUBLIC_BASE_PROOF_NFT / NEXT_PUBLIC_PROOF_NFT not set" }, { status: 503 });
   }
 
   let id: bigint;
@@ -26,13 +25,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ tokenId
     return Response.json({ error: "invalid token id" }, { status: 400 });
   }
 
-  const chain = useBase ? base : ogGalileo;
-  const rpcUrl = useBase
-    ? process.env.NEXT_PUBLIC_BASE_RPC?.trim() || "https://mainnet.base.org"
-    : process.env.NEXT_PUBLIC_OG_RPC?.trim() || ogGalileo.rpcUrls.default.http[0];
+  const rpcUrl = process.env.NEXT_PUBLIC_BASE_RPC?.trim() || "https://mainnet.base.org";
 
   const client = createPublicClient({
-    chain,
+    chain: base,
     transport: http(rpcUrl),
   });
 

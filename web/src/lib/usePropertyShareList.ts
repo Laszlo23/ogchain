@@ -29,7 +29,7 @@ export type PropertyShareRow = {
 };
 
 export function usePropertyShareList() {
-  const { registry, shareFactory } = useMemo(() => getProtocolAddresses(listingsChainId), []);
+  const { registry, shareFactory } = useMemo(() => getProtocolAddresses(), []);
   const unset = !areListingsConfigured();
 
   const { data: nextId, isPending: isPendingNextId } = useReadContract({

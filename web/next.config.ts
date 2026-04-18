@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
+      /** Optional peer of @privy-io/react-auth; not used in this app. */
+      "@farcaster/mini-app-solana": empty,
       porto: empty,
       "porto/internal": empty,
       "@coinbase/wallet-sdk": empty,

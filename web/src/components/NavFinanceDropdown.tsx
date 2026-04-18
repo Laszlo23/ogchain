@@ -50,7 +50,7 @@ export const FINANCE_NAV_ITEMS: FinanceNavItem[] = [
   { href: "/trade", label: "Trade", hint: "Primary & secondary execution", icon: IconTrade },
   { href: "/portfolio", label: "Portfolio", hint: "Your holdings", icon: IconPortfolio },
   { href: "/pool", label: "Pool", hint: "Add liquidity", icon: IconPool },
-  { href: "/stake", label: "Stake", hint: "Stake OG for rewards", icon: IconStake },
+  { href: "/stake", label: "Stake", hint: "Stake native ETH for rewards", icon: IconStake },
 ];
 
 export function financeSectionActive(pathname: string): boolean {

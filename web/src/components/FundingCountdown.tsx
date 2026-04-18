@@ -32,7 +32,7 @@ export function FundingCountdown({ stats }: Props) {
         />
       </div>
       <p className="mt-3 text-[11px] text-muted">
-        {stats.propertiesFunded} properties in active raise · illustrative metrics for demos
+        {stats.propertiesFunded} properties in active raise · reference community-funding narrative
       </p>
     </div>
   );

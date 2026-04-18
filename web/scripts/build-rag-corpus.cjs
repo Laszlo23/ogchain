@@ -11,7 +11,6 @@ const sources = [
   { id: "readme", file: "README.md" },
   { id: "web-readme", file: "web/README.md" },
   { id: "deployments-readme", file: "deployments/README.md" },
-  { id: "docs-0g", file: "docs/0g-network.md" },
   { id: "docs-compliance", file: "docs/compliance.md" },
   { id: "docs-domain", file: "docs/domain-model.md" },
   { id: "docs-grants", file: "docs/grants.md" },
@@ -62,7 +61,7 @@ function main() {
   all.push({
     id: "how-it-works-static",
     source: "how-it-works",
-    text: `How it works (Building Culture demo): Connect a wallet on 0G Galileo (chain id 16602). KYC may be required for restricted tokens. Each property can have an ERC-20 share token for fractional economic interest—not automatic legal land title. Primary vs secondary: one whole share is about $1000 notional at seed; primary sales can require whole shares; the AMM on Trade allows fractional secondary trading. Liquidity: add WETH+share on Pool or use bootstrap scripts. Risks: smart contract and liquidity risk; not investment advice. See /legal/risk.`,
+    text: `How it works (Building Culture): Connect a wallet on Base mainnet (chain id 8453). KYC may be required for restricted tokens. Each property can have an ERC-20 share token for fractional economic interest—not automatic legal land title. Primary vs secondary: one whole share is about $1000 notional at seed; primary sales can require whole shares; the AMM on Trade allows fractional secondary trading. Liquidity: wrap ETH to WETH, add WETH+share on Pool or use bootstrap scripts. Risks: smart contract and liquidity risk; not investment advice. See /legal/risk.`,
   });
 
   fs.mkdirSync(path.dirname(outPath), { recursive: true });

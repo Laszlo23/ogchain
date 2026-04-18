@@ -8,7 +8,7 @@ import { ST_IMMO_HOMEPAGE, ST_IMMO_LAND_PHILOSOPHY } from "@/lib/st-immo-buildin
 /** Short narrative: settlement layer + people-aligned ownership + path to dedicated RWA infrastructure. */
 export const CULTURE_LAND_CHAIN_MANIFESTO: readonly string[] = [
   "Building Culture Land is programmable real estate — transparent rules on-chain, community-first capital, and settlement that does not depend on opaque intermediaries for every step.",
-  "We are live on Base with cultural assets you can explore and back; 0G testnet remains available for developer rehearsal. The roadmap is real-world property — owned by participants, auditable by design, and built for long-term stewardship.",
+  "We are live on Base with cultural assets you can explore and back. The roadmap is real-world property — owned by participants, auditable by design, and built for long-term stewardship.",
 ];
 
 export const HOLZBAUER_REFERENCE_URL =
@@ -32,6 +32,20 @@ export type CultureLandProject = {
   imageAlt: string;
   /** Link to on-chain property detail when the listing aligns */
   exploreHref?: string;
+};
+
+/** Vienna urban pipeline — acquisition stage; indicative figures for partner / broker conversations. Not an offer. */
+export type BuildingCultureCityPipelineProject = {
+  id: string;
+  title: string;
+  region: string;
+  tagline: string;
+  /** Editorial — exploitation / value-add angle */
+  narrative: string[];
+  factSheet: { label: string; value: string }[];
+  /** Optional hero image; pipeline cards use a numbered gradient when omitted */
+  imageSrc?: string;
+  imageAlt: string;
 };
 
 /** Homepage hero lines — canonical copy lives in `st-immo-buildings.ts` (ST-IMMO briefs). */
@@ -250,6 +264,81 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
     imageSrc: "/berg01.jpg",
     imageAlt: "Building Culture City Berggasse — project photography",
     exploreHref: "/properties/1",
+  },
+];
+
+/**
+ * BuildingCultureCity — projects in acquisition (partner pipeline).
+ * Figures are indicative and subject to diligence, negotiation, and issuer approval.
+ */
+export const BUILDING_CULTURE_CITY_PIPELINE: BuildingCultureCityPipelineProject[] = [
+  {
+    id: "bcc-city-center",
+    title: "BuildingCultureCity — City Center",
+    region: "Vienna · central locations",
+    tagline: "Scale rental footprint in the core city",
+    narrative: [
+      "Exploitation focus: disciplined asset management with a clear path to higher rental income across a mixed residential, office, and retail stack.",
+      "Structured for institutional-style reporting — underwriting assumes lease-up discipline and indexed rent where contracts allow.",
+    ],
+    factSheet: [
+      { label: "Exploitation strategy", value: "Asset management; increase rental income" },
+      {
+        label: "Total lettable area (residential, office & retail)",
+        value: "2.100 m²",
+      },
+      { label: "Buying price", value: "€15.000.000 (under negotiation)" },
+      { label: "Rental income (p.a., indicative)", value: "€300.000" },
+    ],
+    imageAlt: "BuildingCultureCity City Center — pipeline visualization",
+  },
+  {
+    id: "bcc-danube-air",
+    title: "BuildingCultureCity — Danube Air",
+    region: "Vienna · Danube corridor",
+    tagline: "Income today, selective residential releases tomorrow",
+    narrative: [
+      "Combines stable rental cash flow with optional monetisation of residential inventory where market depth supports phased apartment sales.",
+      "Risk framing is explicit: realised exit prices and timing depend on zoning, buyer demand, and marketing execution.",
+    ],
+    factSheet: [
+      {
+        label: "Exploitation strategy",
+        value: "Asset management; increase rental income; selective sale of apartments",
+      },
+      { label: "Total lettable area (residential & retail)", value: "2.395 m²" },
+      { label: "Buying price", value: "€5.500.000 (under negotiation)" },
+      { label: "Rental income (p.a., indicative)", value: "€230.000" },
+    ],
+    imageAlt: "BuildingCultureCity Danube Air — pipeline visualization",
+  },
+  {
+    id: "bcc-north-central-rail",
+    title: "BuildingCultureCity — North · central railway context",
+    region: "Vienna · north · connectivity-led micro-location",
+    tagline: "Permissions plus refurbish — staged yield step-up",
+    narrative: [
+      "Exploitation pathway: secure attic / rooftop development permission, stabilise income on the standing asset, then layer capital into attic delivery and selective refurbishment.",
+      "Post-completion economics are scenario-based — compare “in-place” versus “after development” rents with conservative absorption assumptions.",
+    ],
+    factSheet: [
+      {
+        label: "Exploitation strategy",
+        value: "Development permission (attic); asset management thereafter",
+      },
+      {
+        label: "Total lettable area",
+        value: "2.000 m² existing · ~400 m² attic (planned)",
+      },
+      { label: "Buying price", value: "€2.800.000 (under negotiation)" },
+      {
+        label: "Development cost (attic & general refurbishment, indicative)",
+        value: "€5.000.000",
+      },
+      { label: "Rental income (p.a., current indicative)", value: "€130.000" },
+      { label: "Rental income after completion (p.a., indicative)", value: "€350.000" },
+    ],
+    imageAlt: "BuildingCultureCity north / railway context — pipeline visualization",
   },
 ];
 

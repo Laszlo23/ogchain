@@ -10,7 +10,7 @@ const stages = [
 ];
 
 /**
- * Property → Tokenization → Community ownership → Rental yield (illustrative).
+ * Property → Tokenization → Community ownership → Rental yield (reference flow).
  */
 export function OwnershipFlowDiagram() {
   return (
@@ -40,7 +40,7 @@ export function OwnershipFlowDiagram() {
         ))}
       </div>
       <p className="mt-6 text-center text-[10px] text-muted">
-        Illustrative flow — actual rights and cash flows depend on issuer documents and smart contract terms.
+        Reference flow — actual rights and cash flows depend on issuer documents and smart contract terms.
       </p>
     </div>
   );

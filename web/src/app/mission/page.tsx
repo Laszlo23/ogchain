@@ -36,6 +36,14 @@ export default function MissionPage() {
           where the law allows.
         </p>
         <p>
+          We combine <strong className="text-zinc-200">real assets</strong> with{" "}
+          <strong className="text-zinc-200">programmable liquidity</strong> (pools, routing, incentives) and transparent trading rails so
+          capital can move with discipline — not hype. Operator-grade tooling and{" "}
+          <strong className="text-zinc-200">AI-assisted treasury workflows</strong> are part of the roadmap to keep execution consistent and
+          reporting legible. Eco-building and community-built programmes stay central: many surfaces are co-designed with residents,
+          builders, and token holders.
+        </p>
+        <p>
           We want teams who <strong className="text-zinc-200">tokenize real estate</strong> to converge on shared
           patterns — issuance hooks, transfer rules, and disclosure surfaces — so the ecosystem can interoperate without
           locking issuers into one app. Listings on third-party venues, bank-style collateral, and other bridges are{" "}
@@ -71,8 +79,7 @@ export default function MissionPage() {
       <section className="glass-card border border-brand/20 bg-brand/[0.04] p-6">
         <h2 className="text-lg font-semibold text-white">Disclaimer</h2>
         <p className="mt-2 text-sm text-zinc-400">
-          Interfaces default to <strong className="text-zinc-300">Base</strong> when configured and may include optional{" "}
-          <strong className="text-zinc-300">0G (Galileo)</strong> rehearsal. Nothing here is an
+          Production traffic is on <strong className="text-zinc-300">Base</strong> when configured. Nothing here is an
           offer to sell securities or real property. Use counsel-approved disclosures before any regulated raise.
         </p>
         <Link href="/legal/risk" className="mt-4 inline-block text-sm font-medium text-brand hover:underline">

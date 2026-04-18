@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
@@ -25,7 +26,7 @@ export function BetaNoticeTrigger({
   label = "Beta program",
 }: {
   className?: string;
-  label?: string;
+  label?: ReactNode;
 }) {
   return (
     <button

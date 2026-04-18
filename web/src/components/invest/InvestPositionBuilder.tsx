@@ -117,7 +117,7 @@ export function InvestPositionBuilder({
             Buy box
           </h2>
           <p className="mt-1 text-xs text-zinc-500">
-            Whole shares × reference price. Illustrative income uses gross rent × your stake ÷ reference asset value.
+            Whole shares × reference price. Modelled income uses gross rent × your stake ÷ reference asset value.
           </p>
         </div>
       </div>
@@ -211,7 +211,7 @@ export function InvestPositionBuilder({
       </div>
 
       <div className="mt-10 rounded-xl border border-emerald-500/20 bg-emerald-950/[0.12] px-4 py-5">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-400/90">Income engine (illustrative)</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-400/90">Income engine (model)</p>
         <p className="mt-3 font-mono text-2xl text-emerald-100">{formatAnnualRentEur(projectedAnnualRent)}</p>
         <p className="text-xs text-zinc-500">Estimated yearly gross rent share</p>
         <p className="mt-2 font-mono text-sm text-zinc-300">

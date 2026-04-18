@@ -76,7 +76,7 @@ export function HeroTokenizationDiagram() {
         </g>
       </svg>
       <p className="mt-2 text-center text-[10px] uppercase tracking-[0.2em] text-muted">
-        Illustrative — not a live data feed
+        Schematic — not a live data feed
       </p>
     </div>
   );

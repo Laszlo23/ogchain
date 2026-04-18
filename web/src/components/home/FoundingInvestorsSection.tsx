@@ -16,7 +16,7 @@ const perks = [
   },
   {
     title: "Friendlier fee tier",
-    blurb: "Illustrative reduced fee band for founding wallets on supported flows — subject to deployment.",
+    blurb: "Reduced fee band for founding wallets on supported flows when deployed — issuer-specific.",
     Icon: FeeIcon,
     tag: "Savings",
   },

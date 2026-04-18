@@ -1,19 +1,32 @@
 /**
- * Fullscreen funnel slides — one panel per demo property (imagery + copy from `demo-properties`).
+ * Fullscreen funnel slides — intro portfolio teaser + one panel per demo property.
  * Titles align with Culture Land when `exploreHref` matches (`culture-land-portfolio`).
  */
 import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portfolio";
 import { DEMO_PROPERTY_DETAILS, getDemoImageSlides } from "@/lib/demo-properties";
+import {
+  EXPERIENCE_EXCLUDED_DEMO_IDS,
+  getExperienceCarouselPropertyIds,
+  getExperiencePortfolioTotals,
+  type ExperiencePortfolioTotals,
+} from "@/lib/experience-portfolio-totals";
 
-export type ExperienceSlide = {
+export type ExperienceIntroSlide = {
+  kind: "intro";
+  totals: ExperiencePortfolioTotals;
+};
+
+export type ExperiencePropertySlide = {
+  kind: "property";
   kicker?: string;
   title: string;
   subtitle: string;
   imageSrc: string;
   imageAlt: string;
-  /** Demo catalogue id — drives deep links and overlay economics. */
   propertyId: number;
 };
+
+export type ExperienceSlide = ExperienceIntroSlide | ExperiencePropertySlide;
 
 function truncateThesis(s: string, max: number): string {
   const t = s.trim();
@@ -21,18 +34,9 @@ function truncateThesis(s: string, max: number): string {
   return `${t.slice(0, max).trim()}…`;
 }
 
-/**
- * Demo ids excluded from `/experience` — interim listings whose carousel imagery is not suitable for the fullscreen story.
- * Listing pages and registry UIs are unchanged.
- */
-const EXPERIENCE_EXCLUDED_DEMO_IDS = new Set<number>([4]);
-
-/** Ordered slides — one hero image per property (first gallery frame). */
-export function getProjectExperienceSlides(): ExperienceSlide[] {
-  const ids = Object.keys(DEMO_PROPERTY_DETAILS)
-    .map(Number)
-    .filter((id) => !EXPERIENCE_EXCLUDED_DEMO_IDS.has(id))
-    .sort((a, b) => a - b);
+/** Property-only slides (same order as catalogue ids, excluding interim ids). */
+export function getProjectExperienceSlides(): ExperiencePropertySlide[] {
+  const ids = getExperienceCarouselPropertyIds();
   return ids.map((propertyId) => {
     const d = DEMO_PROPERTY_DETAILS[propertyId]!;
     const img = getDemoImageSlides(d)[0]!;
@@ -42,6 +46,7 @@ export function getProjectExperienceSlides(): ExperienceSlide[] {
       ? truncateThesis(`${cl.tagline} — ${cl.region}`, 220)
       : truncateThesis(d.thesis, 220);
     return {
+      kind: "property" as const,
       propertyId,
       kicker: d.discoveryCategory,
       title,
@@ -52,5 +57,15 @@ export function getProjectExperienceSlides(): ExperienceSlide[] {
   });
 }
 
-/** @deprecated Use `getProjectExperienceSlides()` — kept for any stray imports. */
-export const EXPERIENCE_SLIDES: ExperienceSlide[] = getProjectExperienceSlides();
+/** Intro + property slides for `/experience` carousel. */
+export function getExperienceSlides(): ExperienceSlide[] {
+  const totals = getExperiencePortfolioTotals();
+  const intro: ExperienceIntroSlide = { kind: "intro", totals };
+  return [intro, ...getProjectExperienceSlides()];
+}
+
+/** Re-export exclusion set for tests / tooling. */
+export { EXPERIENCE_EXCLUDED_DEMO_IDS };
+
+/** @deprecated Use `getExperienceSlides()` */
+export const EXPERIENCE_SLIDES: ExperienceSlide[] = getExperienceSlides();
