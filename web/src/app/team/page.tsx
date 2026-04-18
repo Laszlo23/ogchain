@@ -17,7 +17,7 @@ const people = [
   {
     name: "Laszlo Bihary",
     role: "Co-founder & product",
-    bio: "Driving protocol integration and investor-facing product on 0G.",
+    bio: "Driving protocol integration and investor-facing product on Base.",
     initials: "LB",
   },
   {

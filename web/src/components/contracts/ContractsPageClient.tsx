@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { zeroAddress } from "viem";
+import { base } from "viem/chains";
 import { CopyAddressButton } from "@/components/CopyAddressButton";
 import { addresses, explorerBase } from "@/lib/contracts";
 import { baseAddresses, baseExplorerBase, isBaseConfigured } from "@/lib/base-addresses";
 import { getBaseGovernanceSafeInfo } from "@/lib/governance-safe";
+import { getListingsChainId } from "@/lib/listings-config";
+import { getProtocolAddresses } from "@/lib/protocol-addresses";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 type Row = { label: string; key: string; address: `0x${string}` };
@@ -76,8 +79,9 @@ function AddressTable({
 }
 
 function PropertyShareTokens() {
+  const listingsChainId = getListingsChainId();
+  const { explorer: listingsExplorer, registry } = getProtocolAddresses(listingsChainId);
   const { chainRows: rows, loading } = usePropertyShareList();
-  const registry = addresses.registry;
 
   if (registry === zeroAddress) {
     return (
@@ -116,7 +120,7 @@ function PropertyShareTokens() {
                 <div className="flex flex-wrap gap-2">
                   <CopyAddressButton address={r.tokenAddress} />
                   <a
-                    href={explorerUrl(explorerBase, r.tokenAddress)}
+                    href={explorerUrl(listingsExplorer, r.tokenAddress)}
                     target="_blank"
                     rel="noreferrer"
                     className="rounded-md border border-white/10 px-2 py-1 text-[10px] font-medium uppercase tracking-wide text-brand hover:bg-brand/10"
@@ -155,6 +159,8 @@ const baseRows: Row[] = [
   { label: "Property registry", key: "base-registry", address: baseAddresses.registry },
   { label: "Property share factory", key: "base-shareFactory", address: baseAddresses.shareFactory },
   { label: "Compliance registry", key: "base-compliance", address: baseAddresses.compliance },
+  { label: "Platform settlement token (BCULT)", key: "base-platform", address: baseAddresses.platformToken },
+  { label: "Purchase escrow (ERC-20)", key: "base-escrow20", address: baseAddresses.purchaseEscrowErc20 },
   { label: "WETH (wrapped native)", key: "base-weth", address: baseAddresses.weth },
   { label: "Router (AMM)", key: "base-router", address: baseAddresses.router },
   { label: "Lending pool", key: "base-lendingPool", address: baseAddresses.lendingPool },
@@ -207,39 +213,45 @@ export function ContractsPageClient() {
 
   return (
     <div className="space-y-14 pb-16">
-      <AddressTable
-        title="0G Galileo (primary)"
-        subtitle={`Explorer: ${explorerBase}`}
-        explorer={explorerBase}
-        rows={ogRows}
-      />
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">Property share tokens (0G)</h2>
-        <p className="text-sm text-zinc-500">ERC-20 tokens minted per property — verify balances and transfers on-chain.</p>
-        <PropertyShareTokens />
-      </section>
-
-      <GovernanceSafeCard />
-
       {baseOk ? (
-        <AddressTable
-          title="Base (additional deployment)"
-          subtitle={`Explorer: ${baseExplorerBase}`}
-          explorer={baseExplorerBase}
-          rows={baseRows}
-        />
+        <>
+          <AddressTable
+            title="Base mainnet (production)"
+            subtitle={`Explorer: ${baseExplorerBase}`}
+            explorer={baseExplorerBase}
+            rows={baseRows}
+          />
+          <GovernanceSafeCard />
+        </>
       ) : (
-        <section className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
-          <h2 className="text-lg font-semibold text-white">Base (additional deployment)</h2>
-          <p className="mt-2 text-sm text-zinc-500">
-            When you deploy to Base, set <code className="text-zinc-400">NEXT_PUBLIC_BASE_EXPLORER</code> and matching{" "}
-            <code className="text-zinc-400">NEXT_PUBLIC_BASE_*</code> contract addresses (see{" "}
-            <code className="text-zinc-400">web/.env.example</code>). This section will list the same core contracts for
-            independent verification.
+        <section className="rounded-xl border border-amber-500/20 bg-amber-950/20 p-6">
+          <h2 className="text-lg font-semibold text-white">Base mainnet</h2>
+          <p className="mt-2 text-sm text-zinc-400">
+            Set <code className="text-zinc-300">NEXT_PUBLIC_BASE_REGISTRY</code>,{" "}
+            <code className="text-zinc-300">NEXT_PUBLIC_BASE_SHARE_FACTORY</code>, and other{" "}
+            <code className="text-zinc-300">NEXT_PUBLIC_BASE_*</code> variables for production verification.
           </p>
         </section>
       )}
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold text-white">Property share tokens</h2>
+        <p className="text-sm text-zinc-500">
+          ERC-20 tokens minted per property on the{" "}
+          <strong className="text-zinc-400">
+            {getListingsChainId() === base.id ? "Base" : "configured"} chain
+          </strong>{" "}
+          — verify balances and transfers on-chain.
+        </p>
+        <PropertyShareTokens />
+      </section>
+
+      <AddressTable
+        title="0G Galileo (testnet)"
+        subtitle={`Explorer: ${explorerBase} · for developer rehearsal`}
+        explorer={explorerBase}
+        rows={ogRows}
+      />
     </div>
   );
 }

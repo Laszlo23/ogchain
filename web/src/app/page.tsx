@@ -56,7 +56,7 @@ export default function Home() {
           </span>
         </Link>
         <p className="inline-flex rounded-full border border-eco/30 bg-eco/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-eco-light">
-          Building Culture · 0G
+          Building Culture · Base
         </p>
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl md:leading-[1.1]">
           Own a piece of Europe&apos;s architectural heritage.
@@ -90,7 +90,7 @@ export default function Home() {
         </p>
 
         <p className="text-xs text-muted">
-          Not investment advice. Live on 0G where marked; reference figures — verify issuer disclosures before relying on
+          Not investment advice. Primary deployment on Base; reference figures — verify issuer disclosures before relying on
           economics.
         </p>
 

@@ -6,7 +6,12 @@ import { Fragment } from "react";
 const steps = [
   { n: 1, title: "Connect wallet", hint: "Link your Web3 wallet", href: "/onboarding#wallet" },
   { n: 2, title: "Verify identity", hint: "Compliance (deployment rules)", href: "/onboarding" },
-  { n: 3, title: "Deposit OG", hint: "Fund with OG (faucet on Galileo)", href: "/invest" },
+  {
+    n: 3,
+    title: "Fund wallet",
+    hint: "ETH + USDC on Base; OG faucet on 0G testnet",
+    href: "/invest",
+  },
   { n: 4, title: "Invest", hint: "Pick a property", href: "/properties" },
 ];
 
@@ -37,7 +42,7 @@ export function InvestorJourney() {
         <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-eco-muted">How it works</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Four steps to invest</h2>
         <p className="mx-auto mt-3 max-w-lg text-sm text-muted">
-          Same rhythm as a modern fintech app — powered by smart contracts on 0G.
+          Same rhythm as a modern fintech app — powered by smart contracts on Base.
         </p>
       </div>
 

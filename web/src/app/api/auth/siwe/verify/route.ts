@@ -1,17 +1,12 @@
 import { NextResponse } from "next/server";
 import { createPublicClient, http } from "viem";
 import { parseSiweMessage, verifySiweMessage } from "viem/siwe";
-import { ogGalileo } from "@/lib/chain";
+import { getSiweVerificationTransport, SIWE_DEFAULT_CHAIN_ID } from "@/lib/siwe-chain";
 import { getPool } from "@/lib/db";
 import { takeNonce } from "@/lib/siwe-store";
 import { COOKIE_NAME, sessionCookieOptions, signSession } from "@/lib/web-session";
 
 export const dynamic = "force-dynamic";
-
-const publicClient = createPublicClient({
-  chain: ogGalileo,
-  transport: http(ogGalileo.rpcUrls.default.http[0]),
-});
 
 export async function POST(req: Request) {
   let body: { message?: string; signature?: `0x${string}` };
@@ -25,12 +20,27 @@ export async function POST(req: Request) {
     return Response.json({ error: "message and signature required" }, { status: 400 });
   }
 
+  let parsed;
+  try {
+    parsed = parseSiweMessage(message);
+  } catch {
+    return Response.json({ error: "invalid SIWE message" }, { status: 400 });
+  }
+
+  const parsedChainId = parsed.chainId != null ? Number(parsed.chainId) : NaN;
+  const effectiveChainId =
+    !Number.isNaN(parsedChainId) ? parsedChainId : SIWE_DEFAULT_CHAIN_ID;
+  const { chain, rpcUrl } = getSiweVerificationTransport(effectiveChainId);
+  const publicClient = createPublicClient({
+    chain,
+    transport: http(rpcUrl),
+  });
+
   const okSig = await verifySiweMessage(publicClient, { message, signature });
   if (!okSig) {
     return Response.json({ error: "invalid signature" }, { status: 401 });
   }
 
-  const parsed = parseSiweMessage(message);
   if (!parsed.address || !parsed.nonce) {
     return Response.json({ error: "invalid message" }, { status: 400 });
   }

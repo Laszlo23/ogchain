@@ -20,7 +20,7 @@ psql "$DATABASE_URL" -f web/sql/add_linkedin_to_user_profiles.sql
 
 ## Environment
 
-- `DATABASE_URL` — Postgres connection string (server-only).
+- `DATABASE_URL` — Postgres connection string (server-only). Use the same host as the app (including a Docker Compose `postgres` service) or a managed provider; the URL is not exposed to the browser.
 - `SESSION_SECRET` — random string (32+ bytes) used to sign HttpOnly session cookies after SIWE sign-in. Required for `/api/profile/*` and community tasks when using cookie auth.
 
 ## Notes

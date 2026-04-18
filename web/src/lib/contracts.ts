@@ -129,3 +129,12 @@ export const guestbookAbi = parseAbi([
   "function lastEntries(uint256 maxItems) view returns (address[] authors, uint64[] timestamps, string[] messages, string[] xHandles, string[] linkedins, string[] farcasters)",
   "function getEntry(uint256 index) view returns (address author, uint64 timestamp, string message, string xHandle, string linkedin, string farcaster)",
 ]);
+
+/** [`PrimaryShareSaleERC20`](../src/PrimaryShareSaleERC20.sol) — fixed ERC-20 price per whole share */
+export const primaryShareSaleErc20Abi = parseAbi([
+  "function shareToken() view returns (address)",
+  "function paymentToken() view returns (address)",
+  "function seller() view returns (address)",
+  "function pricePerShare() view returns (uint256)",
+  "function buyWholeShares(uint256 wholeShares)",
+]);

@@ -4,7 +4,7 @@
   "rpcUrl": "https://mainnet.base.org",
   "explorer": "https://basescan.org",
   "siteUrl": "https://buildingculture.capital",
-  "deployedAt": "2026-04-17",
+  "deployedAt": "2026-04-18",
   "deployer": "0x2CCf1076A9DCA4d656A156d6036Cc2066c596AF5",
   "contracts": {
     "PropertyRegistry": "0x5aca19274B17B97e38da9eA851d91F0CC59DafBf",
@@ -18,7 +18,10 @@
     "BinaryPredictionMarket": "0x7D0E418d1a0e73a73C18F146a660346e2C113046",
     "PropertyShareProof": "0x9D81A95188939C1f708f9E43921C490f4Ef4e064",
     "OgStaking": "0x3145f34A6CC6Ae34d9112f50885aEe826062ACbB",
-    "SimpleLendingPool": "0x0000000000000000000000000000000000000000"
+    "SimpleLendingPool": "0x0000000000000000000000000000000000000000",
+    "PlatformSettlementToken": "0x6bF5638a07B8A0b0D80A3B6Ab69440B83BBAf3D0",
+    "PurchaseEscrowERC20": "0x0Ea9948A36c16Dcc6ce1695011646a1f6128dFd0",
+    "PrimaryShareSaleERC20_Property1": "0xE37446E10a28eB2B188B02C6c8dF5d8e3b3d3b32"
   },
   "demoProperties": []
 }

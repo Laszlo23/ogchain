@@ -9,10 +9,10 @@ import {
   REFERENCE_YIELD_DISCLAIMER,
   formatAnnualRentEur,
   formatPropertyValueEur,
-  getDemoImageSlides,
   getEstimatedYieldPercent,
   type DemoPropertyDetail,
 } from "@/lib/demo-properties";
+import { getPropertyHeroSlides } from "@/lib/property-public-images";
 import { getFundingStats } from "@/lib/funding-stats";
 import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { FundingMeter } from "@/components/FundingMeter";
@@ -50,12 +50,12 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
       : "Residential units";
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-eco/20 bg-surface-elevated/90 shadow-2xl shadow-black/40 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-eco/40 hover:shadow-xl">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-surface-elevated/90 shadow-lg shadow-black/30 backdrop-blur-xl transition duration-300 ease-out hover:-translate-y-1 hover:border-emerald-500/35 hover:shadow-2xl hover:shadow-emerald-950/20">
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-900">
         {demo ? (
           <>
             <PropertyImageCarousel
-              slides={getDemoImageSlides(demo)}
+              slides={getPropertyHeroSlides(propertyId, demo)}
               priorityFirst={propertyId <= 2n}
               sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 400px"
             />
@@ -132,8 +132,6 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
           </span>
         </div>
 
-        {demo && <p className="line-clamp-2 text-sm leading-relaxed text-muted">{demo.thesis}</p>}
-
         <div className="mt-auto flex flex-col gap-3 border-t border-eco/10 pt-6 sm:flex-row sm:flex-wrap">
           {isPlaceholderToken ? (
             <span className="inline-flex min-h-[44px] flex-1 cursor-default items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-2.5 text-center text-sm font-semibold text-zinc-500 sm:order-first sm:flex-none">
@@ -141,17 +139,17 @@ export function PropertyCard({ propertyId, tokenAddress, name, symbol, demo }: P
             </span>
           ) : (
             <Link
-              href={`/trade?property=${idStr}`}
+              href={`/invest?property=${idStr}`}
               className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-action px-6 py-2.5 text-center text-sm font-semibold text-[#0A0A0A] shadow-lg shadow-action/25 transition hover:bg-action-light sm:order-first sm:flex-none"
             >
-              Invest in this building
+              Invest
             </Link>
           )}
           <Link
             href={`/properties/${idStr}`}
-            className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-eco/40 py-2.5 text-center text-sm font-semibold text-canvas transition hover:border-eco/70 hover:bg-eco/10 sm:flex-none sm:px-6"
+            className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/15 py-2.5 text-center text-sm font-semibold text-canvas transition hover:border-white/25 hover:bg-white/[0.06] sm:flex-none sm:px-6"
           >
-            View property details
+            View Details
           </Link>
           {demo && <PropertyShareButton propertyId={idStr} title={demo.headline} variant="compact" />}
           <p className="w-full text-center text-[11px] text-muted sm:order-last">Buy a piece of the cake — community-owned slices.</p>

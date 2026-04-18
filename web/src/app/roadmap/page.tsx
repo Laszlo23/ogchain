@@ -17,7 +17,7 @@ const mainnetFundsJourney = [
     title: "Mainnet deployment",
     when: "After audited contracts are deployed and addresses are published",
     detail:
-      "The protocol and property share contracts go live on the target mainnet. Until then, any UI on 0G is for rehearsal — use only funds you intend to expose and verify network settings.",
+      "The protocol and property share contracts are deployed on Base mainnet for production traffic. Optional 0G Galileo rehearsal remains — use only test funds and verify network settings.",
   },
   {
     step: "2",
@@ -61,10 +61,11 @@ const phases = [
   },
   {
     phase: "Now",
-    title: "Live stack on 0G",
+    title: "Production on Base",
     items: [
-      "Registry + share factory + AMM swap + staking + portfolio flows",
-      "Culture Land property metadata and funding UI",
+      "Registry + share factory + AMM swap + staking + portfolio flows with published addresses",
+      "Culture Land property metadata, funding UI, and transparency pages",
+      "Optional 0G Galileo testnet for developer rehearsal — not production capital",
     ],
   },
   {
@@ -96,10 +97,10 @@ const phases = [
   },
   {
     phase: "Parallel",
-    title: "Base deployment",
+    title: "Cross-chain & bridges",
     items: [
-      "Mirror core contracts on Base with documented addresses (see contracts page)",
-      "Optional bridge strategy — subject to security review",
+      "Documented core contract addresses on Base (see contracts page)",
+      "Optional bridge or liquidity routing — subject to security review and issuer policy",
     ],
   },
   {

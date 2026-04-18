@@ -8,7 +8,7 @@ import { ST_IMMO_HOMEPAGE, ST_IMMO_LAND_PHILOSOPHY } from "@/lib/st-immo-buildin
 /** Short narrative: settlement layer + people-aligned ownership + path to dedicated RWA infrastructure. */
 export const CULTURE_LAND_CHAIN_MANIFESTO: readonly string[] = [
   "Building Culture Land is programmable real estate — transparent rules on-chain, community-first capital, and settlement that does not depend on opaque intermediaries for every step.",
-  "We are live on 0G with cultural assets you can explore and back; the roadmap is a dedicated chain for real-world property — owned by participants, auditable by design, and built for long-term stewardship.",
+  "We are live on Base with cultural assets you can explore and back; 0G testnet remains available for developer rehearsal. The roadmap is real-world property — owned by participants, auditable by design, and built for long-term stewardship.",
 ];
 
 export const HOLZBAUER_REFERENCE_URL =

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 const items = [
   { href: "/legal", label: "Overview" },
+  { href: "/legal/offerings", label: "Offerings" },
   { href: "/legal/terms", label: "Terms" },
   { href: "/legal/privacy", label: "Privacy" },
   { href: "/legal/risk", label: "Risks" },

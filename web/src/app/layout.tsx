@@ -22,21 +22,21 @@ export const metadata: Metadata = {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: [{ url: "/icon.svg" }],
   },
-  title: "Building Culture — Community-owned cultural real estate on 0G",
+  title: "Building Culture — Cultural real estate on Base",
   description:
-    "Building Culture Land: community funding for coworking, cultural, and housing — tokenized shares and on-chain liquidity on 0G. Verify issuer disclosures before any commitment.",
+    "Community funding for coworking, cultural, and housing — tokenized shares and liquidity on Base. Verify issuer disclosures before any commitment.",
   openGraph: {
-    title: "Building Culture — Community-owned cultural real estate on 0G",
+    title: "Building Culture — Cultural real estate on Base",
     description:
-      "Launch and fund community-owned places with tokenized ownership on 0G — not investment advice.",
+      "Launch and fund community-owned places with tokenized ownership — not investment advice.",
     type: "website",
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Building Culture — Community-owned cultural real estate on 0G",
+    title: "Building Culture — Cultural real estate on Base",
     description:
-      "Community funding rounds for cultural real estate on 0G — not investment advice.",
+      "Community funding rounds for cultural real estate — not investment advice.",
   },
 };
 

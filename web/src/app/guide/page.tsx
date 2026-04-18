@@ -4,8 +4,8 @@ import { explorerBase } from "@/lib/contracts";
 
 const steps = [
   {
-    title: "Get OG for gas",
-    body: "Use the official faucet so your wallet can pay gas on Galileo (chain id 16602).",
+    title: "Gas & settlement",
+    body: "Production listings use Base: fund ETH for gas and USDC (or the issuer's quoted token) for trades. For 0G Galileo rehearsal only, use the official OG faucet (chain id 16602).",
     href: "https://faucet.0g.ai/",
   },
   {
@@ -15,17 +15,17 @@ const steps = [
   },
   {
     title: "Configure the web app",
-    body: "Copy deployments/testnet.json values into web/.env.local, or run scripts/sync_web_env.py.",
+    body: "Copy deployments/base-mainnet.json (and optional testnet JSON) into web/.env.local, or run scripts/sync_web_env.py.",
     href: "/",
   },
   {
     title: "Connect wallet",
-    body: "Use an injected wallet (e.g. MetaMask) and add the 0G Galileo network if prompted.",
+    body: "Use an injected wallet (e.g. MetaMask). Add Base mainnet for production; add 0G Galileo only if you are rehearsing on testnet.",
     href: "/properties",
   },
   {
     title: "Explore",
-    body: "Open the explorer to verify registerProperty and createPropertyShare transactions.",
+    body: "Open Basescan (Base) or your configured NEXT_PUBLIC_EXPLORER to verify registerProperty and createPropertyShare transactions.",
     href: explorerBase,
   },
 ];

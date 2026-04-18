@@ -14,6 +14,9 @@ export type ProtocolAddresses = {
   proofNft: `0x${string}`;
   staking: `0x${string}`;
   guestbook: `0x${string}`;
+  platformToken: `0x${string}`;
+  purchaseEscrowErc20: `0x${string}`;
+  governanceSafe: `0x${string}`;
   explorer: string;
 };
 
@@ -21,9 +24,14 @@ function stripSlash(s: string) {
   return s.replace(/\/$/, "");
 }
 
+const zeroAddr = "0x0000000000000000000000000000000000000000" as `0x${string}`;
+
 function bundleOg(): ProtocolAddresses {
   return {
     ...addresses,
+    platformToken: zeroAddr,
+    purchaseEscrowErc20: zeroAddr,
+    governanceSafe: zeroAddr,
     explorer: stripSlash(explorerBase),
   };
 }
@@ -40,11 +48,14 @@ function bundleBase(): ProtocolAddresses {
     proofNft: baseAddresses.proofNft,
     staking: baseAddresses.staking,
     guestbook: baseAddresses.guestbook,
+    platformToken: baseAddresses.platformToken,
+    purchaseEscrowErc20: baseAddresses.purchaseEscrowErc20,
+    governanceSafe: baseAddresses.governanceSafe,
     explorer: stripSlash(baseExplorerBase || explorerBase),
   };
 }
 
-/** Resolve env-configured contracts for a chain id (0G vs Base). Unknown chains fall back to 0G. */
+/** Resolve env-configured contracts for a chain id (Base vs 0G). Unknown chains fall back to 0G bundle. */
 export function getProtocolAddresses(chainId: number): ProtocolAddresses {
   if (chainId === base.id) return bundleBase();
   return bundleOg();

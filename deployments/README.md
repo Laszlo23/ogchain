@@ -152,6 +152,69 @@ forge script script/DeployPrimaryShare.s.sol:DeployPrimaryShareScript \
 
 Then the seller approves the sale contract and buyers call `buyWholeShares(uint256 numWholeShares)` with `msg.value == numWholeShares * price`. See [`docs/primary-sale.md`](../docs/primary-sale.md). OTC-only primary (no contract) is also fine.
 
+### 6a. Base: settlement token + ERC-20 checkout (optional)
+
+On Base, you can deploy a **fixed-supply** [`PlatformSettlementToken`](../src/PlatformSettlementToken.sol) and use [`PrimaryShareSaleERC20`](../src/PrimaryShareSaleERC20.sol) + [`PurchaseEscrowERC20`](../src/PurchaseEscrowERC20.sol) for checkout in a single ERC-20. Fund the deployer with **ETH on Base** for gas.
+
+**1) Mint the settlement token to a Safe (no post-deploy mint):**
+
+```bash
+export PLATFORM_TOKEN_NAME="Building Culture"
+export PLATFORM_TOKEN_SYMBOL=BCULT
+# example: 1B tokens * 1e18
+export PLATFORM_TOKEN_INITIAL_SUPPLY_WEI=1000000000000000000000000000
+export PLATFORM_TOKEN_RECEIVER=0x...   # multisig
+
+forge script script/DeployPlatformSettlement.s.sol:DeployPlatformSettlementScript \
+  --rpc-url https://mainnet.base.org \
+  --broadcast
+```
+
+**2) Escrow for the same payment token** (uses the same `PropertyRegistry` as your Base deploy):
+
+```bash
+export PROPERTY_REGISTRY=0x...   # from base-mainnet.json
+export PAYMENT_TOKEN=0x...      # PlatformSettlementToken from step 1
+
+forge script script/DeployPurchaseEscrowERC20.s.sol:DeployPurchaseEscrowERC20Script \
+  --rpc-url https://mainnet.base.org \
+  --broadcast
+```
+
+**3) Primary sale in payment token** (per property / share token):
+
+```bash
+export PRIMARY_SHARE_TOKEN=0x...
+export PRIMARY_PAYMENT_TOKEN=0x...
+export PRIMARY_SELLER=0x...
+export PRIMARY_PRICE_PER_SHARE=...   # payment token units per 1e18 share units
+
+forge script script/DeployPrimaryShareERC20.s.sol:DeployPrimaryShareERC20Script \
+  --rpc-url https://mainnet.base.org \
+  --broadcast
+```
+
+**4) Point the web app at each sale:** add one object per property to [`web/src/data/primary-sales.json`](../web/src/data/primary-sales.json) (`propertyId`, `chainId` `8453`, `saleAddress`, Base USDC `paymentToken`, `paymentDecimals` `6`, `paymentSymbol` `USDC`). Optional: merge extra rows at build time via `NEXT_PUBLIC_PRIMARY_SALES_JSON` (same schema). See [`docs/primary-sale.md`](../docs/primary-sale.md). Without this file, buyers can still purchase via `cast send` / block explorer; the Trade **Primary** panel stays in “not configured” until entries exist.
+
+**Go-live order (typical):** deploy share tokens → deploy `PrimaryShareSaleERC20` per offering → seller approves shares and (if needed) sets price → add `primary-sales.json` rows → **optionally** run `BootstrapLiquidity` (or use the Pool UI) so **secondary** ETH swaps work; primary USDC checkout does **not** need the internal AMM pool.
+
+Add `PlatformSettlementToken` and `PurchaseEscrowERC20` addresses to [`base-mainnet.json`](base-mainnet.json) and run `python3 scripts/sync_web_env.py deployments/base-mainnet.json` to update `NEXT_PUBLIC_BASE_PLATFORM_TOKEN` and `NEXT_PUBLIC_BASE_PURCHASE_ESCROW_ERC20`. See also [`docs/token-policy.md`](../docs/token-policy.md) and [`docs/liquidity-bootstrap.md`](../docs/liquidity-bootstrap.md).
+
+**One-shot deploy + merge (recommended):** [`deploy-base-settlement.sh`](../scripts/deploy-base-settlement.sh) runs [`DeploySettlementBundle.s.sol`](../script/DeploySettlementBundle.s.sol) so **both contracts share one broadcast** (avoids nonce collisions from two sequential `forge script` runs). From the repo root, with `PRIVATE_KEY` and `PLATFORM_TOKEN_RECEIVER` in [`.env`](../.env):
+
+```bash
+# optional: BASE_RPC_URL=https://...  (Alchemy/Infura on Base)
+export PLATFORM_TOKEN_RECEIVER=0x...   # your Base Safe / treasury
+./scripts/deploy-base-settlement.sh
+python3 scripts/merge_settlement_from_broadcast.py --write deployments/base-mainnet.json
+python3 scripts/sync_web_env.py deployments/base-mainnet.json >> web/.env.local
+cd web && npm run build
+```
+
+`merge_settlement_from_broadcast.py` prefers `broadcast/DeploySettlementBundle.s.sol/8453/run-latest.json`, otherwise the separate settlement + escrow broadcasts. **Run the merge only after a real mainnet broadcast** (not a local anvil fork) so the addresses match Base.
+
+**Dry run on a Base fork (no real ETH):** in one terminal, `anvil --fork-url https://mainnet.base.org` then set `BASE_RPC_URL=http://127.0.0.1:8545` and use an anvil test key (see anvil output) to run the same script. Do not copy those addresses into `base-mainnet.json` for production.
+
 ## 7. Web app
 
 Generate env lines from this JSON:

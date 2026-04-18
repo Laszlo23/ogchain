@@ -19,6 +19,13 @@ export const baseAddresses = {
   proofNft: (process.env.NEXT_PUBLIC_BASE_PROOF_NFT as Addr | undefined) ?? zero,
   staking: (process.env.NEXT_PUBLIC_BASE_STAKING as Addr | undefined) ?? zero,
   guestbook: (process.env.NEXT_PUBLIC_BASE_GUESTBOOK as Addr | undefined) ?? zero,
+  /** Fixed-supply checkout token (deploy `PlatformSettlementToken` on Base). */
+  platformToken: (process.env.NEXT_PUBLIC_BASE_PLATFORM_TOKEN as Addr | undefined) ?? zero,
+  /** Escrow priced in `platformToken` (or same payment asset as deployed). */
+  purchaseEscrowErc20: (process.env.NEXT_PUBLIC_BASE_PURCHASE_ESCROW_ERC20 as Addr | undefined) ?? zero,
+  /** Public governance / treasury Safe (optional, for disclosures). */
+  governanceSafe:
+    (process.env.NEXT_PUBLIC_BASE_GOVERNANCE_SAFE as Addr | undefined) ?? zero,
 };
 
 /** True when Base registry + share factory are set (minimum for listings / verification). */

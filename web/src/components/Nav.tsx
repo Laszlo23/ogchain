@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { zeroAddress } from "viem";
 import { useAccount, useReadContracts } from "wagmi";
+import { FINANCE_NAV_ITEMS, NavFinanceDropdown, financeSectionActive } from "@/components/NavFinanceDropdown";
 import { WalletConnectControls } from "@/components/WalletConnectControls";
 import { accessControlAbi } from "@/lib/contracts";
 import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
@@ -27,25 +28,10 @@ const NavIcon = {
       <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M9 11h.01M12 11h.01M15 11h.01" strokeLinecap="round" />
     </svg>
   ),
-  trade: (cls: string) => (
+  cultureLand: (cls: string) => (
     <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-      <path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
-  invest: (cls: string) => (
-    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" />
-    </svg>
-  ),
-  stake: (cls: string) => (
-    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinejoin="round" />
-    </svg>
-  ),
-  portfolio: (cls: string) => (
-    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-      <rect x="3" y="3" width="7" height="18" rx="1" />
-      <rect x="14" y="9" width="7" height="12" rx="1" />
+      <path d="M12 3l9 4.5v5c0 5.25-3.75 10-9 11.5C6.75 22.5 3 17.75 3 12.5V7.5L12 3z" strokeLinejoin="round" />
+      <path d="M12 8v13M8 12h8" strokeLinecap="round" />
     </svg>
   ),
   community: (cls: string) => (
@@ -57,12 +43,9 @@ const NavIcon = {
   ),
 };
 
-const links: { href: string; label: string; hint: string; icon: (cls: string) => ReactNode }[] = [
+const primaryLinks: { href: string; label: string; hint: string; icon: (cls: string) => ReactNode }[] = [
   { href: "/properties", label: "Properties", hint: "Browse listings", icon: NavIcon.building },
-  { href: "/trade", label: "Trade", hint: "Swap & marketplace", icon: NavIcon.trade },
-  { href: "/invest", label: "Invest", hint: "Investor hub", icon: NavIcon.invest },
-  { href: "/stake", label: "Stake", hint: "Stake OG for rewards", icon: NavIcon.stake },
-  { href: "/portfolio", label: "Portfolio", hint: "Your holdings", icon: NavIcon.portfolio },
+  { href: "/culture-land", label: "Culture Land", hint: "Flagship portfolio", icon: NavIcon.cultureLand },
   { href: "/community", label: "Community", hint: "Updates, tasks, referrals", icon: NavIcon.community },
 ];
 
@@ -155,6 +138,8 @@ function MobileNavDrawer({
 
   if (!open) return null;
 
+  const financeActive = financeSectionActive(pathname);
+
   return (
     <div
       id="mobile-nav-drawer"
@@ -185,7 +170,7 @@ function MobileNavDrawer({
         </div>
         <nav className="flex-1 overflow-y-auto px-2 py-4" aria-label="Main">
           <ul className="space-y-1">
-            {links.map((l) => {
+            {primaryLinks.map((l) => {
               const active =
                 l.href === "/"
                   ? pathname === "/"
@@ -208,7 +193,42 @@ function MobileNavDrawer({
                 </li>
               );
             })}
-            {hydrated && allowed && (
+          </ul>
+
+          <div className="mt-4 border-t border-white/[0.06] pt-4">
+            <p
+              className={`px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider ${
+                financeActive ? "text-eco-light/90" : "text-zinc-500"
+              }`}
+            >
+              Finance
+            </p>
+            <ul className="space-y-1">
+              {FINANCE_NAV_ITEMS.map((item) => {
+                const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={onClose}
+                      className={`flex items-start gap-3 rounded-xl px-3 py-3 text-left transition ${
+                        active ? "bg-white/[0.08] text-eco-light" : "text-zinc-300 hover:bg-white/[0.05]"
+                      }`}
+                    >
+                      <span className="mt-0.5 text-current">{item.icon(iconCls)}</span>
+                      <span>
+                        <span className="block font-medium">{item.label}</span>
+                        <span className="block text-xs font-normal text-zinc-500">{item.hint}</span>
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {hydrated && allowed ? (
+            <ul className="mt-4 border-t border-white/[0.06] pt-4">
               <li>
                 <Link
                   href="/admin"
@@ -236,8 +256,8 @@ function MobileNavDrawer({
                   </span>
                 </Link>
               </li>
-            )}
-          </ul>
+            </ul>
+          ) : null}
         </nav>
       </div>
     </div>
@@ -248,15 +268,11 @@ export function Nav() {
   const pathname = usePathname();
   const iconCls = "h-3.5 w-3.5 shrink-0 opacity-90";
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const closeMobile = useCallback(() => setMobileOpen(false), []);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const interactive = useHydrated();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-eco/10 bg-surface/95 backdrop-blur-xl">
+    <header data-nav-interactive={interactive ? "true" : "false"} className="sticky top-0 z-50 border-b border-eco/10 bg-surface/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-3 px-4 py-3 sm:px-8">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <button
@@ -276,16 +292,13 @@ export function Nav() {
               Building Culture
             </span>
             <span className="hidden text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500 sm:inline">
-              0G
+              Base
             </span>
           </Link>
         </div>
 
-        <nav
-          className="hidden items-center gap-x-0.5 md:flex md:gap-x-1"
-          aria-label="Main"
-        >
-          {links.map((l) => {
+        <nav className="hidden items-center gap-x-0.5 md:flex md:gap-x-1" aria-label="Main">
+          {primaryLinks.map((l) => {
             const active =
               l.href === "/"
                 ? pathname === "/"
@@ -297,6 +310,7 @@ export function Nav() {
               </Link>
             );
           })}
+          <NavFinanceDropdown />
           <AdminNavLink />
         </nav>
 
@@ -305,7 +319,9 @@ export function Nav() {
         </div>
       </div>
 
-      {mounted ? createPortal(<MobileNavDrawer open={mobileOpen} onClose={closeMobile} />, document.body) : null}
+      {typeof document !== "undefined"
+        ? createPortal(<MobileNavDrawer open={mobileOpen} onClose={closeMobile} />, document.body)
+        : null}
     </header>
   );
 }

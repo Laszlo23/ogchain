@@ -1,18 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BetaNoticeTrigger } from "@/components/BetaWelcomeModal";
+import { FooterSocialLinks } from "@/components/FooterSocialLinks";
 import { explorerBase } from "@/lib/contracts";
+import { baseExplorerBase } from "@/lib/base-addresses";
 
 const product = [
   { href: "/", label: "Home" },
   { href: "/properties", label: "Properties" },
-  { href: "/trade", label: "Trade" },
   { href: "/invest", label: "Invest" },
-  { href: "/stake", label: "Stake" },
+  { href: "/trade", label: "Trade" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/pool", label: "Pool" },
+  { href: "/stake", label: "Stake" },
 ];
 
 const learn = [
+  { href: "/transparency", label: "Transparency" },
   { href: "/experience", label: "Immersive story" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/guestbook", label: "On-chain guestbook" },
@@ -29,6 +33,7 @@ const learn = [
 
 const legal = [
   { href: "/legal", label: "Legal overview" },
+  { href: "/legal/offerings", label: "Offerings structure" },
   { href: "/legal/terms", label: "Terms of use" },
   { href: "/legal/privacy", label: "Privacy policy" },
   { href: "/legal/risk", label: "Risks & disclaimer" },
@@ -71,16 +76,8 @@ export function Footer() {
               On-chain liquidity and settlement for fractional real estate exposure — reference figures where marked; not
               investment advice.
             </p>
+            <FooterSocialLinks />
             <div className="mt-6 flex flex-wrap items-center gap-6">
-              <a
-                href="https://0g.ai"
-                target="_blank"
-                rel="noreferrer"
-                className="opacity-90 transition hover:opacity-100"
-                aria-label="0G Network"
-              >
-                <Image src="/partners/0g-logo.svg" alt="" width={120} height={36} className="h-8 w-auto" />
-              </a>
               <a
                 href="https://www.base.org"
                 target="_blank"
@@ -90,17 +87,30 @@ export function Footer() {
               >
                 <Image src="/partners/base-logo.svg" alt="" width={130} height={36} className="h-8 w-auto" />
               </a>
+              <a
+                href="https://0g.ai"
+                target="_blank"
+                rel="noreferrer"
+                className="opacity-75 transition hover:opacity-100"
+                aria-label="0G Network (testnet tooling)"
+              >
+                <Image src="/partners/0g-logo.svg" alt="" width={120} height={36} className="h-8 w-auto" />
+              </a>
             </div>
             <p className="mt-4 text-xs text-zinc-600">
-              Primary deployment:{" "}
-              <a href={explorerBase} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-brand">
-                0G explorer
+              Production: Base — verify on{" "}
+              <a href={baseExplorerBase} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-brand">
+                Basescan
               </a>
-              . Base contracts listed on{" "}
+              . Optional 0G Galileo rehearsal —{" "}
+              <a href={explorerBase} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-brand">
+                testnet explorer
+              </a>
+              . Full list:{" "}
               <Link href="/contracts" className="text-zinc-500 hover:text-brand">
                 Contracts
-              </Link>{" "}
-              when configured.
+              </Link>
+              .
             </p>
           </div>
           <LinkCol title="Product" items={product} />
@@ -110,14 +120,15 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/[0.06] pt-8 text-center text-[11px] text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:text-left">
           <p>
-            © {new Date().getFullYear()} Building Culture · Culture Land · Live on 0G
+            © {new Date().getFullYear()} Building Culture · Culture Land · Live on Base
           </p>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 sm:justify-end">
+            <BetaNoticeTrigger className="cursor-pointer text-zinc-600 underline-offset-4 hover:text-zinc-400 hover:underline" label="Beta program" />
             <Link href="/contracts" className="hover:text-zinc-400">
               Verify contracts
             </Link>
-            <a href={explorerBase} target="_blank" rel="noreferrer" className="hover:text-zinc-400">
-              Chain explorer
+            <a href={baseExplorerBase} target="_blank" rel="noreferrer" className="hover:text-zinc-400">
+              Basescan
             </a>
           </div>
         </div>

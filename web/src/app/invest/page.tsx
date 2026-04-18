@@ -1,15 +1,32 @@
 "use client";
 
-import Image from "next/image";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { formatEther, zeroAddress } from "viem";
-import { useAccount, useBalance, useReadContracts } from "wagmi";
+import { useRouter, useSearchParams } from "next/navigation";
+import { formatEther, formatUnits } from "viem";
+import { useAccount, useReadContracts } from "wagmi";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
-import { InvestorJourney } from "@/components/InvestorJourney";
+import { ContactConciergeCta } from "@/components/ContactConciergeCta";
+import { FundingMeter } from "@/components/FundingMeter";
 import { TrustSection } from "@/components/TrustSection";
-import { erc20Abi, ogStakingAbi } from "@/lib/contracts";
-import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
+import { Web3TradeGuard } from "@/components/Web3TradeGuard";
+import { InvestAfterSection } from "@/components/invest/InvestAfterSection";
+import { InvestCoreMetrics } from "@/components/invest/InvestCoreMetrics";
+import { InvestGlobalInvestorsStrip } from "@/components/invest/InvestGlobalInvestorsStrip";
+import { InvestHero } from "@/components/invest/InvestHero";
+import { InvestLiquidityExitSection } from "@/components/invest/InvestLiquidityExitSection";
+import { InvestOwnershipSection } from "@/components/invest/InvestOwnershipSection";
+import { InvestPositionBuilder } from "@/components/invest/InvestPositionBuilder";
+import { InvestPropertyHero } from "@/components/invest/InvestPropertyHero";
+import { InvestPropertySwitcher } from "@/components/invest/InvestPropertySwitcher";
+import { InvestTradeLinks } from "@/components/invest/InvestTradeLinks";
+import { PropertyInvestTrustStrip } from "@/components/PropertyInvestTrustStrip";
+import { erc20Abi } from "@/lib/contracts";
+import { demoAvailableShares } from "@/lib/demo-investment-math";
+import { getFundingStats } from "@/lib/funding-stats";
+import { getListingsChainDisplayName, getListingsChainId } from "@/lib/listings-config";
+import { useListingsProtocolAddresses } from "@/lib/use-listings-protocol-addresses";
+import { usePrimarySaleQuote } from "@/lib/use-primary-sale-quote";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 function parseShareFloat(wei: bigint): number {
@@ -18,16 +35,58 @@ function parseShareFloat(wei: bigint): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-type Tab = "overview" | "properties" | "liquidity";
-
-export default function InvestPage() {
-  const [tab, setTab] = useState<Tab>("overview");
-  const { address, isConnected } = useAccount();
-  const { weth, staking } = useProtocolAddresses();
+function InvestPageInner() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const propertyParam = searchParams.get("property");
+  const { address } = useAccount();
+  const { explorer: explorerBase } = useListingsProtocolAddresses();
+  const listingsChainId = getListingsChainId();
+  const chainLabel = getListingsChainDisplayName(listingsChainId);
 
   const { chainRows: rows, loading, unset } = usePropertyShareList();
+  const [selectedId, setSelectedId] = useState("");
+  const [wholeShares, setWholeShares] = useState(1);
 
-  const { data: nativeBal } = useBalance({ address, query: { enabled: !!address } });
+  useEffect(() => {
+    if (rows.length === 0) return;
+    if (propertyParam && rows.some((r) => r.id.toString() === propertyParam)) {
+      setSelectedId(propertyParam);
+      return;
+    }
+    if (selectedId === "") {
+      setSelectedId(rows[0].id.toString());
+    }
+  }, [rows, propertyParam, selectedId]);
+
+  const selected = useMemo(() => {
+    if (!selectedId && rows[0]) return rows[0];
+    const id = BigInt(selectedId || "0");
+    return rows.find((r) => r.id === id) ?? rows[0];
+  }, [rows, selectedId]);
+
+  useEffect(() => {
+    setWholeShares(1);
+  }, [selected?.id]);
+
+  const demo = selected?.demo;
+  const propertyId = selected?.id ?? 0n;
+  const goalUsd = demo?.illustrativePropertyValueUsd ?? 10_000_000;
+  const funding = propertyId > 0n ? getFundingStats(propertyId, goalUsd) : getFundingStats(1n, goalUsd);
+  const fundingCurrency = demo?.creditLines?.length ? "EUR" : "USD";
+
+  const quote = usePrimarySaleQuote(selected?.tokenAddress, selected?.id);
+
+  const unitPriceUsd = useMemo(() => {
+    if (quote.onChainSale && quote.pricePerShare !== undefined) {
+      return Number(formatUnits(quote.pricePerShare, quote.effectiveDecimals));
+    }
+    return demo?.illustrativeShareUsd ?? 1000;
+  }, [quote.onChainSale, quote.pricePerShare, quote.effectiveDecimals, demo?.illustrativeShareUsd]);
+
+  const paySymbol = quote.onChainSale ? quote.paySymbol : "USDC";
+  const totalPayUsd = wholeShares * unitPriceUsd;
+  const totalPayDisplay = totalPayUsd.toLocaleString("en-US", { maximumFractionDigits: 2 });
 
   const balanceReads = useMemo(
     () =>
@@ -42,302 +101,172 @@ export default function InvestPage() {
     [rows, address],
   );
 
-  const { data: balanceRows, isPending: loadingBalances } = useReadContracts({
+  const { data: balanceRows } = useReadContracts({
     contracts: balanceReads,
     query: { enabled: !!address && balanceReads.length > 0 },
   });
-
-  const wethRead = useMemo(
-    () =>
-      address && weth !== zeroAddress
-        ? [
-            {
-              address: weth,
-              abi: erc20Abi,
-              functionName: "balanceOf" as const,
-              args: [address] as const,
-            },
-          ]
-        : [],
-    [weth, address],
-  );
-
-  const { data: wethBalData } = useReadContracts({
-    contracts: wethRead,
-    query: { enabled: wethRead.length > 0 },
-  });
-
-  const stakingReads = useMemo(
-    () =>
-      staking !== zeroAddress && address
-        ? [
-            { address: staking, abi: ogStakingAbi, functionName: "balanceOf" as const, args: [address] },
-            { address: staking, abi: ogStakingAbi, functionName: "earned" as const, args: [address] },
-          ]
-        : [],
-    [staking, address],
-  );
-
-  const { data: stakeData } = useReadContracts({
-    contracts: stakingReads,
-    query: { enabled: stakingReads.length > 0 },
-  });
-
-  const wethBalance = wethBalData?.[0]?.status === "success" ? (wethBalData[0].result as bigint) : undefined;
-  const stakedOg =
-    stakeData?.[0]?.status === "success" ? (stakeData[0].result as bigint) : undefined;
-  const stakeEarned =
-    stakeData?.[1]?.status === "success" ? (stakeData[1].result as bigint) : undefined;
 
   const withBalances = useMemo(() => {
     if (!balanceRows?.length) return rows.map((r) => ({ ...r, balance: undefined as bigint | undefined }));
     return rows.map((r, i) => {
       const row = balanceRows[i];
-      const bal =
-        row?.status === "success" && typeof row.result === "bigint" ? row.result : undefined;
+      const bal = row?.status === "success" && typeof row.result === "bigint" ? row.result : undefined;
       return { ...r, balance: bal };
     });
   }, [rows, balanceRows]);
 
-  const { totalUsdEst } = useMemo(() => {
+  const { totalUsdEst, propertiesHeldCount } = useMemo(() => {
     let total = 0;
+    let count = 0;
     for (const r of withBalances) {
       const bal = r.balance ?? 0n;
       if (bal === 0n) continue;
+      count += 1;
       const shares = parseShareFloat(bal);
       const px = r.demo?.illustrativeShareUsd ?? 0;
       total += shares * px;
     }
-    return { totalUsdEst: total };
+    return { totalUsdEst: total, propertiesHeldCount: count };
   }, [withBalances]);
 
-  const tabs: { id: Tab; label: string }[] = [
-    { id: "overview", label: "Overview" },
-    { id: "properties", label: "Properties" },
-    { id: "liquidity", label: "Liquidity & lending" },
-  ];
+  const selectedBal = useMemo(() => {
+    if (!selected) return undefined;
+    const row = withBalances.find((r) => r.id === selected.id);
+    return row?.balance;
+  }, [withBalances, selected]);
+
+  const alreadyOwnsSelected = selectedBal !== undefined && selectedBal > 0n;
+
+  const availableModel =
+    demo && propertyId > 0n ? demoAvailableShares(propertyId, goalUsd) : 0;
+
+  let sharePriceLabel = "—";
+  let sharePriceSub: string | undefined;
+  if (quote.onChainSale && quote.pricePerShare !== undefined) {
+    sharePriceLabel = `${formatUnits(quote.pricePerShare, quote.effectiveDecimals)} ${paySymbol}`;
+  } else if (demo?.illustrativeShareUsd != null) {
+    sharePriceLabel = `~$${demo.illustrativeShareUsd.toLocaleString()} USDC (reference)`;
+    sharePriceSub = "Bind to on-chain primary sale when configured in primary-sales.json.";
+  }
+
+  function onSelectProperty(id: string) {
+    setSelectedId(id);
+    router.replace(`/invest?property=${id}`, { scroll: false });
+  }
+
+  if (unset) {
+    return (
+      <div className="mx-auto max-w-[1280px] space-y-6 pb-16">
+        <InvestHero />
+        <p className="text-zinc-400">
+          Configure registry and share factory in <code className="text-gold-400">.env.local</code> to load listings.
+        </p>
+      </div>
+    );
+  }
+
+  if (loading && rows.length === 0) {
+    return (
+      <div className="mx-auto max-w-[1280px] pb-16">
+        <p className="animate-pulse text-zinc-500">Loading invest journey…</p>
+      </div>
+    );
+  }
+
+  if (!selected || rows.length === 0) {
+    return (
+      <div className="mx-auto max-w-[1280px] space-y-6 pb-16">
+        <InvestHero />
+        <p className="text-zinc-400">No share tokens listed yet.</p>
+        <Link href="/properties" className="text-brand hover:underline">
+          Browse properties →
+        </Link>
+      </div>
+    );
+  }
+
+  if (!demo) {
+    return (
+      <div className="mx-auto max-w-[1280px] space-y-6 pb-16">
+        <InvestHero />
+        <InvestPropertySwitcher rows={rows} selectedId={selected.id.toString()} onSelect={onSelectProperty} />
+        <p className="text-zinc-400">No demo metadata for this listing — open the property page or Trade for execution.</p>
+        <Link href={`/trade?property=${selected.id.toString()}`} className="text-brand hover:underline">
+          Go to Trade →
+        </Link>
+      </div>
+    );
+  }
+
+  const propertyTitle = demo.investorCardTitle ?? demo.headline;
 
   return (
-    <div className="mx-auto max-w-[1280px] space-y-8 pb-16">
-      <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">One place</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Investor hub</h1>
-        <p className="text-sm leading-relaxed text-zinc-400">
-          A compact view of exposure and participation: balances, reference property weights, and links to stake,
-          pool, and trade. Liquidity and pools are per network — switch your wallet to 0G or Base to match the deployment
-          you use. Nothing here is a promise of returns — see{" "}
-          <Link href="/legal/risk" className="text-brand hover:underline">
-            risks &amp; disclaimer
-          </Link>
-          .
-        </p>
-      </header>
+    <div className="mx-auto max-w-[1280px] space-y-10 pb-16">
+      <InvestHero />
 
-      <section className="glass-card border border-gold-500/15 p-5">
-        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gold-500/90">
-          How value can compound (reference)
-        </p>
-        <ul className="mt-3 grid gap-3 text-sm text-zinc-400 sm:grid-cols-3">
-          <li>
-            <span className="font-medium text-zinc-200">Trading fees</span> — LPs in automated pools may earn swap fees
-            when liquidity and volume exist (not guaranteed).
-          </li>
-          <li>
-            <span className="font-medium text-zinc-200">Staking</span> — Rewards follow the staking contract&apos;s
-            rules; yields vary and can be zero.
-          </li>
-          <li>
-            <span className="font-medium text-zinc-200">Issuance &amp; property economics</span> — Longer-term outcomes
-            follow offering documents and off-chain performance — not a monthly ROI from this UI.
-          </li>
-        </ul>
-      </section>
+      <InvestPropertyHero propertyId={propertyId} demo={demo} />
 
-      <details className="group glass-card">
-        <summary className="cursor-pointer list-none px-5 py-4 text-sm font-medium text-white marker:content-none [&::-webkit-details-marker]:hidden">
-          <span className="inline-flex items-center gap-2">
-            Investor journey &amp; trust
-            <span className="text-[11px] font-normal text-zinc-500">(expand)</span>
-          </span>
-        </summary>
-        <div className="space-y-6 border-t border-white/[0.06] px-5 py-5">
-          <InvestorJourney />
-          <TrustSection />
-        </div>
-      </details>
+      <InvestPropertySwitcher rows={rows} selectedId={selected.id.toString()} onSelect={onSelectProperty} />
+
+      <InvestGlobalInvestorsStrip propertyId={propertyId} funding={funding} />
+
+      <FundingMeter stats={funding} variant="compact" label="Funding progress (reference)" currency={fundingCurrency} />
+
+      <InvestCoreMetrics demo={demo} sharePriceLabel={sharePriceLabel} sharePriceSub={sharePriceSub} />
+
+      <Web3TradeGuard offlinePrimarySale={!quote.onChainSale}>
+        <InvestPositionBuilder
+          demo={demo}
+          symbol={selected.symbol}
+          propertyTitle={propertyTitle}
+          referenceAssetValue={goalUsd}
+          availableSharesModel={availableModel}
+          portfolioValueRefUsd={totalUsdEst}
+          propertiesHeldCount={propertiesHeldCount}
+          alreadyOwnsSelected={alreadyOwnsSelected}
+          quote={quote}
+          wholeShares={wholeShares}
+          onWholeSharesChange={setWholeShares}
+        />
+      </Web3TradeGuard>
+
+      <InvestLiquidityExitSection demo={demo} />
+
+      <InvestOwnershipSection demo={demo} />
+
+      <PropertyInvestTrustStrip
+        propertyId={propertyId}
+        tokenAddress={selected.tokenAddress}
+        explorerBase={explorerBase}
+        demo={demo}
+      />
+
+      <InvestTradeLinks
+        propertyIdStr={selected.id.toString()}
+        chainLabel={chainLabel}
+        paySymbol={paySymbol}
+        totalPayDisplay={totalPayDisplay}
+        wholeShares={wholeShares}
+        symbol={selected.symbol}
+      />
+
+      <ContactConciergeCta />
+
+      <InvestAfterSection />
 
       <ComplianceStatus />
 
-      <div className="flex flex-wrap gap-2 border-b border-white/[0.06] pb-3">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setTab(t.id)}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-              tab === t.id
-                ? "bg-gold-500/15 text-gold-300"
-                : "text-zinc-500 hover:text-zinc-300"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {!isConnected ? (
-        <p className="text-center text-zinc-500">Connect a wallet for personalized totals.</p>
-      ) : unset ? (
-        <p className="text-zinc-400">Configure registry and share factory to list properties.</p>
-      ) : loading && rows.length === 0 ? (
-        <p className="text-zinc-500">Loading…</p>
-      ) : (
-        <>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="glass-card-strong p-4">
-              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Native OG</p>
-              <p className="mt-1 font-mono text-xl text-white">{nativeBal ? formatEther(nativeBal.value) : "—"}</p>
-            </div>
-            <div className="glass-card-strong p-4">
-              <p className="text-[10px] uppercase tracking-wide text-zinc-500">WETH</p>
-              <p className="mt-1 font-mono text-xl text-white">
-                {wethBalance !== undefined ? formatEther(wethBalance) : loadingBalances ? "…" : "—"}
-              </p>
-            </div>
-            <div className="glass-card-strong p-4">
-              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Staked OG</p>
-              <p className="mt-1 font-mono text-xl text-gradient-gold">
-                {stakedOg !== undefined ? formatEther(stakedOg) : staking === zeroAddress ? "—" : "0"}
-              </p>
-              {stakeEarned !== undefined && stakeEarned > 0n && (
-                <p className="mt-1 text-[10px] text-zinc-500">Pending ~{formatEther(stakeEarned)} OG</p>
-              )}
-            </div>
-            <div className="glass-card-strong p-4">
-              <p className="text-[10px] uppercase tracking-wide text-zinc-500">Reference USD (shares)</p>
-              <p className="mt-1 font-mono text-xl text-white">
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                }).format(totalUsdEst)}
-              </p>
-              <p className="mt-1 text-[10px] text-zinc-500">Not NAV — reference weighting only.</p>
-            </div>
-          </div>
-
-          {tab === "overview" && (
-            <div className="space-y-4">
-              <p className="text-sm text-zinc-400">
-                Use the tabs for per-property exposure and liquidity routes. Numbers are chain reads plus reference USD
-                where configured — not a suitability assessment.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/stake"
-                  className="rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-6 py-2.5 text-sm font-semibold text-black"
-                >
-                  Stake OG
-                </Link>
-                <Link
-                  href="/portfolio"
-                  className="rounded-full border border-white/15 px-6 py-2.5 text-sm font-medium text-zinc-200"
-                >
-                  Detailed portfolio
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {tab === "properties" && (
-            <div className="space-y-3">
-              <p className="text-sm text-zinc-400">
-                Browse the catalog or open a property to trade. Share balances mirror your wallet holdings.
-              </p>
-              <Link href="/properties" className="inline-block text-sm font-medium text-gold-400 hover:underline">
-                All properties →
-              </Link>
-              <div className="space-y-2 pt-2">
-                {rows.length === 0 ? (
-                  <p className="text-sm text-zinc-500">No share tokens deployed yet.</p>
-                ) : (
-                  withBalances.map((r) => {
-                    const usdEst =
-                      r.balance && r.demo?.illustrativeShareUsd != null
-                        ? parseShareFloat(r.balance) * r.demo.illustrativeShareUsd
-                        : null;
-                    return (
-                      <Link
-                        key={r.id.toString()}
-                        href={`/properties/${r.id.toString()}`}
-                        className="glass-card flex flex-wrap items-center gap-3 p-4 transition hover:border-gold-500/25"
-                      >
-                        {r.demo?.imageSrc ? (
-                          <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-zinc-800">
-                            <Image
-                              src={r.demo.imageSrc}
-                              alt={r.demo.imageAlt}
-                              fill
-                              className="object-cover"
-                              sizes="80px"
-                            />
-                          </div>
-                        ) : (
-                          <div className="h-14 w-20 shrink-0 rounded-lg bg-zinc-800" />
-                        )}
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-zinc-100">{r.demo?.headline ?? r.name}</p>
-                          <p className="text-xs text-zinc-500">{r.symbol}</p>
-                        </div>
-                        <div className="text-right text-sm">
-                          {r.balance !== undefined ? (
-                            <>
-                              <p className="font-mono text-white">{formatEther(r.balance)} shares</p>
-                              {usdEst != null && (
-                                <p className="text-[11px] text-zinc-500">
-                                  ~{" "}
-                                  {new Intl.NumberFormat("en-US", {
-                                    style: "currency",
-                                    currency: "USD",
-                                    maximumFractionDigits: 0,
-                                  }).format(usdEst)}{" "}
-                                  ref.
-                                </p>
-                              )}
-                            </>
-                          ) : (
-                            <span className="text-zinc-500">…</span>
-                          )}
-                        </div>
-                      </Link>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          )}
-
-          {tab === "liquidity" && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Link href="/pool" className="glass-card block p-5 transition hover:border-gold-500/25">
-                <p className="text-[10px] font-medium uppercase tracking-wider text-gold-500/80">AMM</p>
-                <h2 className="mt-2 text-lg font-semibold text-white">Liquidity pool</h2>
-                <p className="mt-1 text-sm text-zinc-500">Add or remove WETH + property share liquidity.</p>
-              </Link>
-              <Link href="/lend" className="glass-card block p-5 transition hover:border-gold-500/25">
-                <p className="text-[10px] font-medium uppercase tracking-wider text-gold-500/80">Lending</p>
-                <h2 className="mt-2 text-lg font-semibold text-white">Lend / borrow</h2>
-                <p className="mt-1 text-sm text-zinc-500">Collateralize shares, borrow WETH (protocol pool).</p>
-              </Link>
-              <Link href="/trade" className="glass-card block p-5 transition hover:border-gold-500/25 sm:col-span-2">
-                <p className="text-[10px] font-medium uppercase tracking-wider text-gold-500/80">Primary</p>
-                <h2 className="mt-2 text-lg font-semibold text-white">Buy shares</h2>
-                <p className="mt-1 text-sm text-zinc-500">Swap native OG into property share tokens.</p>
-              </Link>
-            </div>
-          )}
-        </>
-      )}
+      <TrustSection />
     </div>
+  );
+}
+
+export default function InvestPage() {
+  return (
+    <Suspense
+      fallback={<div className="mx-auto max-w-[1280px] px-4 py-20 text-center text-muted">Loading…</div>}
+    >
+      <InvestPageInner />
+    </Suspense>
   );
 }

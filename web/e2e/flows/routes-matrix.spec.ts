@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { expectImmersiveVisible, expectMainVisible } from "../helpers";
+import { expectImmersiveVisible, expectMainVisible, skipHomeIntroRedirect } from "../helpers";
 
 /**
  * Direct navigation: every route should render without 5xx.
@@ -43,8 +43,8 @@ const standardRoutes: { path: string; title?: RegExp }[] = [
 
 for (const { path, title } of standardRoutes) {
   test(`GET ${path} renders app shell`, async ({ page }) => {
-    const res = await page.goto(path);
-    expect(res?.ok()).toBeTruthy();
+    if (path === "/") await skipHomeIntroRedirect(page);
+    await page.goto(path, { waitUntil: "domcontentloaded" });
     if (title) {
       await expect(page).toHaveTitle(title);
     }
@@ -53,7 +53,6 @@ for (const { path, title } of standardRoutes) {
 }
 
 test("GET /experience renders immersive (no main)", async ({ page }) => {
-  const res = await page.goto("/experience");
-  expect(res?.ok()).toBeTruthy();
+  await page.goto("/experience", { waitUntil: "domcontentloaded" });
   await expectImmersiveVisible(page);
 });

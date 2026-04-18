@@ -6,10 +6,12 @@ import { formatEther, parseEther, zeroAddress } from "viem";
 import {
   useAccount,
   useBalance,
+  useChainId,
   useReadContract,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
+import { base } from "viem/chains";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
 import { TrustSection } from "@/components/TrustSection";
 import { Card } from "@/components/ui/Card";
@@ -20,6 +22,8 @@ const SECONDS_PER_YEAR = 365n * 24n * 60n * 60n;
 
 export default function StakePage() {
   const { address, isConnected } = useAccount();
+  const chainId = useChainId();
+  const nativeLabel = chainId === base.id ? "ETH" : "OG";
   const { staking, explorer: explorerBase } = useProtocolAddresses();
   const configured = staking !== zeroAddress;
 
@@ -183,11 +187,13 @@ export default function StakePage() {
   return (
     <div className="mx-auto max-w-[1280px] space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Native OG</p>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Stake OG</h1>
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">
+          Native {nativeLabel} (Base: ETH · 0G test: OG)
+        </p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Stake</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          Lock OG to earn rewards. See estimated APY, total staked, and pending rewards — unstaking uses a cooldown
-          before principal is released.
+          Lock the chain&apos;s native currency to earn rewards. On Base this is ETH; on 0G testnet it is OG. See
+          estimated APY, total staked, and pending rewards — unstaking uses a cooldown before principal is released.
         </p>
       </header>
       <ComplianceStatus />
@@ -200,7 +206,7 @@ export default function StakePage() {
         <Card hover className="border-brand/10">
           <h3 className="text-sm font-semibold text-white">Stake</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Deposit native OG into the staking contract. Your principal is tracked on-chain; rewards accrue from the
+            Deposit native currency into the staking contract. Your principal is tracked on-chain; rewards accrue from the
             configured emission schedule.
           </p>
         </Card>
@@ -214,7 +220,7 @@ export default function StakePage() {
         <Card hover className="border-brand/10">
           <h3 className="text-sm font-semibold text-white">Rewards</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Claim OG rewards without exiting your stake. Unstaking is a two-step process: request, then withdraw after
+            Claim rewards without exiting your stake. Unstaking is a two-step process: request, then withdraw after
             cooldown — not a guaranteed yield or audited product.
           </p>
         </Card>
@@ -239,9 +245,9 @@ export default function StakePage() {
             <div className="glass-card-strong rounded-2xl border border-white/[0.08] p-6">
               <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted">Pool TVL</p>
               <p className="mt-2 font-mono text-2xl text-white">
-                {totalStaked !== undefined ? `${formatEther(totalStaked)} OG` : "—"}
+                {totalStaked !== undefined ? `${formatEther(totalStaked)} ${nativeLabel}` : "—"}
               </p>
-              <p className="mt-2 text-[11px] text-muted">Total OG locked in the staking contract.</p>
+              <p className="mt-2 text-[11px] text-muted">Total native currency locked in the staking contract.</p>
             </div>
             <div className="glass-card-strong rounded-2xl border border-brand/20 p-6">
               <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted">Est. APY</p>
@@ -253,7 +259,9 @@ export default function StakePage() {
             <div className="glass-card-strong rounded-2xl border border-white/[0.08] p-6 sm:col-span-2 lg:col-span-1">
               <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted">Reward rate</p>
               <p className="mt-2 font-mono text-lg text-white">
-                {rewardRate !== undefined && rewardRate > 0n ? `${formatEther(rewardRate)} OG/s` : "—"}
+                {rewardRate !== undefined && rewardRate > 0n
+                  ? `${formatEther(rewardRate)} ${nativeLabel}/s`
+                  : "—"}
               </p>
               <p className="mt-2 text-[11px] text-muted">On-chain emission parameter; not a promise of future returns.</p>
             </div>
@@ -267,9 +275,9 @@ export default function StakePage() {
                 <h2 className="text-sm font-medium text-white">Wallet</h2>
                 <p className="mt-1 font-mono text-xs text-zinc-500">{address}</p>
                 <p className="mt-3 text-xs text-zinc-500">
-                  Native OG balance:{" "}
+                  Native {nativeLabel} balance:{" "}
                   <span className="font-mono text-zinc-300">
-                    {nativeBal ? formatEther(nativeBal.value) : "—"} OG
+                    {nativeBal ? formatEther(nativeBal.value) : "—"} {nativeLabel}
                   </span>
                 </p>
               </div>
@@ -278,7 +286,7 @@ export default function StakePage() {
                 <h2 className="text-sm font-medium text-white">Stake</h2>
                 <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
                   <label className="flex-1 text-xs text-zinc-500">
-                    Amount (OG)
+                    Amount ({nativeLabel})
                     <input
                       type="text"
                       inputMode="decimal"
@@ -298,14 +306,14 @@ export default function StakePage() {
                   </button>
                 </div>
                 <p className="mt-2 text-[11px] text-zinc-500">
-                  Staked: {stakedBal !== undefined ? formatEther(stakedBal) : "—"} OG
+                  Staked: {stakedBal !== undefined ? formatEther(stakedBal) : "—"} {nativeLabel}
                 </p>
               </div>
 
               <div className="glass-card p-5">
                 <h2 className="text-sm font-medium text-white">Rewards</h2>
                 <p className="mt-2 font-mono text-lg text-gold-200/90">
-                  Pending: {earned !== undefined ? formatEther(earned) : "—"} OG
+                  Pending: {earned !== undefined ? formatEther(earned) : "—"} {nativeLabel}
                 </p>
                 <button
                   type="button"
@@ -325,7 +333,10 @@ export default function StakePage() {
                 {pendingWithdraw && pendingWithdraw > 0n && unlockTime ? (
                   <div className="mt-4 space-y-2">
                     <p className="text-sm text-zinc-300">
-                      Pending: <span className="font-mono">{formatEther(pendingWithdraw)} OG</span>
+                      Pending:{" "}
+                    <span className="font-mono">
+                      {formatEther(pendingWithdraw)} {nativeLabel}
+                    </span>
                     </p>
                     {secondsLeft > 0 ? (
                       <p className="text-xs text-amber-200/90">
@@ -354,7 +365,7 @@ export default function StakePage() {
                 ) : (
                   <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
                     <label className="flex-1 text-xs text-zinc-500">
-                      Amount to exit (OG)
+                      Amount to exit ({nativeLabel})
                       <input
                         type="text"
                         inputMode="decimal"

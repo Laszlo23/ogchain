@@ -32,7 +32,7 @@ export default function MissionPage() {
         </p>
         <p>
           This is not a promise of easy returns. It is a <strong className="text-zinc-200">design direction</strong>:
-          open infrastructure, verifiable contracts, and a path from live 0G listings to issuer-governed, compliant offerings
+          open infrastructure, verifiable contracts, and a path from live Base listings to issuer-governed, compliant offerings
           where the law allows.
         </p>
         <p>
@@ -71,7 +71,8 @@ export default function MissionPage() {
       <section className="glass-card border border-brand/20 bg-brand/[0.04] p-6">
         <h2 className="text-lg font-semibold text-white">Disclaimer</h2>
         <p className="mt-2 text-sm text-zinc-400">
-          Interfaces may point at <strong className="text-zinc-300">0G (Galileo)</strong> or other deployments. Nothing here is an
+          Interfaces default to <strong className="text-zinc-300">Base</strong> when configured and may include optional{" "}
+          <strong className="text-zinc-300">0G (Galileo)</strong> rehearsal. Nothing here is an
           offer to sell securities or real property. Use counsel-approved disclosures before any regulated raise.
         </p>
         <Link href="/legal/risk" className="mt-4 inline-block text-sm font-medium text-brand hover:underline">

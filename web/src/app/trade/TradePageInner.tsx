@@ -1,21 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { formatEther, parseEther } from "viem";
 import {
   useAccount,
   useBalance,
+  useChainId,
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { ComplianceStatus, useCompliance } from "@/components/ComplianceStatus";
 import { TrustSection } from "@/components/TrustSection";
+import { TransparencyCrossLink } from "@/components/TransparencyCrossLink";
+import { Web3TradeGuard } from "@/components/Web3TradeGuard";
+import { TradePrimarySalePanel } from "@/components/trade/TradePrimarySalePanel";
 import { erc20Abi, pairAbi, proofNftAbi, routerAbi } from "@/lib/contracts";
+import { getListingsChainId } from "@/lib/listings-config";
+import { nativeCurrencySymbol } from "@/lib/native-currency-label";
 import { useProtocolAddresses } from "@/lib/use-protocol-addresses";
 import { formatIllustrativeEconomics } from "@/lib/demo-properties";
+import { usePrimarySaleQuote } from "@/lib/use-primary-sale-quote";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
 
 function deadline(): bigint {
@@ -25,19 +32,43 @@ function deadline(): bigint {
 const zero = "0x0000000000000000000000000000000000000000" as const;
 
 export function TradePageInner() {
+  const nextRouter = useRouter();
   const searchParams = useSearchParams();
   const propertyFromUrl = searchParams.get("property");
+  const marketFromUrl = searchParams.get("market");
 
   const { address, isConnected } = useAccount();
+  const walletChainId = useChainId();
+  const listingsChainId = getListingsChainId();
+  const nativeSym = nativeCurrencySymbol(walletChainId ?? listingsChainId);
   const { blocked } = useCompliance();
   const { router, weth, proofNft, explorer: explorerBase } = useProtocolAddresses();
 
   const { chainRows: rows, loading, unset } = usePropertyShareList();
   const [selectedId, setSelectedId] = useState<string>("");
   const [search, setSearch] = useState("");
-  const [amountOg, setAmountOg] = useState("0.1");
+  const [amountNative, setAmountNative] = useState("0.1");
   const [slippageBps, setSlippageBps] = useState(50);
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [marketTab, setMarketTab] = useState<"primary" | "secondary">("primary");
+
+  useEffect(() => {
+    if (marketFromUrl === "secondary") {
+      setMarketTab("secondary");
+      return;
+    }
+    if (marketFromUrl === "primary") {
+      setMarketTab("primary");
+    }
+  }, [marketFromUrl]);
+
+  useEffect(() => {
+    if (marketFromUrl === "primary" || marketFromUrl === "secondary") return;
+    if (typeof window === "undefined") return;
+    const h = window.location.hash;
+    if (h === "#secondary") setMarketTab("secondary");
+    else if (h === "#primary") setMarketTab("primary");
+  }, [marketFromUrl]);
 
   useEffect(() => {
     if (rows.length === 0) return;
@@ -56,6 +87,11 @@ export function TradePageInner() {
     return rows.find((r) => r.id === id) ?? rows[0];
   }, [rows, selectedId]);
 
+  const primaryQuote = usePrimarySaleQuote(
+    selected?.tokenAddress as `0x${string}` | undefined,
+    selected?.id,
+  );
+
   const tokenOut = selected?.tokenAddress;
 
   const filteredRows = useMemo(() => {
@@ -70,11 +106,11 @@ export function TradePageInner() {
 
   const amountInWei = useMemo(() => {
     try {
-      return parseEther(amountOg || "0");
+      return parseEther(amountNative || "0");
     } catch {
       return 0n;
     }
-  }, [amountOg]);
+  }, [amountNative]);
 
   const { data: ethPair } = useReadContract({
     address: router,
@@ -198,19 +234,34 @@ export function TradePageInner() {
   const busy = swapPending || swapConfirming || claimPending || claimConfirming;
   const economicsLine = selected?.demo ? formatIllustrativeEconomics(selected.demo) : null;
   const displayTitle = selected?.demo?.headline ?? selected?.name ?? "Choose a property";
+
+  function syncMarketTab(tab: "primary" | "secondary") {
+    setMarketTab(tab);
+    const id = selected?.id.toString() ?? "";
+    const p = new URLSearchParams();
+    if (id) p.set("property", id);
+    p.set("market", tab);
+    nextRouter.replace(`/trade?${p.toString()}`, { scroll: false });
+  }
+
   return (
     <div className="mx-auto max-w-[1280px] space-y-8 pb-16">
       <header className="space-y-2 text-center sm:text-left">
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Marketplace</p>
         <h1 className="text-3xl font-bold tracking-tight text-white">Trade</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-muted">
-          <strong className="text-white">Secondary:</strong> spend OG through the AMM pool for property share tokens.
-          Pool price follows reserves.
+          <strong className="text-white">Primary:</strong> whole shares in USDC (or another ERC-20) when configured — no pool
+          needed. <strong className="text-white">Secondary:</strong> swap native {nativeSym} via WETH/share pools; pool price
+          follows reserves.
         </p>
       </header>
 
       <ComplianceStatus />
       <TrustSection />
+
+      <div className="flex justify-center px-2">
+        <TransparencyCrossLink className="text-center" />
+      </div>
 
       <p className="text-center text-[11px] leading-relaxed text-zinc-500">
         <strong className="text-zinc-400">Primary</strong> (issuer) sales can require whole shares only (min. one full
@@ -248,71 +299,30 @@ export function TradePageInner() {
         <p className="text-center text-zinc-400">No share tokens yet. Seed properties first.</p>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
-            <table className="w-full min-w-[720px] text-left text-sm">
-              <thead>
-                <tr className="border-b border-white/[0.08] text-muted">
-                  <th className="px-4 py-3 font-medium">Property token</th>
-                  <th className="px-4 py-3 font-medium">Price</th>
-                  <th className="px-4 py-3 font-medium">24h</th>
-                  <th className="px-4 py-3 font-medium">Volume</th>
-                  <th className="px-4 py-3 font-medium">Liquidity</th>
-                  <th className="px-4 py-3 font-medium text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRows.map((r) => {
-                  const active = selected?.id === r.id;
-                  return (
-                    <tr
-                      key={r.id.toString()}
-                      className={`border-b border-white/[0.04] transition hover:bg-white/[0.03] ${
-                        active ? "bg-brand/10" : ""
-                      }`}
-                    >
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          {r.demo?.imageSrc ? (
-                            <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md bg-zinc-800">
-                              <Image
-                                src={r.demo.imageSrc}
-                                alt={r.demo.imageAlt ?? r.name}
-                                fill
-                                className="object-cover"
-                                sizes="56px"
-                              />
-                            </div>
-                          ) : (
-                            <div className="h-10 w-14 shrink-0 rounded-md bg-zinc-800" />
-                          )}
-                          <div>
-                            <p className="font-medium text-white">{r.demo?.headline ?? r.name}</p>
-                            <p className="text-xs text-muted">{r.symbol}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 font-mono text-muted">AMM</td>
-                      <td className="px-4 py-3 text-muted">—</td>
-                      <td className="px-4 py-3 text-muted">—</td>
-                      <td className="px-4 py-3 text-muted">Pool</td>
-                      <td className="px-4 py-3 text-right">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedId(r.id.toString())}
-                          className="rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-[#0A0A0A] hover:bg-brand-light"
-                        >
-                          Buy
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="flex flex-wrap gap-2 border-b border-white/[0.06] pb-4">
+            <button
+              type="button"
+              onClick={() => syncMarketTab("primary")}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
+                marketTab === "primary"
+                  ? "bg-emerald-600 text-white shadow-lg shadow-emerald-900/30"
+                  : "border border-white/10 bg-white/[0.04] text-zinc-400 hover:border-white/20 hover:text-white"
+              }`}
+            >
+              Primary market
+            </button>
+            <button
+              type="button"
+              onClick={() => syncMarketTab("secondary")}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
+                marketTab === "secondary"
+                  ? "bg-gold-600 text-black shadow-lg shadow-gold-900/30"
+                  : "border border-white/10 bg-white/[0.04] text-zinc-400 hover:border-white/20 hover:text-white"
+              }`}
+            >
+              Secondary market
+            </button>
           </div>
-          <p className="text-[10px] text-muted">
-            24h, volume, and liquidity are not indexed here — connect a subgraph for live market stats.
-          </p>
 
           <div className="grid gap-8 lg:grid-cols-5">
             <div className="space-y-6 lg:col-span-3">
@@ -365,26 +375,67 @@ export function TradePageInner() {
               </div>
             </div>
 
-            <div className="space-y-6 lg:col-span-2 lg:sticky lg:top-28 lg:self-start">
+            <div className="space-y-10 lg:col-span-2 lg:sticky lg:top-28 lg:self-start">
+              <Web3TradeGuard
+                showDisclosureFooter={false}
+                offlinePrimarySale={marketTab === "primary" && !!selected && !primaryQuote.onChainSale}
+              >
+              {marketTab === "primary" ? (
+              <section id="primary" className="scroll-mt-28 space-y-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-white">Primary market</h2>
+                  <p className="mt-1 text-sm text-muted">
+                    Buy whole shares from the issuer when a sale contract is configured — pay with ERC-20 (typically USDC).
+                  </p>
+                </div>
+                <TradePrimarySalePanel
+                  selected={
+                    selected
+                      ? {
+                          id: selected.id,
+                          tokenAddress: selected.tokenAddress as `0x${string}`,
+                          symbol: selected.symbol,
+                          name: selected.name,
+                        }
+                      : undefined
+                  }
+                  title={displayTitle}
+                  explorer={explorerBase}
+                />
+              </section>
+              ) : null}
+
+              {marketTab === "secondary" ? (
+              <section id="secondary" className="scroll-mt-28 space-y-6">
+                <div>
+                  <h2 className="text-lg font-semibold text-white">Secondary market</h2>
+                  <p className="mt-1 text-sm text-muted">
+                    Swap native {nativeSym} (via WETH) into shares when a pool exists — sell path can be added later.
+                  </p>
+                </div>
+
           <div className="glass-card-strong overflow-hidden shadow-2xl shadow-black/40">
+            <div className="border-b border-white/[0.06] px-6 py-3">
+              <p className="text-[10px] font-medium uppercase tracking-wide text-zinc-500">Secondary (AMM)</p>
+            </div>
             <div className="space-y-1 border-b border-white/[0.06] px-6 py-5">
               <p className="text-xs font-medium uppercase tracking-wide text-gold-500/90">You pay</p>
               <div className="flex items-baseline justify-between gap-2">
                 <input
                   type="text"
                   inputMode="decimal"
-                  value={amountOg}
-                  onChange={(e) => setAmountOg(e.target.value)}
+                  value={amountNative}
+                  onChange={(e) => setAmountNative(e.target.value)}
                   className="min-w-0 flex-1 bg-transparent text-3xl font-semibold tracking-tight text-white placeholder:text-zinc-600 focus:outline-none"
                   placeholder="0.0"
                 />
                 <span className="shrink-0 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-sm font-medium text-zinc-200">
-                  OG
+                  {nativeSym}
                 </span>
               </div>
               {nativeBal && (
                 <p className="text-xs text-zinc-500">
-                  Balance: {formatEther(nativeBal.value)} OG
+                  Balance: {formatEther(nativeBal.value)} {nativeSym} (wraps to WETH for the pool)
                 </p>
               )}
             </div>
@@ -429,7 +480,11 @@ export function TradePageInner() {
 
             {ethPair === zero && tokenOut && (
               <p className="border-t border-white/[0.06] px-6 py-3 text-xs text-amber-400">
-                No liquidity pool for this property yet. Add OG + shares on the Pool page first.
+                No liquidity pool for this property yet. Add {nativeSym} + shares on the{" "}
+                <a href="/pool" className="text-brand underline underline-offset-2">
+                  Pool
+                </a>{" "}
+                page first (someone must seed both sides of the pair).
               </p>
             )}
 
@@ -486,7 +541,82 @@ export function TradePageInner() {
             </p>
           )}
           {swapError && <p className="text-center text-xs text-red-400">{swapError.message}</p>}
+              </section>
+              ) : null}
+              </Web3TradeGuard>
             </div>
+          </div>
+
+          <div className="space-y-3">
+            <p className="text-xs text-muted">
+              Browse listings — <strong className="text-zinc-400">selection only</strong>; execute buys in Primary or Secondary
+              panels above.
+            </p>
+            <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-white/[0.08] text-muted">
+                    <th className="px-4 py-3 font-medium">Property token</th>
+                    <th className="px-4 py-3 font-medium">Venue note</th>
+                    <th className="px-4 py-3 font-medium">24h</th>
+                    <th className="px-4 py-3 font-medium">Volume</th>
+                    <th className="px-4 py-3 font-medium">Liquidity</th>
+                    <th className="px-4 py-3 font-medium text-right">Select</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredRows.map((r) => {
+                    const active = selected?.id === r.id;
+                    return (
+                      <tr
+                        key={r.id.toString()}
+                        className={`border-b border-white/[0.04] transition hover:bg-white/[0.03] ${
+                          active ? "bg-brand/10" : ""
+                        }`}
+                      >
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            {r.demo?.imageSrc ? (
+                              <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md bg-zinc-800">
+                                <Image
+                                  src={r.demo.imageSrc}
+                                  alt={r.demo.imageAlt ?? r.name}
+                                  fill
+                                  className="object-cover"
+                                  sizes="56px"
+                                />
+                              </div>
+                            ) : (
+                              <div className="h-10 w-14 shrink-0 rounded-md bg-zinc-800" />
+                            )}
+                            <div>
+                              <p className="font-medium text-white">{r.demo?.headline ?? r.name}</p>
+                              <p className="text-xs text-muted">{r.symbol}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 font-mono text-muted">AMM</td>
+                        <td className="px-4 py-3 text-muted">—</td>
+                        <td className="px-4 py-3 text-muted">—</td>
+                        <td className="px-4 py-3 text-muted">Pool</td>
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedId(r.id.toString())}
+                            className="rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-[#0A0A0A] hover:bg-brand-light"
+                          >
+                            Select
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-[10px] text-muted">
+              24h, volume, and liquidity are not indexed here — connect a subgraph for live market stats.
+            </p>
           </div>
 
           <button

@@ -9,10 +9,22 @@ type Props = {
 };
 
 const steps = [
-  { title: "Connect wallet", body: "Use MetaMask or any injected wallet on 0G (Galileo).", href: "/onboarding#wallet" },
+  {
+    title: "Connect wallet",
+    body: "Use MetaMask or any injected wallet. Switch to Base for production listings.",
+    href: "/onboarding#wallet",
+  },
   { title: "Verification", body: "Compliance bypass or admin verification may apply on early deployments.", href: "/onboarding" },
-  { title: "Deposit OG", body: "Fund your wallet from the faucet, then wrap to WETH if adding liquidity.", href: "/invest" },
-  { title: "Confirm investment", body: "Choose a property and swap OG for share tokens on Trade.", href: "/properties" },
+  {
+    title: "Fund wallet",
+    body: "On Base: ETH for gas and USDC (or quoted settlement token). On 0G testnet: OG from the faucet if rehearsing.",
+    href: "/invest",
+  },
+  {
+    title: "Confirm investment",
+    body: "Choose a property and complete the trade flow (primary or AMM) on the listing chain.",
+    href: "/properties",
+  },
 ];
 
 export function InvestFlowModal({ open, onClose }: Props) {

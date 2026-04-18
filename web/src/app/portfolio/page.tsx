@@ -268,9 +268,10 @@ export default function PortfolioPage() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-sm font-medium text-white">Yield & rewards</h2>
-                <p className="mt-1 text-xs text-zinc-500">
-                  Rental or revenue distribution would accrue per issuer policy. Wire a distributor contract + oracle
-                  for production.
+                <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                  When live, rental or revenue distributions follow each issuer&apos;s policy and disclosures. This UI does not
+                  settle cash flows on-chain yet — production stacks typically add a revenue distributor contract and verified
+                  inputs (oracle, attestations, or issuer-signed proofs), which operators wire per deployment.
                 </p>
               </div>
               <button

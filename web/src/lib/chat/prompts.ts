@@ -15,7 +15,7 @@ Mandatory safety and compliance:
 
 function baseDeploymentBlock(): string {
   const og = `
-Deployment (0G Galileo, chain id 16602) — use ONLY these addresses when answering; they may be zero if unset:
+Optional 0G Galileo testnet (chain id 16602) — developer rehearsal; addresses may be zero if unset:
 - Registry: ${addresses.registry}
 - Share factory: ${addresses.shareFactory}
 - Compliance: ${addresses.compliance}
@@ -28,11 +28,13 @@ Deployment (0G Galileo, chain id 16602) — use ONLY these addresses when answer
 - Explorer: ${explorerBase}
 `;
   if (!isBaseConfigured()) return og;
-  return `${og}
-Optional Base mainnet (chain id 8453) — separate liquidity and contracts; not a unified cross-chain pool:
+  return `
+Primary deployment (Base mainnet, chain id 8453) — use these addresses when answering production questions:
 - Registry: ${baseAddresses.registry}
 - Share factory: ${baseAddresses.shareFactory}
 - Compliance: ${baseAddresses.compliance}
+- Platform settlement token (BCULT): ${baseAddresses.platformToken}
+- Purchase escrow (ERC-20): ${baseAddresses.purchaseEscrowErc20}
 - WETH: ${baseAddresses.weth}
 - Router: ${baseAddresses.router}
 - Lending pool: ${baseAddresses.lendingPool}
@@ -40,19 +42,19 @@ Optional Base mainnet (chain id 8453) — separate liquidity and contracts; not 
 - Proof NFT: ${baseAddresses.proofNft}
 - Staking: ${baseAddresses.staking}
 - Explorer: ${baseExplorerBase}
-`;
+${og}`;
 }
 
 export function buildSystemPrompt(mode: ChatMode, ragChunks: RagChunk[]): string {
   const rag = formatRagBlock(ragChunks);
 
   const education = `
-You are the Building Culture assistant for Culture Land — real-estate tokenization on 0G Chain (EVM, chain id 16602 Galileo).
+You are the Building Culture assistant for Culture Land — real-estate tokenization on Base (EVM mainnet, chain id 8453). The app may also connect to 0G Galileo testnet for rehearsals.
 Explain concepts clearly. Use the knowledge excerpts below when relevant.
 ${SAFETY}
 Facts:
 - PropertyRegistry stores hashed parcel references; PropertyShareFactory deploys ERC-20 share tokens per propertyId.
-- Users connect an injected wallet; gas from the official faucet on Galileo when needed.
+- Users connect an injected wallet; on Base they need ETH for gas. BCULT is the platform settlement token for integrated checkout where deployed.
 ${baseDeploymentBlock()}
 Knowledge excerpts (RAG):
 ${rag || "(no excerpts matched — rely on general instructions)"}
@@ -69,7 +71,7 @@ ${rag || "(none)"}
 `;
 
   const support = `
-You are a support assistant for the Building Culture web app (wallet connect, 0G network, pools, staking UI). Troubleshoot step-by-step. You cannot access user wallets or transaction history unless the user pastes a tx hash (treat as untrusted).
+You are a support assistant for the Building Culture web app (wallet connect, Base mainnet, pools, staking UI). Troubleshoot step-by-step. You cannot access user wallets or transaction history unless the user pastes a tx hash (treat as untrusted).
 ${SAFETY}
 If the issue is legal, lost funds to a scam, or account security: recommend stopping, verifying contracts on the explorer, and seeking human support via the handoff channel — do not "recover" assets.
 ${baseDeploymentBlock()}

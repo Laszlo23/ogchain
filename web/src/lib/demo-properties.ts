@@ -4,6 +4,7 @@
  * Long-form narrative is aligned with ST-IMMO / BuildingCulture partner briefs (`st-immo-buildings.ts`).
  */
 import { BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
+import { demoWholeTokenSupply } from "@/lib/demo-investment-math";
 import type { PublicDocumentId } from "@/lib/public-documents";
 import { IMMERSIVE_PROJECT_FRAMES } from "@/lib/property-geo";
 import { getStImmoBuildingForDemoPropertyId } from "@/lib/st-immo-buildings";
@@ -84,7 +85,36 @@ export type DemoPropertyDetail = {
   greenPrint?: string[];
   /** Third-party brokerage / data-room text — verify independently; not an offer by Building Culture */
   brokerOrDataRoomNotice?: string;
+  /** One emotional line under the hero title (place-first hook). */
+  emotionalHero?: string;
+  /** Building / architecture / history — investor-facing story (section “Building story”). */
+  buildingStory?: string;
+  /** Who owns what off-chain; what the token represents; issuer — bullet list. */
+  assetStructureBullets?: string[];
+  /** Investor economics: distributions, governance hooks, transfer rules — bullets. */
+  investorRightsBullets?: string[];
+  /** Exit paths — illustrative; not guaranteed (secondary, refinance, sale). */
+  exitOptionsBullets?: string[];
+  /** Optional trust row overrides next to the invest column. */
+  trustStrip?: {
+    issuerDisplayName?: string;
+    jurisdictionLine?: string;
+    custodyLine?: string;
+  };
+  /** Simulator presets currency (defaults to USD-style labels if unset). */
+  simulatorCurrency?: "EUR" | "USD";
+  /** Invest page: liquidity / lock / buyback framing — illustrative; issuer terms override. */
+  liquidityRulesBullets?: string[];
 };
+
+/** Reference price per whole-token unit using demo cap math (same currency basis as `illustrativePropertyValueUsd`). */
+export function getReferencePricePerShareUnits(d: DemoPropertyDetail): number | null {
+  const v = d.illustrativePropertyValueUsd;
+  if (v == null || v <= 0) return null;
+  const cap = demoWholeTokenSupply(v);
+  if (cap <= 0) return null;
+  return v / cap;
+}
 
 /** Gross yield % from illustrative income and asset value. */
 export function getEstimatedYieldPercent(d: DemoPropertyDetail): number {
@@ -145,6 +175,37 @@ const st7 = getStImmoBuildingForDemoPropertyId(7)!;
 /** Shared reference: property #2 and #4 in the demo seed both map to Jagdschlossgasse 81 (Hietzing VKP was a duplicate slot). */
 const DEMO_JAGDSCHLOSSGASSE_81: DemoPropertyDetail = {
   headline: "Building Culture City Jagdschlossgasse 81",
+  emotionalHero:
+    "Nine homes opposite the Werkbundsiedlung — new Viennese housing in conversation with modernist heritage.",
+  buildingStory:
+    "Cubist forms, generous glazing, and terraces face greenery on all sides. Heat pumps and solar anchor operating costs while the building courts tenants who value design and proximity to recreation.\n\nFigures in partner briefs are reference only — verify acquisition, rent roll, and SPV structure with the issuer.",
+  assetStructureBullets: [
+    "Title and debt live in issuer SPVs off-chain; tokens represent contractual economic exposure.",
+    "Share token transfers may be restricted — check ComplianceRegistry and offering terms.",
+    "Rent and capex flow through issuer-controlled accounts — waterfall in disclosure.",
+  ],
+  investorRightsBullets: [
+    "Cash-flow participation only when declared by the issuer — not a guaranteed coupon.",
+    "Governance follows issuer articles and any token-side hooks described in documents.",
+    "Liquidity via permitted secondary venues or OTC — pool depth varies.",
+  ],
+  exitOptionsBullets: [
+    "Secondary trading when pools exist and rules allow.",
+    "Potential asset sale or refinance — issuer-dependent and time-uncertain.",
+    "No mandatory redemption — align horizon with offering documents.",
+  ],
+  trustStrip: {
+    issuerDisplayName: "Issuer SPV (reference — verify offering)",
+    jurisdictionLine: "Austria — confirm prospectus / exemption path with counsel.",
+    custodyLine: "Building custody per land register excerpts in issuer data room.",
+  },
+  simulatorCurrency: "EUR",
+  liquidityRulesBullets: [
+    "Investment lock period — reference 30 days after purchase (verify issuer program).",
+    "Sell / buyback request cooldown — reference 7 days before buyback execution (if offered).",
+    "Buyback capacity — reference up to 15% of treasury processed per cycle (illustrative cap).",
+    "Secondary trading — when AMM pools exist and rules allow (depth varies).",
+  ],
   investorCardTitle: "Building Culture City Jagdschlossgasse 81",
   investorCardSubtitle: "Vienna — Residential opposite Werkbundsiedlung",
   whyItMatters:
@@ -185,11 +246,42 @@ const DEMO_JAGDSCHLOSSGASSE_81: DemoPropertyDetail = {
 export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> = {
   1: {
     headline: "Building Culture City Berggasse",
+    emotionalHero:
+      "A 19th-century Viennese ensemble in the Servitenviertel — opening stewardship of heritage to a global community.",
+    buildingStory:
+      "Berggasse sits where Gründerzeit fabric meets everyday Vienna: courtyards, rooflines, and rental homes woven into the 9th district. The bundle combines the landmark Berggasse position with reference satellite holdings — partner economics are summarized under Financial breakdown; reconcile every figure with issuer filings before committing capital.\n\nArchitecture here is not a render: it is continuity with the city — daylight, proportion, and long renewal horizons that match patient capital.",
+    assetStructureBullets: [
+      "Legal title to land and buildings sits with issuer SPVs and registered owners off-chain — not automatic on-chain title.",
+      "The ERC-20 share token represents a programmed economic interest under issuer disclosure — not a direct land registry claim for the wallet.",
+      "Issuance, compliance gating, and distributions follow the issuer’s offering documents and ComplianceRegistry rules on this chain.",
+    ],
+    investorRightsBullets: [
+      "Economic participation per issuer waterfall — typically pro-rata to tokens for declared distributions (verify SPV docs).",
+      "Governance hooks depend on issuer design; on-chain admin roles are protocol-side — not a shareholder vote by default.",
+      "Transfers may be restricted for regulated offerings; secondary liquidity requires pools and permitted venues.",
+    ],
+    exitOptionsBullets: [
+      "Secondary: swap or OTC when ComplianceRegistry and liquidity allow — see Trade after you hold shares.",
+      "Issuer-led events: potential refinance or portfolio sale — timelines and gates are disclosure-specific (not guaranteed).",
+      "No guaranteed buy-back — treat tokens as long-duration exposure unless issuer terms say otherwise.",
+    ],
+    trustStrip: {
+      issuerDisplayName: "Issuer SPV (reference — verify in offering docs)",
+      jurisdictionLine: "Austria / EU offering context — confirm with counsel.",
+      custodyLine: "Land/building custody: Austrian land register + issuer structure — verify cadastre excerpts in data room.",
+    },
+    simulatorCurrency: "EUR",
+    liquidityRulesBullets: [
+      "Investment lock period — reference 30 days after purchase (verify issuer program).",
+      "Sell / buyback request cooldown — reference 7 days before buyback execution (if offered).",
+      "Buyback capacity — reference up to 15% of treasury processed per cycle (illustrative cap).",
+      "Secondary trading — when AMM pools exist and rules allow (depth varies).",
+    ],
     investorCardTitle: "Building Culture City Berggasse",
     investorCardSubtitle: "Vienna IX — Historic residential property",
     whyItMattersTitle: "Why Berggasse matters",
     whyItMatters:
-      "Located in Vienna's historic 9th district (Servitenviertel), Berggasse represents the typology of late 19th-century European residential architecture — Gründerzeit scale, courtyard life, and continuity with the city's urban fabric.\n\nThrough Building Culture, the property becomes a shared cultural asset: heritage preservation aligned with long-term community investment.\n\nInvestors do not only participate in yield. They join the stewardship of architectural culture — transparent rules, fractional access, and a narrative grounded in place.",
+      "Located in Vienna's historic 9th district (Servitenviertel), Berggasse represents the typology of late 19th-century European residential architecture — Gründerzeit scale, courtyard life, and continuity with the city's urban fabric.\n\nThrough Building Culture, the property becomes a shared cultural asset: heritage preservation aligned with long-term community investment.\n\nInvestors participate in yield and in the stewardship of architectural culture — transparent rules, fractional access, and a narrative grounded in place.",
     unitCountLabel: "7 apartments",
     location: "Vienna · Multi-asset bundle (incl. one house abroad)",
     imageSrc: "/partners/01berggasse.jpeg",

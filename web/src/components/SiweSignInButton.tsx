@@ -5,6 +5,7 @@ import { useAccount, useChainId, useSignMessage } from "wagmi";
 import { createSiweMessage } from "viem/siwe";
 import type { SiweVerifyResponse } from "@/lib/siwe-verify-types";
 import { SessionSetupBanner } from "@/components/SessionSetupBanner";
+import { SIWE_DEFAULT_CHAIN_ID } from "@/lib/siwe-chain";
 
 const FALLBACK_SITE_ORIGIN =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://buildingculture.capital";
@@ -39,7 +40,7 @@ export function SiweSignInButton({ onSuccess, onVerify, className, label = "Sign
     if (!nonce) return;
     const message = createSiweMessage({
       address,
-      chainId: chainId || 16602,
+      chainId: chainId || SIWE_DEFAULT_CHAIN_ID,
       domain: typeof window !== "undefined" ? window.location.host : FALLBACK_SITE_HOST,
       nonce,
       uri: typeof window !== "undefined" ? window.location.origin : FALLBACK_SITE_ORIGIN,

@@ -21,7 +21,7 @@ const connectors = [
 ];
 
 export const wagmiConfig = createConfig({
-  chains: [ogGalileo, base],
+  chains: [base, ogGalileo],
   connectors,
   ssr: true,
   transports: {

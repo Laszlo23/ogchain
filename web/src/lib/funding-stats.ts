@@ -81,3 +81,42 @@ export function getFoundingInvestorSlotsRemaining(): { remaining: number; total:
     total: FOUNDING_TOTAL_SLOTS,
   };
 }
+
+const REGION_SLOTS = [
+  { code: "AT", city: "Vienna" },
+  { code: "DE", city: "Berlin" },
+  { code: "US", city: "New York" },
+  { code: "JP", city: "Tokyo" },
+  { code: "SG", city: "Singapore" },
+  { code: "GB", city: "London" },
+  { code: "FR", city: "Paris" },
+  { code: "CH", city: "Zurich" },
+] as const;
+
+function flagEmoji(alpha2: string): string {
+  if (alpha2.length !== 2) return "🌍";
+  const u = alpha2.toUpperCase();
+  return Array.from(u)
+    .map((c) => String.fromCodePoint(127397 + c.charCodeAt(0)))
+    .join("");
+}
+
+export type DemoInvestorRegion = { flag: string; city: string; countryCode: string };
+
+/** Illustrative participation regions — deterministic from property id; not geo analytics. */
+export function getDemoInvestorRegions(propertyId: bigint): DemoInvestorRegion[] {
+  const h = hashSeed(propertyId);
+  const picks: DemoInvestorRegion[] = [];
+  const used = new Set<number>();
+  let i = 0;
+  while (picks.length < 5 && i < 40) {
+    const idx = (h + i * 17) % REGION_SLOTS.length;
+    if (!used.has(idx)) {
+      used.add(idx);
+      const r = REGION_SLOTS[idx];
+      picks.push({ flag: flagEmoji(r.code), city: r.city, countryCode: r.code });
+    }
+    i += 1;
+  }
+  return picks;
+}

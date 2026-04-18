@@ -27,6 +27,8 @@ def emit_lines(data: dict) -> list[str]:
     explorer = (data.get("explorer") or "").rstrip("/")
 
     if chain_id == 8453:
+        platform = c.get("PlatformSettlementToken", zero)
+        escrow20 = c.get("PurchaseEscrowERC20", zero)
         lines = [
             f"NEXT_PUBLIC_BASE_RPC={rpc}",
             f"NEXT_PUBLIC_BASE_EXPLORER={explorer}",
@@ -39,6 +41,8 @@ def emit_lines(data: dict) -> list[str]:
             f"NEXT_PUBLIC_BASE_PREDICTION_MARKET={c['BinaryPredictionMarket']}",
             f"NEXT_PUBLIC_BASE_PROOF_NFT={proof}",
             f"NEXT_PUBLIC_BASE_STAKING={staking}",
+            f"NEXT_PUBLIC_BASE_PLATFORM_TOKEN={platform}",
+            f"NEXT_PUBLIC_BASE_PURCHASE_ESCROW_ERC20={escrow20}",
         ]
     else:
         lines = [

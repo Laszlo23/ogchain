@@ -4,7 +4,8 @@ import { InvestorJourney } from "@/components/InvestorJourney";
 
 export const metadata: Metadata = {
   title: "How it works — Building Culture",
-  description: "Connect, verify, fund with OG, and buy fractional property shares on 0G.",
+  description:
+    "Connect, verify, fund with ETH/USDC on Base (or test assets on 0G), and buy fractional property shares.",
 };
 
 export default function HowItWorksPage() {
@@ -29,8 +30,9 @@ export default function HowItWorksPage() {
         <h2 className="text-lg font-semibold text-white">What you own</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           Each property can have an ERC-20 <strong className="text-zinc-300">share token</strong> representing a
-          fractional economic interest as defined by the issuer&apos;s legal structure — not automatic land title. On
-          0G, numbers and metadata are <strong className="text-zinc-300">reference</strong> unless you verify issuer filings.
+          fractional economic interest as defined by the issuer&apos;s legal structure — not automatic land title. On-chain
+          numbers and metadata are <strong className="text-zinc-300">reference</strong> until you reconcile them with issuer
+          filings and disclosures.
         </p>
       </section>
 
@@ -40,7 +42,7 @@ export default function HowItWorksPage() {
           In the seeded listing model, <strong className="text-zinc-300">one whole share</strong> (1.0 token) lines up with about{" "}
           <strong className="text-zinc-300">$1,000</strong> notional at seed time. Issuers can offer{" "}
           <strong className="text-zinc-300">primary</strong> sales that only sell whole shares (minimum one), at a
-          price they set in native OG. On the{" "}
+          price they set in the configured settlement asset (e.g. USDC on Base). On the{" "}
           <Link href="/trade" className="text-brand hover:underline">
             Trade
           </Link>{" "}
@@ -53,7 +55,7 @@ export default function HowItWorksPage() {
       <section className="glass-card p-6 sm:p-8">
         <h2 className="text-lg font-semibold text-white">Liquidity &amp; trading</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          When a pool exists, you can swap OG for shares on the{" "}
+          When a pool exists, you can swap against the paired asset for shares on the{" "}
           <Link href="/trade" className="text-brand hover:underline">
             Trade
           </Link>{" "}

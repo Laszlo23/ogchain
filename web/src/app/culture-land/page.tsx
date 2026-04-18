@@ -44,8 +44,8 @@ export default function CultureLandPage() {
         <div className="mx-auto max-w-2xl space-y-3 text-sm leading-relaxed text-zinc-500">
           <p>
             This page gathers partner and investor materials in English. Figures are reference unless stated otherwise in
-            your offering documents. On-chain listings in the app are live on 0G — reconcile with explorer data and issuer
-            filings before any commitment.
+            your offering documents. On-chain listings default to Base when configured — reconcile with explorer data and
+            issuer filings before any commitment.
           </p>
           {CULTURE_LAND_CHAIN_MANIFESTO.map((line) => (
             <p key={line} className="text-zinc-400">

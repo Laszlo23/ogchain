@@ -11,8 +11,9 @@ import { FundingMeter } from "@/components/FundingMeter";
 import { TrustSection } from "@/components/TrustSection";
 import { erc20Abi } from "@/lib/contracts";
 import { areListingsConfigured, getListingsChainId } from "@/lib/listings-config";
+import { nativeCurrencySymbol } from "@/lib/native-currency-label";
 import { useListingsProtocolAddresses } from "@/lib/use-listings-protocol-addresses";
-import { demoAvailableShares } from "@/lib/demo-investment-math";
+import { demoAvailableShares, demoWholeTokenSupply } from "@/lib/demo-investment-math";
 import { PropertyImageCarousel } from "@/components/PropertyImageCarousel";
 import { PropertyShareButton } from "@/components/PropertyShareButton";
 import {
@@ -24,10 +25,13 @@ import {
   formatSquareMeters,
   getDemoImageSlides,
   getEstimatedYieldPercent,
+  getReferencePricePerShareUnits,
 } from "@/lib/demo-properties";
 import { getFundingStats } from "@/lib/funding-stats";
 import { getPublicDocumentById, getPublicDocumentPreviewPaths, publicDocumentHref } from "@/lib/public-documents";
 import { PropertyInvestmentCalculator } from "@/components/PropertyInvestmentCalculator";
+import { PropertyDealRoomStrip } from "@/components/PropertyDealRoomStrip";
+import { PropertyInvestTrustStrip } from "@/components/PropertyInvestTrustStrip";
 import { PropertyLocationMap } from "@/components/PropertyLocationMap";
 import { getPropertyGeoById } from "@/lib/property-geo";
 import { usePropertyShareList } from "@/lib/usePropertyShareList";
@@ -46,6 +50,7 @@ export default function PropertyDetailPage() {
   const { proofNft, explorer: explorerBase } = useListingsProtocolAddresses();
   const unset = !areListingsConfigured();
   const listingsChainId = getListingsChainId();
+  const listingsNative = nativeCurrencySymbol(listingsChainId);
 
   const { chainRows, loading } = usePropertyShareList();
   const row = chainRows.find((r) => r.id === propertyId);
@@ -83,10 +88,11 @@ export default function PropertyDetailPage() {
   if (unset) {
     return (
       <p className="text-zinc-400">
-        Set registry and share factory for your chain: on 0G, <code className="text-gold-400">NEXT_PUBLIC_REGISTRY</code> and{" "}
-        <code className="text-gold-400">NEXT_PUBLIC_SHARE_FACTORY</code>; on Base, <code className="text-gold-400">NEXT_PUBLIC_BASE_REGISTRY</code> and{" "}
-        <code className="text-gold-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code> in <code className="text-zinc-300">web/.env.local</code> or repo-root <code className="text-zinc-300">.env</code>{" "}
-        for Docker builds (see <code className="text-zinc-300">.env.docker.example</code>).
+        Set registry and share factory in <code className="text-zinc-300">web/.env.local</code> (or repo-root <code className="text-zinc-300">.env</code> for Docker): on{" "}
+        <strong className="text-zinc-300">Base</strong>, <code className="text-gold-400">NEXT_PUBLIC_BASE_REGISTRY</code> and{" "}
+        <code className="text-gold-400">NEXT_PUBLIC_BASE_SHARE_FACTORY</code>; on <strong className="text-zinc-300">0G testnet</strong>,{" "}
+        <code className="text-gold-400">NEXT_PUBLIC_REGISTRY</code> and <code className="text-gold-400">NEXT_PUBLIC_SHARE_FACTORY</code> (see{" "}
+        <code className="text-zinc-300">.env.docker.example</code>).
       </p>
     );
   }
@@ -116,6 +122,17 @@ export default function PropertyDetailPage() {
   const propertyGeo = getPropertyGeoById(Number(idStr));
   const assetValue =
     demo?.illustrativePropertyValueUsd != null ? formatPropertyValueEur(demo) : "—";
+  const modelTokenCap = demo && demo.illustrativePropertyValueUsd != null ? demoWholeTokenSupply(goalUsd) : null;
+  const refPricePerShareUnits = demo ? getReferencePricePerShareUnits(demo) : null;
+  const simCurrency = demo?.simulatorCurrency ?? "USD";
+  const refPriceFormatted =
+    refPricePerShareUnits != null
+      ? new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: simCurrency === "EUR" ? "EUR" : "USD",
+          maximumFractionDigits: refPricePerShareUnits < 100 ? 2 : 0,
+        }).format(refPricePerShareUnits)
+      : "—";
 
   const tabBtn = (id: typeof tab, label: string) => (
     <button
@@ -158,6 +175,11 @@ export default function PropertyDetailPage() {
                   {demo.investorCardTitle ?? demo.headline ?? row.name}
                 </h1>
                 <p className="mt-2 text-sm text-zinc-300">{demo.investorCardSubtitle ?? demo.location ?? row.symbol}</p>
+                {demo.emotionalHero ? (
+                  <p className="mt-4 max-w-2xl text-base font-medium leading-relaxed text-white/95 sm:text-lg">
+                    {demo.emotionalHero}
+                  </p>
+                ) : null}
                 {demo.investorCardTitle && demo.headline !== demo.investorCardTitle ? (
                   <p className="mt-1 text-xs text-zinc-500">{demo.headline}</p>
                 ) : null}
@@ -172,18 +194,193 @@ export default function PropertyDetailPage() {
         </div>
       </div>
 
-      {demo?.whyItMatters && (
-        <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
-          <h2 className="text-lg font-semibold text-white">
-            {demo.whyItMattersTitle ?? "Why this building matters"}
-          </h2>
+      {demo ? (
+        <nav
+          aria-label="Property journey"
+          className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 text-[11px] font-medium uppercase tracking-[0.12em] text-zinc-400 sm:gap-3"
+        >
+          <span className="w-full text-[10px] font-normal tracking-wide text-zinc-500 sm:w-auto">Journey</span>
+          {(
+            [
+              ["#story", "Discover"],
+              ["#structure", "Structure"],
+              ["#financials", "Economics"],
+              ["#rights", "Rights"],
+              ["#exit", "Exit"],
+              ["#community", "Community"],
+              ["#invest", "Invest"],
+            ] as const
+          ).map(([href, label]) => (
+            <a key={href} href={href} className="rounded-full border border-white/[0.06] px-3 py-1 text-zinc-300 transition hover:border-brand/40 hover:text-white">
+              {label}
+            </a>
+          ))}
+        </nav>
+      ) : null}
+
+      {demo ? <PropertyDealRoomStrip propertyIdStr={idStr} /> : null}
+
+      {(demo?.buildingStory || demo?.whyItMatters) && (
+        <section id="story" className="scroll-mt-28 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">{demo!.buildingStory ? "Building story" : demo!.whyItMattersTitle ?? "Why this building matters"}</h2>
           <div className="mt-4 space-y-4 text-sm leading-relaxed text-muted">
-            {demo.whyItMatters.split("\n\n").map((para, i) => (
+            {(demo!.buildingStory ?? demo!.whyItMatters)!.split("\n\n").map((para, i) => (
               <p key={i}>{para}</p>
             ))}
           </div>
         </section>
       )}
+
+      {demo && ((demo.assetStructureBullets?.length ?? 0) > 0 || demo.ownershipModel) ? (
+        <section id="structure" className="scroll-mt-28 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">Asset structure</h2>
+          <p className="mt-1 text-xs text-muted">Reference-only — custody and issuer mechanics follow offering documents.</p>
+          {demo.assetStructureBullets && demo.assetStructureBullets.length > 0 ? (
+            <ul className="mt-4 list-inside list-disc space-y-2 text-sm leading-relaxed text-muted">
+              {demo.assetStructureBullets.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          ) : demo.ownershipModel ? (
+            <p className="mt-4 text-sm leading-relaxed text-muted">{demo.ownershipModel}</p>
+          ) : null}
+          <p className="mt-4 text-xs text-muted">
+            PDFs and plans appear under <span className="text-zinc-400">Architecture &amp; plans</span> or the Documents tab.
+          </p>
+        </section>
+      ) : null}
+
+      {demo ? (
+        <section id="financials" className="scroll-mt-28 space-y-6 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+          <div>
+            <h2 className="text-lg font-semibold text-white">Financial breakdown (reference)</h2>
+            <p className="mt-1 text-xs text-muted">
+              Illustrative economics for discovery — not an offer. {REFERENCE_YIELD_DISCLAIMER}
+            </p>
+            <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Property value (ref.)</dt>
+                <dd className="mt-1 font-mono text-sm text-white">{assetValue}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Annual gross rent (ref.)</dt>
+                <dd className="mt-1 font-mono text-sm text-white">{formatAnnualRentEur(demo.annualRentalIncomeEur)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Modelled gross yield (illustrative)</dt>
+                <dd className="mt-1 font-mono text-sm text-brand">{getEstimatedYieldPercent(demo).toFixed(1)}% p.a.</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Token supply cap (model)</dt>
+                <dd className="mt-1 font-mono text-sm text-white">{modelTokenCap != null ? modelTokenCap.toLocaleString("en-US") : "—"} shares</dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="text-xs uppercase tracking-wide text-muted">Reference price per token ({simCurrency})</dt>
+                <dd className="mt-1 font-mono text-sm text-white">{refPriceFormatted}</dd>
+                <p className="mt-2 text-[10px] text-muted">Derived from reference asset value ÷ model cap — same basis as the simulator.</p>
+              </div>
+            </dl>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-4">
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Property value</p>
+              <p className="mt-1 font-mono text-lg text-white">{assetValue}</p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-4">
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Per-token ref. ({simCurrency})</p>
+              <p className="mt-1 font-mono text-lg text-white">{refPriceFormatted}</p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-4">
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Reference yield (illustrative)</p>
+              <p className="mt-1 text-lg font-semibold text-brand">{REFERENCE_YIELD_BAND_LABEL} p.a.</p>
+              <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
+              <p className="mt-2 text-[11px] text-muted">
+                Modelled gross: <span className="font-mono text-white">{getEstimatedYieldPercent(demo).toFixed(1)}%</span>
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-4">
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Live supply (chain)</p>
+              <p className="mt-1 font-mono text-lg text-white">{totalSupplyStr}</p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-4">
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Tokens remaining (model)</p>
+              <p className="mt-1 font-mono text-lg text-white">{remainingShares}</p>
+            </div>
+          </div>
+
+          <FundingMeter stats={funding} label="Funding progress (reference)" currency={fundingCurrency} />
+        </section>
+      ) : null}
+
+      {demo?.investorRightsBullets && demo.investorRightsBullets.length > 0 ? (
+        <section id="rights" className="scroll-mt-28 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">Investor rights &amp; economics</h2>
+          <p className="mt-1 text-xs text-muted">
+            Summary only — see{" "}
+            <Link href="/legal" className="text-brand hover:underline">
+              Legal &amp; risks
+            </Link>{" "}
+            and issuer documents.
+          </p>
+          <ul className="mt-4 list-inside list-disc space-y-2 text-sm leading-relaxed text-muted">
+            {demo.investorRightsBullets.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {demo?.exitOptionsBullets && demo.exitOptionsBullets.length > 0 ? (
+        <section id="exit" className="scroll-mt-28 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">Exit &amp; liquidity (illustrative)</h2>
+          <p className="mt-1 text-xs text-muted">Not a promise of liquidity, timing, or price — paths depend on issuer terms and markets.</p>
+          <ul className="mt-4 list-inside list-disc space-y-2 text-sm leading-relaxed text-muted">
+            {demo.exitOptionsBullets.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {demo ? (
+        <section id="community" className="scroll-mt-28 rounded-2xl border border-brand/20 bg-brand/[0.06] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-white">Community &amp; round context</h2>
+          <p className="mt-2 text-sm text-muted">
+            Reference campaign stats for orientation — not live TVL or weekly volume. Use them alongside issuer disclosure.
+          </p>
+          <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div>
+              <dt className="text-xs uppercase tracking-wide text-muted">Round progress (reference)</dt>
+              <dd className="mt-1 font-mono text-sm text-white">{Math.round(funding.progress * 100)}%</dd>
+            </div>
+            <div>
+              <dt className="text-xs uppercase tracking-wide text-muted">Investors (round model)</dt>
+              <dd className="mt-1 font-mono text-sm text-white">{funding.investors.toLocaleString()}</dd>
+            </div>
+            <div>
+              <dt className="text-xs uppercase tracking-wide text-muted">Share price ref.</dt>
+              <dd className="mt-1 font-mono text-sm text-white">{sharePrice}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-xs uppercase tracking-wide text-muted">Reference yield band</dt>
+              <dd className="mt-1 font-mono text-sm text-brand">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
+              <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
+            </div>
+          </dl>
+          {demo.communityUsers && demo.communityUsers.length > 0 ? (
+            <div className="mt-6 border-t border-white/[0.08] pt-6">
+              <p className="text-sm font-medium text-white">Who uses this place</p>
+              <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-muted">
+                {demo.communityUsers.map((u) => (
+                  <li key={u}>{u}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {demo.fundingRoundNote ? <p className="mt-4 text-xs text-muted">{demo.fundingRoundNote}</p> : null}
+        </section>
+      ) : null}
 
       {demo?.greenPrint && demo.greenPrint.length > 0 ? (
         <section className="rounded-2xl border border-eco/20 bg-eco/[0.06] p-6 sm:p-8">
@@ -213,21 +410,19 @@ export default function PropertyDetailPage() {
 
       <ComplianceStatus />
 
-      {demo && (demo.vision || demo.architectureNarrative || demo.communityUsers || demo.ownershipModel) && (
+      {demo && (demo.vision || demo.architectureNarrative || (demo.documentIds && demo.documentIds.length > 0)) ? (
         <div className="space-y-6">
-          {demo.vision && (
+          {demo.vision ? (
             <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
               <h2 className="text-lg font-semibold text-white">Vision</h2>
               <p className="mt-3 text-sm leading-relaxed text-muted">{demo.vision}</p>
             </section>
-          )}
+          ) : null}
           {(demo.architectureNarrative || (demo.documentIds && demo.documentIds.length > 0)) && (
             <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
               <h2 className="text-lg font-semibold text-white">Architecture &amp; plans</h2>
-              {demo.architectureNarrative && (
-                <p className="mt-3 text-sm leading-relaxed text-muted">{demo.architectureNarrative}</p>
-              )}
-              {demo.documentIds && demo.documentIds.length > 0 && (
+              {demo.architectureNarrative ? <p className="mt-3 text-sm leading-relaxed text-muted">{demo.architectureNarrative}</p> : null}
+              {demo.documentIds && demo.documentIds.length > 0 ? (
                 <ul className="mt-4 space-y-2">
                   {demo.documentIds.map((docId) => {
                     const doc = getPublicDocumentById(docId);
@@ -266,91 +461,12 @@ export default function PropertyDetailPage() {
                     );
                   })}
                 </ul>
-              )}
+              ) : null}
               <p className="mt-3 text-xs text-muted">Plans are reference documents — not a title report.</p>
             </section>
           )}
-          {demo.communityUsers && demo.communityUsers.length > 0 && (
-            <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
-              <h2 className="text-lg font-semibold text-white">Community</h2>
-              <p className="mt-2 text-sm text-muted">Who uses this place:</p>
-              <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-muted">
-                {demo.communityUsers.map((u) => (
-                  <li key={u}>{u}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-          {demo.ownershipModel && (
-            <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">
-              <h2 className="text-lg font-semibold text-white">Ownership model</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{demo.ownershipModel}</p>
-            </section>
-          )}
-          <section className="rounded-2xl border border-brand/20 bg-brand/[0.06] p-6 sm:p-8">
-            <h2 className="text-lg font-semibold text-white">Funding round (reference)</h2>
-            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Progress</dt>
-                <dd className="mt-1 font-mono text-sm text-white">{Math.round(funding.progress * 100)}%</dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Investors (round)</dt>
-                <dd className="mt-1 font-mono text-sm text-white">{funding.investors.toLocaleString()}</dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Share price ref.</dt>
-                <dd className="mt-1 font-mono text-sm text-white">{sharePrice}</dd>
-              </div>
-              <div className="sm:col-span-2">
-                <dt className="text-xs uppercase tracking-wide text-muted">Reference yield (illustrative)</dt>
-                <dd className="mt-1 font-mono text-sm text-brand">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
-                <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
-                {demo ? (
-                  <p className="mt-2 text-[11px] text-muted">
-                    Modelled gross from reference rent ÷ value:{" "}
-                    <span className="font-mono text-white">{getEstimatedYieldPercent(demo).toFixed(1)}%</span>
-                  </p>
-                ) : null}
-              </div>
-            </dl>
-            {demo.fundingRoundNote && <p className="mt-4 text-xs text-muted">{demo.fundingRoundNote}</p>}
-            <p className="mt-2 text-xs text-muted">Figures are reference economics — not live on-chain TVL.</p>
-          </section>
         </div>
-      )}
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Property value</p>
-          <p className="mt-1 font-mono text-lg text-white">{assetValue}</p>
-        </div>
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Token price</p>
-          <p className="mt-1 font-mono text-lg text-white">{sharePrice}</p>
-        </div>
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Reference yield (illustrative)</p>
-          <p className="mt-1 text-lg font-semibold text-brand">{REFERENCE_YIELD_BAND_LABEL} p.a.</p>
-          <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
-          {demo ? (
-            <p className="mt-2 text-[11px] text-muted">
-              Modelled gross:{" "}
-              <span className="font-mono text-white">{getEstimatedYieldPercent(demo).toFixed(1)}%</span>
-            </p>
-          ) : null}
-        </div>
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Total tokens (supply)</p>
-          <p className="mt-1 font-mono text-lg text-white">{totalSupplyStr}</p>
-        </div>
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted">Tokens remaining (model)</p>
-          <p className="mt-1 font-mono text-lg text-white">{remainingShares}</p>
-        </div>
-      </div>
-
-      <FundingMeter stats={funding} label="Funding progress (reference)" currency={fundingCurrency} />
+      ) : null}
 
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
@@ -521,7 +637,7 @@ export default function PropertyDetailPage() {
                   <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand">Investor proof</p>
                   <h2 className="mt-2 text-lg font-semibold text-white">Certificate NFT</h2>
                   <p className="mt-2 text-sm text-muted">
-                    Mint a soulbound proof on the Trade page after you hold shares (live on 0G).
+                    Mint a soulbound proof on the Trade page after you hold shares (switch wallet to the listing chain).
                   </p>
                   <Link
                     href={`/trade?property=${idStr}`}
@@ -535,7 +651,9 @@ export default function PropertyDetailPage() {
           )}
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <PropertyInvestTrustStrip propertyId={propertyId} tokenAddress={row.tokenAddress} explorerBase={explorerBase} demo={demo} />
+
           <PropertyInvestmentCalculator
             propertyId={propertyId}
             demo={demo}
@@ -543,30 +661,34 @@ export default function PropertyDetailPage() {
             tradeHref={`/trade?property=${idStr}`}
           />
 
-          <div className="sticky top-24 space-y-4 rounded-2xl border border-brand/20 bg-surface-elevated/90 p-6 shadow-xl backdrop-blur-md">
+          <div className="space-y-4 rounded-2xl border border-brand/20 bg-surface-elevated/90 p-6 shadow-xl backdrop-blur-md">
             <div className="flex items-start justify-between gap-3">
-              <h2 className="text-sm font-medium uppercase tracking-wider text-muted">Invest</h2>
-              {demo && <PropertyShareButton propertyId={idStr} title={demo.headline} variant="compact" />}
+              <h2 className="text-sm font-medium uppercase tracking-wider text-muted">Next step</h2>
+              {demo ? <PropertyShareButton propertyId={idStr} title={demo.headline} variant="compact" /> : null}
             </div>
-            <p className="text-sm text-muted">Connect your wallet and swap OG for {row.symbol} on the AMM.</p>
-            <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-              <p className="text-[10px] uppercase tracking-wide text-muted">You pay</p>
-              <p className="mt-1 text-2xl font-semibold text-white">OG</p>
-              <p className="mt-3 text-[10px] uppercase tracking-wide text-muted">You receive (est.)</p>
-              <p className="text-sm text-brand">{row.symbol} shares</p>
-            </div>
-            <Link
-              href={`/trade?property=${idStr}`}
+            <p className="text-sm text-muted">
+              Review the <strong className="text-zinc-300">simulator</strong> and trust checks, then execute on Trade when ready. Primary USDC (if
+              configured) and secondary {listingsNative} pools live on the trade page.
+            </p>
+            <a
+              href="#invest"
               className="block w-full rounded-full bg-brand py-3 text-center text-sm font-semibold text-[#0A0A0A] transition hover:bg-brand-light"
             >
-              Connect wallet to invest
+              Review investment
+            </a>
+            <Link
+              href={`/invest?property=${idStr}`}
+              className="block w-full rounded-full border border-white/15 py-3 text-center text-sm font-semibold text-zinc-200 transition hover:border-brand/40 hover:text-white"
+            >
+              Open invest journey
             </Link>
             <Link
-              href={explorerToken}
-              target="_blank"
-              rel="noreferrer"
-              className="block text-center text-xs text-muted hover:text-brand"
+              href={`/trade?property=${idStr}`}
+              className="block w-full rounded-full border border-white/15 py-3 text-center text-sm font-semibold text-zinc-200 transition hover:border-brand/40 hover:text-white"
             >
+              Continue to Trade (advanced liquidity)
+            </Link>
+            <Link href={explorerToken} target="_blank" rel="noreferrer" className="block text-center text-xs text-muted hover:text-brand">
               View token on explorer →
             </Link>
           </div>

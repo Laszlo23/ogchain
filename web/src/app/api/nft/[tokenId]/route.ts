@@ -1,6 +1,7 @@
+import { base } from "viem/chains";
 import { createPublicClient, http } from "viem";
 import { ogGalileo } from "@/lib/chain";
-/** Proof NFT metadata is resolved on 0G via NEXT_PUBLIC_PROOF_NFT; a separate Base deployment would need its own metadata route or host. */
+import { baseAddresses } from "@/lib/base-addresses";
 import { addresses, proofNftAbi } from "@/lib/contracts";
 import { DEMO_PROPERTY_DETAILS } from "@/lib/demo-properties";
 
@@ -10,9 +11,12 @@ const zero = "0x0000000000000000000000000000000000000000" as const;
 
 export async function GET(_req: Request, { params }: { params: Promise<{ tokenId: string }> }) {
   const { tokenId } = await params;
-  const nft = addresses.proofNft;
+
+  const useBase = baseAddresses.proofNft !== zero;
+  const nft = useBase ? baseAddresses.proofNft : addresses.proofNft;
+
   if (nft === zero) {
-    return Response.json({ error: "NEXT_PUBLIC_PROOF_NFT not set" }, { status: 503 });
+    return Response.json({ error: "NEXT_PUBLIC_PROOF_NFT / NEXT_PUBLIC_BASE_PROOF_NFT not set" }, { status: 503 });
   }
 
   let id: bigint;
@@ -22,9 +26,14 @@ export async function GET(_req: Request, { params }: { params: Promise<{ tokenId
     return Response.json({ error: "invalid token id" }, { status: 400 });
   }
 
+  const chain = useBase ? base : ogGalileo;
+  const rpcUrl = useBase
+    ? process.env.NEXT_PUBLIC_BASE_RPC?.trim() || "https://mainnet.base.org"
+    : process.env.NEXT_PUBLIC_OG_RPC?.trim() || ogGalileo.rpcUrls.default.http[0];
+
   const client = createPublicClient({
-    chain: ogGalileo,
-    transport: http(ogGalileo.rpcUrls.default.http[0]),
+    chain,
+    transport: http(rpcUrl),
   });
 
   let propertyId: bigint;
@@ -43,14 +52,14 @@ export async function GET(_req: Request, { params }: { params: Promise<{ tokenId
   const demo = DEMO_PROPERTY_DETAILS[pid];
   const name = demo ? `${demo.headline} — certificate` : `Property #${pid} — certificate`;
   const image = demo?.imageSrc ?? "";
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
   return Response.json({
     name,
     description:
       demo?.thesis ??
-      "Soulbound certificate for an Og property share position. Reference metadata — not legal title.",
+      "Soulbound certificate for an on-chain property share position. Reference metadata — not legal title.",
     image,
-    external_url: base ? `${base}/properties` : undefined,
+    external_url: baseUrl ? `${baseUrl}/properties` : undefined,
   });
 }

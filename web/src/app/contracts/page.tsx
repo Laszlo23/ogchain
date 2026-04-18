@@ -4,7 +4,7 @@ import { ContractsPageClient } from "@/components/contracts/ContractsPageClient"
 
 export const metadata: Metadata = {
   title: "Contracts — Building Culture",
-  description: "Verify core protocol and property share token addresses on 0G Galileo and Base.",
+  description: "Verify core protocol and property share token addresses on Base mainnet (and optional 0G testnet).",
 };
 
 export default function ContractsPage() {
@@ -22,7 +22,7 @@ export default function ContractsPage() {
             Risks &amp; disclaimer
           </Link>
           {" · "}
-          Testnet demo — not an investment offering.
+          Verify deployments on-chain before sending funds — not an investment offering.
         </p>
       </header>
 

@@ -7,7 +7,7 @@ const steps = [
   {
     n: 1,
     title: "Connect wallet",
-    body: "Use a Web3 wallet on 0G (Galileo). Your address is your account — no separate signup.",
+    body: "Use a Web3 wallet on Base (production) or 0G testnet (rehearsal). Your address is your account — no separate signup.",
     cta: { href: "#wallet", label: "Connect below" },
   },
   {
@@ -18,8 +18,8 @@ const steps = [
   },
   {
     n: 3,
-    title: "Deposit OG tokens",
-    body: "Fund your wallet with OG from the faucet. Wrap to WETH when adding liquidity or follow the Buy flow with native OG.",
+    title: "Fund your wallet",
+    body: "On Base, hold ETH for gas and USDC (or the quoted settlement token) for purchases. On 0G testnet, use the OG faucet and wrap for pool flows when applicable.",
     cta: { href: "/guide", label: "Read the guide" },
   },
   {

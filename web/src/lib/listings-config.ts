@@ -3,20 +3,27 @@ import { isBaseConfigured } from "@/lib/base-addresses";
 import { ogGalileo } from "@/lib/chain";
 import { addresses } from "@/lib/contracts";
 
+/** Human label for the chain used by property listings (matches `getListingsChainId`). */
+export function getListingsChainDisplayName(chainId: number): string {
+  if (chainId === base.id) return "Base";
+  if (chainId === ogGalileo.id) return "0G Galileo (testnet)";
+  return `Chain ${chainId}`;
+}
+
 const zero = "0x0000000000000000000000000000000000000000" as const;
 
-/** True when OG (Galileo) registry + factory are non-zero in env. */
+/** True when 0G (Galileo) registry + factory are non-zero in env. */
 function isOgListingsConfigured(): boolean {
   return addresses.registry !== zero && addresses.shareFactory !== zero;
 }
 
 /**
  * Chain used for /properties listings and share-token reads.
- * Prefer 0G when both OG env vars are set; otherwise use Base when Base registry + factory are set.
+ * Prefer Base mainnet when registry + factory are configured; otherwise fall back to 0G Galileo.
  */
 export function getListingsChainId(): number {
-  if (isOgListingsConfigured()) return ogGalileo.id;
   if (isBaseConfigured()) return base.id;
+  if (isOgListingsConfigured()) return ogGalileo.id;
   return ogGalileo.id;
 }
 

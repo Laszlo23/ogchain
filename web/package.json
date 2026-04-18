@@ -24,6 +24,7 @@
     "wagmi": "^3.6.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.2",
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.59.1",
     "@types/node": "^20",

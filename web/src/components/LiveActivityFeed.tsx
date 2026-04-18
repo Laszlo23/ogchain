@@ -76,7 +76,11 @@ export function LiveActivityFeed({ variant = "list" }: Props) {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">Live activity</p>
         <p className="text-xs text-muted">Synthetic feed — not on-chain events</p>
       </div>
-      <ul className="max-h-52 space-y-0 divide-y divide-eco/10 overflow-y-auto text-sm">
+      <ul
+        className="max-h-52 space-y-0 divide-y divide-eco/10 overflow-y-auto text-sm outline-none focus-visible:ring-2 focus-visible:ring-eco/35"
+        tabIndex={0}
+        aria-label="Activity lines"
+      >
         {lines.map((line, i) => (
           <li
             key={`${line}-${i}`}

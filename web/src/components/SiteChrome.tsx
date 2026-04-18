@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { BetaWelcomeModal } from "@/components/BetaWelcomeModal";
 import { ChainSwitchBanner } from "@/components/ChainSwitchBanner";
 import { InAppBrowserBanner } from "@/components/InAppBrowserBanner";
 import { Footer } from "@/components/Footer";
@@ -24,6 +25,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <>
       <InAppBrowserBanner />
+      <BetaWelcomeModal />
       <Nav />
       <ChainSwitchBanner />
       <main className="relative mx-auto min-h-[60vh] w-full max-w-[1280px] px-4 py-8 sm:px-8">
