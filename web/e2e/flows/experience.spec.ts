@@ -1,7 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { skipHomeIntroRedirect } from "../helpers";
 
 test.describe("/experience interactions", () => {
   test("desktop: story panel and project controls visible", async ({ page }) => {
+    await skipHomeIntroRedirect(page);
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/experience");
     await expect(page.getByRole("region", { name: /Story details/i })).toBeVisible();
@@ -10,6 +12,7 @@ test.describe("/experience interactions", () => {
   });
 
   test("mobile: hero then open full story", async ({ page }) => {
+    await skipHomeIntroRedirect(page);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/experience");
     const details = page.getByRole("region", { name: "Story details" });
@@ -19,6 +22,7 @@ test.describe("/experience interactions", () => {
   });
 
   test("keyboard: ArrowDown advances beat", async ({ page }) => {
+    await skipHomeIntroRedirect(page);
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/experience");
     await page.getByRole("region", { name: /Immersive stories/i }).click();

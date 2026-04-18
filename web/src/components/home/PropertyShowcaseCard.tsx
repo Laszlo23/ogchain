@@ -71,12 +71,14 @@ export function PropertyShowcaseCard({ propertyId, demo }: Props) {
           </div>
           <div className="sm:col-span-2">
             <dt className="text-[11px] font-medium uppercase tracking-wide text-muted">Reference yield (illustrative)</dt>
-            <dd className="mt-1 font-mono text-lg font-semibold tabular-nums text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
-            <p className="mt-2 text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
-            <p className="mt-2 text-[11px] text-muted">
-              Modelled gross:{" "}
-              <span className="font-mono text-canvas">{yieldPct.toFixed(1)}%</span>
-            </p>
+            <dd className="mt-1 space-y-2">
+              <div className="font-mono text-lg font-semibold tabular-nums text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</div>
+              <p className="text-[10px] leading-snug text-muted">{REFERENCE_YIELD_DISCLAIMER}</p>
+              <p className="text-[11px] text-muted">
+                Modelled gross:{" "}
+                <span className="font-mono text-canvas">{yieldPct.toFixed(1)}%</span>
+              </p>
+            </dd>
           </div>
           <div>
             <dt className="text-[11px] font-medium uppercase tracking-wide text-muted">{unitsHeader}</dt>

@@ -43,7 +43,7 @@ const standardRoutes: { path: string; title?: RegExp }[] = [
 
 for (const { path, title } of standardRoutes) {
   test(`GET ${path} renders app shell`, async ({ page }) => {
-    if (path === "/") await skipHomeIntroRedirect(page);
+    await skipHomeIntroRedirect(page);
     await page.goto(path, { waitUntil: "domcontentloaded" });
     if (title) {
       await expect(page).toHaveTitle(title);
@@ -53,6 +53,7 @@ for (const { path, title } of standardRoutes) {
 }
 
 test("GET /experience renders immersive (no main)", async ({ page }) => {
+  await skipHomeIntroRedirect(page);
   await page.goto("/experience", { waitUntil: "domcontentloaded" });
   await expectImmersiveVisible(page);
 });
