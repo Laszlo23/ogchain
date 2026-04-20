@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { ImmersiveExperience } from "@/components/experience/ImmersiveExperience";
 
+/** Avoid stale CDN/HTML cache serving an old immersive shell after deploys. */
+export const dynamic = "force-dynamic";
+
 const ogImagePath = "/partners/Keutschach-am-See-1b-1.jpg";
 
 export const metadata: Metadata = {

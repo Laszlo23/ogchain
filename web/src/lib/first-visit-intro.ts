@@ -1,5 +1,5 @@
-/** localStorage key — first visit shows immersive intro before full homepage. */
-export const FIRST_VISIT_INTRO_STORAGE_KEY = "building-culture-intro-v1";
+/** localStorage key — first visit shows immersive intro before full homepage. Bump when intro content changes materially. */
+export const FIRST_VISIT_INTRO_STORAGE_KEY = "building-culture-intro-v2";
 
 export function markIntroSeen(): void {
   try {

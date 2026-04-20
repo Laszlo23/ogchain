@@ -66,6 +66,3 @@ export function getExperienceSlides(): ExperienceSlide[] {
 
 /** Re-export exclusion set for tests / tooling. */
 export { EXPERIENCE_EXCLUDED_DEMO_IDS };
-
-/** @deprecated Use `getExperienceSlides()` */
-export const EXPERIENCE_SLIDES: ExperienceSlide[] = getExperienceSlides();
