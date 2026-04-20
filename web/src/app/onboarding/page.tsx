@@ -1,31 +1,32 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useAccount, useConnect } from "wagmi";
 
 const steps = [
   {
     n: 1,
-    title: "Connect wallet",
-    body: "Use a Web3 wallet on Base mainnet. Your address is your account — no separate signup.",
+    title: "Create or connect your account (wallet)",
+    body: "Use a wallet app on Base — the network we deploy on. Your address is your account; there is no separate username unless you use a provider that adds one.",
     cta: { href: "#wallet", label: "Connect below" },
   },
   {
     n: 2,
-    title: "Verification (may be simplified early on)",
-    body: "Restricted share tokens use ComplianceRegistry on-chain. Early deployments may use a global bypass or manual verification — full provider KYC can be phased in per issuer.",
-    cta: { href: "/issuer", label: "Issuer console" },
+    title: "Verification when required",
+    body: "Some tokens are restricted. You may need to verify identity before you can hold or trade — your issuer or the app will prompt you when it applies.",
+    cta: { href: "/kyc", label: "Verification hub" },
   },
   {
     n: 3,
     title: "Fund your wallet",
-    body: "On Base, hold ETH for gas and USDC (or the quoted settlement token) for purchases and pool flows where configured.",
+    body: "Keep a little ETH on Base for fees, and USDC (or the token the listing quotes) for purchases and pool features where enabled.",
     cta: { href: "/guide", label: "Read the guide" },
   },
   {
     n: 4,
-    title: "Start investing",
-    body: "Pick a property, review the quote, and buy shares — or provide liquidity on the Pool page.",
+    title: "Pick a listing and invest",
+    body: "Open a property, read the documents, and follow the flow to buy — or use pool pages where configured.",
     cta: { href: "/properties", label: "Browse properties" },
   },
 ];
@@ -34,14 +35,24 @@ export default function OnboardingPage() {
   const { isConnected } = useAccount();
   const { connect, connectors, isPending } = useConnect();
   const done = isConnected ? 1 : 0;
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   return (
     <div className="mx-auto max-w-2xl space-y-10 pb-16">
       <header className="space-y-3 text-center">
+        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-eco-muted">
+          Prefer a gentler intro?{" "}
+          <Link href="/start" className="text-eco-light underline-offset-2 hover:underline">
+            Start here (plain English)
+          </Link>
+        </p>
         <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Get started</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          Four steps from zero to your first on-chain real estate position. Built for clarity — like onboarding a
-          premium fintech app.
+          Four steps from “new wallet” to exploring listings. New to the concepts? Use the short walkthrough at{" "}
+          <Link href="/start" className="text-eco-light underline-offset-2 hover:underline">
+            /start
+          </Link>{" "}
+          first.
         </p>
       </header>
 
@@ -58,8 +69,38 @@ export default function OnboardingPage() {
           />
         </div>
         <p className="mt-2 text-[11px] text-zinc-500">
-          Step 1 completes when your wallet is connected. Remaining steps depend on deployment settings.
+          Step 1 completes when your wallet is connected. Later steps depend on issuer rules and what you choose to do.
         </p>
+      </div>
+
+      <div className="glass-card border-white/10 p-0">
+        <button
+          type="button"
+          onClick={() => setAdvancedOpen((o) => !o)}
+          className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left text-sm font-medium text-zinc-300 transition hover:text-white"
+          aria-expanded={advancedOpen}
+        >
+          <span>Advanced (technical)</span>
+          <span className="text-zinc-500" aria-hidden>
+            {advancedOpen ? "−" : "+"}
+          </span>
+        </button>
+        {advancedOpen && (
+          <div className="space-y-3 border-t border-white/[0.06] px-5 pb-5 pt-2 text-xs leading-relaxed text-zinc-500">
+            <p>
+              Restricted share tokens may use an on-chain <span className="text-zinc-400">ComplianceRegistry</span>.
+              Tokens are typically ERC-20 on Base; liquidity and pricing may involve AMM or issuer-controlled flows — see
+              each listing and{" "}
+              <Link href="/how-it-works" className="text-eco-light underline-offset-2 hover:underline">
+                How it works
+              </Link>{" "}
+              for detail.
+            </p>
+            <p>
+              Issuer tools: <Link href="/issuer" className="text-eco-light underline-offset-2 hover:underline">Issuer console</Link>.
+            </p>
+          </div>
+        )}
       </div>
 
       <div id="wallet" className="space-y-4">
@@ -90,7 +131,7 @@ export default function OnboardingPage() {
             onClick={() => connect({ connector: connectors[0] })}
             className="rounded-full bg-gradient-to-r from-action to-action-light px-8 py-3 text-sm font-semibold text-[#0A0A0A] shadow-lg shadow-action/20 disabled:opacity-50"
           >
-            {isPending ? "Connecting…" : "Connect wallet"}
+            {isPending ? "Connecting…" : "Create or connect wallet"}
           </button>
         ) : (
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">

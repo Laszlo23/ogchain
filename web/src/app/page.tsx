@@ -26,6 +26,7 @@ import { HomeIntroRedirect } from "@/components/home/HomeIntroRedirect";
 import { FLAGSHIP_PROPERTY_ID } from "@/lib/flagship-campaign";
 import { CULTURE_LAND_CHAIN_MANIFESTO } from "@/lib/culture-land-portfolio";
 import { CultureLandImageStrip } from "@/components/home/CultureLandImageStrip";
+import { HomePageJsonLd } from "@/components/seo/HomePageJsonLd";
 
 /** Talent app domain verification — must appear on the homepage <head>. */
 export const metadata: Metadata = {
@@ -42,6 +43,7 @@ export default function Home() {
 
   return (
     <div className="relative -mx-4 -mt-8 overflow-hidden px-4 pt-8">
+      <HomePageJsonLd />
       <HomeIntroRedirect />
       <HeroBackground />
 
@@ -84,6 +86,12 @@ export default function Home() {
           </ButtonLink>
         </div>
         <p className="text-sm text-muted">
+          <Link href="/start" className="text-eco-light underline-offset-4 transition hover:text-canvas hover:underline">
+            New here? Start with a simple walkthrough
+          </Link>
+          <span className="mx-2 text-zinc-600" aria-hidden>
+            ·
+          </span>
           <Link href="/mission" className="text-eco-light underline-offset-4 transition hover:text-canvas hover:underline">
             Read the Vision
           </Link>

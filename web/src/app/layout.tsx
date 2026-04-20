@@ -4,8 +4,9 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { SiteChrome } from "@/components/SiteChrome";
 import { REFERENCE_YIELD_BAND_LABEL } from "@/lib/demo-properties";
+import { getSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://buildingculture.capital";
+const siteUrl = getSiteUrl();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,16 +26,34 @@ export const metadata: Metadata = {
   },
   title: "Building Culture — Cultural real estate on Base",
   description: `Community funding for coworking, cultural, and housing — tokenized shares on Base. Planning yield band ${REFERENCE_YIELD_BAND_LABEL} p.a. · issuer disclosures and Legal hub.`,
+  applicationName: "Building Culture",
+  referrer: "origin-when-cross-origin",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   openGraph: {
     title: "Building Culture — Cultural real estate on Base",
     description: `Community-owned cultural real estate on Base — ${REFERENCE_YIELD_BAND_LABEL} planning band · economics in issuer materials.`,
     type: "website",
     url: "/",
+    siteName: "Building Culture",
+    locale: "en_US",
+    images: [
+      {
+        url: "/properties/1/hero.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Building Culture — flagship cultural property listing",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Building Culture — Cultural real estate on Base",
     description: `Cultural real estate on Base — ${REFERENCE_YIELD_BAND_LABEL} planning band · Building Culture.`,
+    images: ["/properties/1/hero.jpg"],
   },
 };
 

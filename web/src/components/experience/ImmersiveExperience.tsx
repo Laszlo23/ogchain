@@ -711,6 +711,10 @@ export function ImmersiveExperience() {
           </button>
         </div>
         <p className="text-[10px] text-zinc-500">
+          <Link href="/start" className="hover:text-zinc-400">
+            Simple explanation
+          </Link>
+          <span className="mx-2 text-zinc-600">·</span>
           <Link href="/mission" className="hover:text-zinc-400">
             Mission
           </Link>

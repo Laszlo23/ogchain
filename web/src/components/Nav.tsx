@@ -41,9 +41,16 @@ const NavIcon = {
       <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   ),
+  startHere: (cls: string) => (
+    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+      <path d="M12 3l7.5 4.33v8.66L12 20l-7.5-4.33V7.33L12 3z" strokeLinejoin="round" />
+      <path d="M12 12l7.5-4.33M12 12v8M12 12L4.5 7.67" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 const primaryLinks: { href: string; label: string; hint: string; icon: (cls: string) => ReactNode }[] = [
+  { href: "/start", label: "Start here", hint: "Plain-English intro", icon: NavIcon.startHere },
   { href: "/properties", label: "Properties", hint: "Browse listings", icon: NavIcon.building },
   { href: "/culture-land", label: "Culture Land", hint: "Flagship portfolio", icon: NavIcon.cultureLand },
   { href: "/community", label: "Community", hint: "Updates, tasks, referrals", icon: NavIcon.community },

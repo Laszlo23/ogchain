@@ -42,7 +42,14 @@ export function HomeFinalCta() {
         )}
       </div>
       <p className="relative mt-6 text-[10px] text-muted">
-        Prefer a guided flow? <Link href="/onboarding" className="text-eco-light underline-offset-2 hover:underline">Onboarding</Link>
+        New here?{" "}
+        <Link href="/start" className="text-eco-light underline-offset-2 hover:underline">
+          Start with a simple walkthrough
+        </Link>{" "}
+        ·{" "}
+        <Link href="/onboarding" className="text-eco-light underline-offset-2 hover:underline">
+          Full onboarding
+        </Link>
       </p>
     </section>
   );
