@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { BuildingCultureCityPipelineProject } from "@/lib/culture-land-portfolio";
+import { pipelineNavLabel, type BuildingCultureCityPipelineProject } from "@/lib/culture-land-portfolio";
 
 const PLACEHOLDER_GRADIENT = [
   "linear-gradient(145deg, rgba(212,175,55,0.22) 0%, rgba(15,23,42,0.95) 42%, rgba(15,23,42,1) 100%)",
@@ -65,7 +65,7 @@ export function PipelineProjectsSection({
         />
         <div className="relative mx-auto max-w-3xl text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-action-light/95">
-            BuildingCultureCity · Partner pipeline
+            Partner acquisition pipeline
           </p>
           <h2
             id="bcc-pipeline-heading"
@@ -74,9 +74,9 @@ export function PipelineProjectsSection({
             Projects in acquisition
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-zinc-400 sm:text-[15px]">
-            Structured for broker and investor diligence: exploitation angle, indicative lettable area, and negotiated
-            economics. Treat every line item as conditional on legal review, zoning, tenancy schedule, and financing —
-            not a solicitation.
+            Vienna, Carinthia, and other tracks — structured for broker and investor diligence: exploitation angle,
+            indicative lettable area, and negotiated economics. Treat every line item as conditional on legal review,
+            zoning, tenancy schedule, and financing — not a solicitation.
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export function PipelineProjectsSection({
               href={`#${p.id}`}
               className="rounded-full border border-white/15 bg-black/25 px-3 py-1.5 text-[11px] font-medium text-zinc-300 transition hover:border-eco/40 hover:text-white"
             >
-              {p.title.replace(/^BuildingCultureCity — /i, "").trim()}
+              {pipelineNavLabel(p)}
             </a>
           ))}
         </nav>
@@ -135,6 +135,29 @@ export function PipelineProjectsSection({
                       </div>
                     ))}
                   </dl>
+                  {p.documents && p.documents.length > 0 && (
+                    <div className="mt-6 border-t border-white/[0.06] pt-5">
+                      <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">
+                        Plans & PDFs
+                      </h4>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {p.documents.map((doc) => (
+                          <a
+                            key={doc.href}
+                            href={doc.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-gold-500/25 bg-gold-500/[0.07] px-3 py-1.5 text-[11px] font-medium text-gold-100/95 transition hover:border-gold-400/45 hover:bg-gold-500/10"
+                          >
+                            <span aria-hidden className="text-[10px]">
+                              PDF
+                            </span>
+                            {doc.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </article>

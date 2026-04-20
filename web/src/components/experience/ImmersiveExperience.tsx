@@ -17,6 +17,7 @@ import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portf
 import {
   EUR_USD_TEASER,
   formatEurReferenceCompact,
+  formatLettableM2Compact,
   formatUsdTeaserApprox,
 } from "@/lib/experience-portfolio-totals";
 import { flagshipCampaign, FLAGSHIP_PROPERTY_ID } from "@/lib/flagship-campaign";
@@ -181,11 +182,13 @@ export function ImmersiveExperience() {
   const introTotals = slide.kind === "intro" ? slide.totals : null;
   const heroHeadline =
     slide.kind === "intro"
-      ? "Your tour starts at portfolio scale."
+      ? "A deliberate on-ramp — reference scale, then your story."
       : (clDisplay?.title ?? detail?.headline ?? slide.title);
   const heroSupporting =
     slide.kind === "intro" && introTotals
-      ? `${formatUsdTeaserApprox(introTotals.sumReferenceValueUsdApprox)} reference value · ${formatUsdTeaserApprox(introTotals.sumAnnualRentUsdApprox)} gross rent p.a. (USD illustrative @ ${EUR_USD_TEASER}) · ${introTotals.propertyCount} places`
+      ? `${formatLettableM2Compact(introTotals.combinedLettableM2)} combined lettable (catalogue + partner pipeline). ` +
+          `${formatUsdTeaserApprox(introTotals.sumReferenceValueUsdApprox)} catalogue value · ${formatUsdTeaserApprox(introTotals.sumAnnualRentUsdApprox)} rent p.a. (USD @ ${EUR_USD_TEASER}). ` +
+          `Not investment advice — explore listings and pipeline, then decide with issuer docs.`
       : clDisplay
         ? `${clDisplay.region} · ${clDisplay.tagline}`
         : (detail?.location ?? (slide.kind === "property" ? slide.subtitle : ""));
@@ -253,7 +256,13 @@ export function ImmersiveExperience() {
               <h1 className="mt-2 text-3xl font-semibold leading-[1.1] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
                 {heroHeadline}
               </h1>
-              <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/85 drop-shadow-md">{heroSupporting}</p>
+              <p
+                className={`mt-2 text-sm leading-relaxed text-white/85 drop-shadow-md ${
+                  slide.kind === "intro" ? "line-clamp-6" : "line-clamp-3"
+                }`}
+              >
+                {heroSupporting}
+              </p>
               <div className="mt-5 flex flex-col gap-3">
                 <button
                   type="button"
@@ -426,25 +435,53 @@ export function ImmersiveExperience() {
           >
             {slide.kind === "intro" && introTotals ? (
               <>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-action-light/90">Reference scale</p>
-                <p className="mt-1 text-lg font-semibold text-white">Curated Culture Land listings</p>
-                <p className="mt-0.5 text-xs text-zinc-500">
-                  Aggregated illustrative economics for {introTotals.propertyCount} properties in this story (demo
-                  catalogue).
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-action-light/90">
+                  Immersive on-ramp
                 </p>
-                <dl className="mt-4 space-y-4 text-sm">
+                <p className="mt-1 text-lg font-semibold text-white">Reference scale — catalogue + pipeline</p>
+                <p className="mt-0.5 text-xs text-zinc-500">
+                  Use this tour to orient — then open listings, diligence PDFs on Culture Land, and issuer verification.
+                  Not a solicitation.
+                </p>
+                <div className="mt-5 rounded-xl border border-eco/20 bg-eco/[0.06] px-4 py-4">
+                  <p className="text-[9px] font-semibold uppercase tracking-wider text-eco-light/90">
+                    Combined lettable area (reference)
+                  </p>
+                  <p className="mt-1 font-mono text-3xl font-semibold tabular-nums tracking-tight text-white sm:text-4xl">
+                    {formatLettableM2Compact(introTotals.combinedLettableM2)}
+                  </p>
+                  <p className="mt-2 text-[11px] leading-relaxed text-zinc-400">
+                    Catalogue (demo): {formatLettableM2Compact(introTotals.catalogueLettableM2)} · Partner pipeline
+                    (indicative): {formatLettableM2Compact(introTotals.pipelineLettableM2)}
+                  </p>
+                </div>
+                <dl className="mt-5 space-y-4 text-sm">
                   <div>
-                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Total reference value (USD approx.)</dt>
+                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">
+                      Pipeline · indicative purchase / rent (EUR)
+                    </dt>
+                    <dd className="mt-1 font-mono text-lg font-semibold text-white">
+                      {formatEurReferenceCompact(introTotals.pipelineIndicativePurchaseEur)} ·{" "}
+                      {formatEurReferenceCompact(introTotals.pipelineIndicativeRentEur)} p.a.
+                    </dd>
+                    <p className="mt-1 text-[10px] text-zinc-500">Partner-sourced; not on-chain TVL.</p>
+                  </div>
+                  <div>
+                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">
+                      On-chain catalogue · reference value (USD approx.)
+                    </dt>
                     <dd className="mt-1 font-mono text-2xl font-semibold text-white">
                       {formatUsdTeaserApprox(introTotals.sumReferenceValueUsdApprox)}
                     </dd>
                     <p className="mt-1 text-[10px] text-zinc-500">
-                      EUR reference: {formatEurReferenceCompact(introTotals.sumReferenceValueEur)} · illustrative{" "}
-                      {EUR_USD_TEASER} USD/EUR
+                      EUR: {formatEurReferenceCompact(introTotals.sumReferenceValueEur)} · {introTotals.propertyCount}{" "}
+                      listings in carousel · illustrative {EUR_USD_TEASER} USD/EUR
                     </p>
                   </div>
                   <div>
-                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Gross rental income p.a. (USD approx.)</dt>
+                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">
+                      Catalogue gross rent p.a. (USD approx.)
+                    </dt>
                     <dd className="mt-1 font-mono text-2xl font-semibold text-eco-light">
                       {formatUsdTeaserApprox(introTotals.sumAnnualRentUsdApprox)}
                     </dd>
@@ -522,19 +559,27 @@ export function ImmersiveExperience() {
             : null}
 
             {slide.kind === "intro" ? (
-              <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-                <Link
-                  href="/properties"
-                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
-                >
-                  Explore listings
-                </Link>
+              <div className="mt-5 flex flex-col gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Link
+                    href="/properties"
+                    className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
+                  >
+                    Explore listings
+                  </Link>
+                  <Link
+                    href="/culture-land"
+                    className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-gold-500/40 bg-gold-500/10 px-4 text-center text-sm font-semibold text-gold-100 shadow-sm backdrop-blur-sm transition hover:bg-gold-500/15"
+                  >
+                    Pipeline & PDFs
+                  </Link>
+                </div>
                 <button
                   type="button"
                   onClick={() => goProject(1)}
-                  className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-white/40 bg-black/35 px-4 text-center text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-black/50"
+                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-white/40 bg-black/35 px-4 text-center text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-black/50"
                 >
-                  Continue to stories
+                  Continue to property stories
                 </button>
               </div>
             ) : (
@@ -556,7 +601,7 @@ export function ImmersiveExperience() {
 
             <p className="mt-3 text-[10px] leading-relaxed text-zinc-500">
               {slide.kind === "intro"
-                ? "Illustrative sums from partner reference fields — not on-chain TVL or a prospectus. "
+                ? "Illustrative sums — catalogue from demo listings; pipeline from partner diligence placeholders — not on-chain TVL or a prospectus. "
                 : isFlagship
                   ? "Reference figures — not on-chain TVL. "
                   : "Reference financials — verify issuer docs. "}

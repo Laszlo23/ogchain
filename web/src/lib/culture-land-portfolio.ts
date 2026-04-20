@@ -34,10 +34,12 @@ export type CultureLandProject = {
   exploreHref?: string;
 };
 
-/** Vienna urban pipeline — acquisition stage; indicative figures for partner / broker conversations. Not an offer. */
+/** Partner acquisition pipeline — Vienna, Carinthia, and other tracks; indicative figures. Not an offer. */
 export type BuildingCultureCityPipelineProject = {
   id: string;
   title: string;
+  /** Short label for jump nav / chips when `title` has a long prefix */
+  shortTitle?: string;
   region: string;
   tagline: string;
   /** Editorial — exploitation / value-add angle */
@@ -46,7 +48,26 @@ export type BuildingCultureCityPipelineProject = {
   /** Optional hero image; pipeline cards use a numbered gradient when omitted */
   imageSrc?: string;
   imageAlt: string;
+  /** External PDFs / plans (e.g. VENDONO, floor plans) */
+  documents?: { label: string; href: string }[];
+  /** Numeric aggregates for immersive / reference scale (avoid parsing factSheet strings) */
+  metrics?: {
+    lettableAreaM2?: number;
+    indicativePurchaseEur?: number;
+    indicativeRentEur?: number;
+  };
 };
+
+/** Nav chip text: prefers `shortTitle`, else strips known title prefixes. */
+export function pipelineNavLabel(project: Pick<BuildingCultureCityPipelineProject, "title" | "shortTitle">): string {
+  if (project.shortTitle?.trim()) return project.shortTitle.trim();
+  const t = project.title
+    .replace(/^BuildingCultureCity — /i, "")
+    .replace(/^Building Culture Water — /i, "")
+    .replace(/^Building Culture — /i, "")
+    .trim();
+  return t || project.title;
+}
 
 /** Homepage hero lines — canonical copy lives in `st-immo-buildings.ts` (ST-IMMO briefs). */
 export const BLOCKCHAIN_HOMEPAGE_LINES = ST_IMMO_HOMEPAGE;
@@ -268,7 +289,7 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
 ];
 
 /**
- * BuildingCultureCity — projects in acquisition (partner pipeline).
+ * Partner acquisition pipeline (Vienna, Carinthia, other tracks).
  * Figures are indicative and subject to diligence, negotiation, and issuer approval.
  */
 export const BUILDING_CULTURE_CITY_PIPELINE: BuildingCultureCityPipelineProject[] = [
@@ -291,6 +312,11 @@ export const BUILDING_CULTURE_CITY_PIPELINE: BuildingCultureCityPipelineProject[
       { label: "Rental income (p.a., indicative)", value: "€300.000" },
     ],
     imageAlt: "BuildingCultureCity City Center — pipeline visualization",
+    metrics: {
+      lettableAreaM2: 2100,
+      indicativePurchaseEur: 15_000_000,
+      indicativeRentEur: 300_000,
+    },
   },
   {
     id: "bcc-danube-air",
@@ -311,6 +337,11 @@ export const BUILDING_CULTURE_CITY_PIPELINE: BuildingCultureCityPipelineProject[
       { label: "Rental income (p.a., indicative)", value: "€230.000" },
     ],
     imageAlt: "BuildingCultureCity Danube Air — pipeline visualization",
+    metrics: {
+      lettableAreaM2: 2395,
+      indicativePurchaseEur: 5_500_000,
+      indicativeRentEur: 230_000,
+    },
   },
   {
     id: "bcc-north-central-rail",
@@ -339,6 +370,88 @@ export const BUILDING_CULTURE_CITY_PIPELINE: BuildingCultureCityPipelineProject[
       { label: "Rental income after completion (p.a., indicative)", value: "€350.000" },
     ],
     imageAlt: "BuildingCultureCity north / railway context — pipeline visualization",
+    metrics: {
+      lettableAreaM2: 2000,
+      indicativePurchaseEur: 2_800_000,
+      indicativeRentEur: 130_000,
+    },
+  },
+  {
+    id: "bcw-green-lake-suites",
+    title: "Building Culture Water — GREEN & LAKE · SUITES",
+    shortTitle: "GREEN & LAKE · SUITES",
+    region: "Reifnitz am Wörthersee · Carinthia",
+    tagline: "Six apartments, lake proximity, generous outdoor living",
+    narrative: [
+      "Partner-sourced programme: six apartments across 2–4 bedrooms with about 450 m² lettable interior and about 300 m² further lettable deck space — courtyards set within a green park setting, roughly 200 m walking distance to the lake.",
+      "Green line (partner narrative): air-source heat pump with solar support; large courtyards in a park context; substantial covered decks as extended living space.",
+      "Figures are reference for diligence — verify against issuer materials, surveys, and tenancy schedule before any commitment.",
+    ],
+    factSheet: [
+      { label: "Programme", value: "6 apartments (2, 3 & 4 bedrooms)" },
+      { label: "Lettable interior (reference)", value: "450 m²" },
+      { label: "Lettable deck / outdoor (reference)", value: "300 m²" },
+      { label: "Parking spaces", value: "20" },
+      { label: "Total investment (incl. furniture, reference)", value: "€5.300.000" },
+      { label: "Rent (p.a., reference)", value: "€200.000" },
+      { label: "Lake access", value: "~200 m walking" },
+      { label: "Klagenfurt Airport", value: "~15 minutes" },
+    ],
+    imageSrc: "/culture-land/green-lake/hero-render.png",
+    imageAlt: "Building Culture Water — GREEN & LAKE · SUITES — architectural visualization Reifnitz",
+    documents: [
+      {
+        label: "VENDONO Top 10",
+        href: "https://buildingculture.4everbucket.com/VENDONO_Green%26Lake_Top%2010.pdf",
+      },
+      {
+        label: "VENDONO Top 6",
+        href: "https://buildingculture.4everbucket.com/VENDONO_Green%26Lake_Top_6v1.pdf",
+      },
+      {
+        label: "VENDONO Top 8",
+        href: "https://buildingculture.4everbucket.com/VENDONO_Green%26Lake_Top_8.pdf",
+      },
+      {
+        label: "Grundriss Top 10 · 4 Zi",
+        href: "https://buildingculture.4everbucket.com/Grundriss%20Top%2010%204%20Zi.pdf",
+      },
+      {
+        label: "Folder (overview)",
+        href: "https://buildingculture.4everbucket.com/VENDONO_Green%26Lake_Folder.pdf",
+      },
+    ],
+    metrics: {
+      lettableAreaM2: 750,
+      indicativePurchaseEur: 5_300_000,
+      indicativeRentEur: 200_000,
+    },
+  },
+  {
+    id: "bcc-buero-labor-state",
+    title: "Building Culture — Büro · Labor (state tenant)",
+    shortTitle: "Büro · Labor · state tenant",
+    region: "Austria · location under diligence",
+    tagline: "Long-dated public-sector income · LEED Gold",
+    narrative: [
+      "Indicative institutional-style acquisition: office / laboratory use with a state organisation as tenant — fifteen-year lease term plus two optional five-year extensions, subject to final contract and disclosure.",
+      "Certification: LEED Gold (partner-reported) as the sustainability frame; verify engineering and compliance documentation in diligence.",
+      "Not an on-chain listing — pipeline visibility only. Economics are partner-sourced placeholders until a formal process and data room are available.",
+    ],
+    factSheet: [
+      { label: "Sector", value: "Office · laboratory" },
+      { label: "Purchase price (unverhandelt, indicative)", value: "€104.000.000" },
+      { label: "Rental income (p.a., indicative)", value: "€4.000.000" },
+      { label: "Indicative yield", value: "3,8 %" },
+      { label: "Tenant", value: "State organisation (diligence)" },
+      { label: "Lease term", value: "15 years + 2 × 5 years extension (option)" },
+      { label: "Certification", value: "LEED Gold (partner-reported)" },
+    ],
+    imageAlt: "Office · laboratory — pipeline placeholder",
+    metrics: {
+      indicativePurchaseEur: 104_000_000,
+      indicativeRentEur: 4_000_000,
+    },
   },
 ];
 

@@ -7,6 +7,7 @@ import { DEMO_PROPERTY_DETAILS, getDemoImageSlides } from "@/lib/demo-properties
 import {
   EUR_USD_TEASER,
   formatEurReferenceCompact,
+  formatLettableM2Compact,
   formatUsdTeaserApprox,
   type ExperiencePortfolioTotals,
 } from "@/lib/experience-portfolio-totals";
@@ -64,21 +65,32 @@ export function getIntroPortfolioBeats(totals: ExperiencePortfolioTotals): Story
   const usdRent = formatUsdTeaserApprox(totals.sumAnnualRentUsdApprox);
   const eurVal = formatEurReferenceCompact(totals.sumReferenceValueEur);
   const eurRent = formatEurReferenceCompact(totals.sumAnnualRentEur);
+  const combinedM2 = formatLettableM2Compact(totals.combinedLettableM2);
+  const catM2 = formatLettableM2Compact(totals.catalogueLettableM2);
+  const pipeM2 = formatLettableM2Compact(totals.pipelineLettableM2);
+  const pipePur = formatEurReferenceCompact(totals.pipelineIndicativePurchaseEur);
+  const pipeRent = formatEurReferenceCompact(totals.pipelineIndicativeRentEur);
 
   return [
     {
       role: "portfolio",
       roleLabel: ROLE_LABELS.portfolio,
-      title: "The Culture Land universe — by the numbers",
+      title: "Start here — reference scale before you choose a story",
       subtitle: trunc(
-        `${usdVal} reference portfolio · ${usdRent} gross rent p.a. (USD illustrative at ${EUR_USD_TEASER} USD/EUR). ` +
-          `EUR reference: ${eurVal} asset value · ${eurRent} rent. ` +
-          `${totals.propertyCount} curated listings in this story — swipe for each place.`,
-        320,
+        `${combinedM2} lettable reference (catalogue ${catM2} + partner pipeline ${pipeM2}). ` +
+          `On-chain catalogue: ${usdVal} · ${usdRent} gross rent p.a. (USD illustrative @ ${EUR_USD_TEASER}). ` +
+          `EUR: ${eurVal} value · ${eurRent} rent · ${totals.propertyCount} listings in this carousel. ` +
+          `Pipeline (indicative, not TVL): ${pipePur} purchase · ${pipeRent} rent p.a. — swipe to explore; not investment advice.`,
+        380,
       ),
       imageSrc: INTRO_HERO_IMAGE,
       imageAlt:
         "Portfolio teaser — illustrative reference economics across Culture Land listings; partner imagery, not investment advice.",
+      partnerLinks: [
+        { label: "Culture Land & pipeline (PDFs)", href: "/culture-land" },
+        { label: "On-chain listings", href: "/properties" },
+        { label: "Investor hub", href: "/invest" },
+      ],
     },
   ];
 }

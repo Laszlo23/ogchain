@@ -8,6 +8,7 @@ import {
   CULTURE_LAND_CHAIN_MANIFESTO,
   CULTURE_LAND_PROJECTS,
   HOLZBAUER_REFERENCE_URL,
+  pipelineNavLabel,
 } from "@/lib/culture-land-portfolio";
 import { PipelineProjectsSection } from "@/components/culture-land/PipelineProjectsSection";
 import { ButtonLink } from "@/components/ui/Button";
@@ -15,7 +16,7 @@ import { ButtonLink } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "Building Culture Land — Portfolio",
   description:
-    "Partner portfolio: Vienna acquisition pipeline (BuildingCultureCity), revitalised villages, lakefront living, and landmarks — reference economics and sustainability notes. Not investment advice.",
+    "Partner portfolio: acquisition pipeline (Vienna, Carinthia / GREEN & LAKE, and other tracks), revitalised villages, lakefront living, and landmarks — reference economics and sustainability notes. Not investment advice.",
 };
 
 export default function CultureLandPage() {
@@ -117,7 +118,7 @@ export default function CultureLandPage() {
                 href={`#${p.id}`}
                 className="inline-block rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-zinc-300 transition hover:border-eco/40 hover:text-white"
               >
-                {p.title.replace(/^BuildingCultureCity — /i, "").trim()}
+                {pipelineNavLabel(p)}
               </a>
             </li>
           ))}
