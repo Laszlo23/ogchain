@@ -320,13 +320,13 @@ export function ImmersiveExperience() {
           </div>
         </header>
 
-        {/* Band 3: story + panel — scroll on small screens; opaque story tray on mobile */}
+        {/* Band 3: story + panel — scroll only on property slides (mobile overflow); intro has no nested scroll */}
         <div
-          className={`pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:justify-between md:gap-10 ${
+          className={
             slide.kind === "intro"
-              ? "md:items-start md:overflow-y-auto md:pt-2 md:pb-8"
-              : "md:items-end md:overflow-visible"
-          }`}
+              ? "pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-x-hidden md:flex-row md:justify-between md:gap-10 md:items-start md:overflow-visible md:pt-2 md:pb-6"
+              : "pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:justify-between md:gap-10 md:items-end md:overflow-visible"
+          }
         >
           <div
             key={`story-${slideVisualKey}-${beatIndex}`}
@@ -440,10 +440,10 @@ export function ImmersiveExperience() {
 
           <aside
             key={`panel-${slideVisualKey}`}
-            className={`pointer-events-auto relative z-20 mt-0 w-full max-w-md shrink-0 rounded-2xl border border-white/12 bg-black/70 px-5 py-5 shadow-2xl shadow-black/50 backdrop-blur-md immersive-panel-enter md:mt-0 md:w-[min(100%,380px)] md:bg-black/55 ${
+            className={`pointer-events-auto relative z-20 mt-0 w-full max-w-md shrink-0 rounded-2xl border border-white/12 bg-black/70 shadow-2xl shadow-black/50 backdrop-blur-md immersive-panel-enter md:mt-0 md:w-[min(100%,380px)] md:bg-black/55 ${
               slide.kind === "intro"
-                ? "max-h-[min(520px,calc(100dvh-10.5rem))] overflow-y-auto overscroll-y-contain md:max-h-[min(560px,calc(100dvh-11rem))] md:self-start md:ring-1 md:ring-white/10"
-                : ""
+                ? "overflow-visible px-4 py-4 md:self-start md:ring-1 md:ring-white/10"
+                : "px-5 py-5"
             }`}
           >
             {slide.kind === "intro" && introTotals ? (
@@ -452,13 +452,13 @@ export function ImmersiveExperience() {
                   Reference snapshot
                 </p>
                 <p className="mt-1 text-base font-semibold leading-snug text-white">Catalogue + partner pipeline</p>
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-gold-500/40 bg-gold-500/[0.1] px-3 py-3 shadow-inner shadow-black/20">
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="rounded-xl border border-gold-500/40 bg-gold-500/[0.1] px-2.5 py-2.5 shadow-inner shadow-black/20">
                     <p className="text-[8px] font-semibold uppercase tracking-wider text-gold-400/95">ROI band</p>
                     <p className="mt-0.5 font-mono text-xl font-bold tabular-nums text-white">7–10%</p>
                     <p className="text-[9px] text-zinc-500">p.a. · ref.</p>
                   </div>
-                  <div className="rounded-xl border border-eco/30 bg-eco/[0.08] px-3 py-3 shadow-inner shadow-black/20">
+                  <div className="rounded-xl border border-eco/30 bg-eco/[0.08] px-2.5 py-2.5 shadow-inner shadow-black/20">
                     <p className="text-[8px] font-semibold uppercase tracking-wider text-eco-light/90">Lettable</p>
                     <p className="mt-0.5 font-mono text-xl font-bold tabular-nums text-white">
                       {formatLettableM2Compact(introTotals.combinedLettableM2)}
@@ -466,7 +466,7 @@ export function ImmersiveExperience() {
                     <p className="text-[9px] text-zinc-500">combined</p>
                   </div>
                 </div>
-                <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3">
+                <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-2.5">
                   <p className="text-[8px] font-semibold uppercase tracking-wider text-zinc-400">Pipeline (EUR)</p>
                   <p className="mt-1 font-mono text-base font-semibold leading-tight text-white">
                     {formatEurReferenceCompact(introTotals.pipelineIndicativePurchaseEur)}
@@ -475,7 +475,7 @@ export function ImmersiveExperience() {
                     {formatEurReferenceCompact(introTotals.pipelineIndicativeRentEur)} p.a.
                   </p>
                 </div>
-                <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                <dl className="mt-2 grid grid-cols-2 gap-2 text-xs">
                   <div className="rounded-lg bg-black/30 px-2 py-2">
                     <dt className="text-[8px] uppercase tracking-wider text-zinc-500">Catalogue value</dt>
                     <dd className="mt-0.5 font-mono text-sm font-semibold text-white">
@@ -489,11 +489,11 @@ export function ImmersiveExperience() {
                     </dd>
                   </div>
                 </dl>
-                <p className="mt-3 text-[10px] leading-snug text-zinc-500">
+                <p className="mt-2 text-[10px] leading-snug text-zinc-500">
                   Cat. {formatLettableM2Compact(introTotals.catalogueLettableM2)} · Pipe{" "}
                   {formatLettableM2Compact(introTotals.pipelineLettableM2)} · {EUR_USD_TEASER} USD/EUR teaser
                 </p>
-                <p className="mt-2 text-[11px] leading-snug text-zinc-400">
+                <p className="mt-1.5 text-[11px] leading-snug text-zinc-400">
                   <span className="text-zinc-500">Featured:</span>{" "}
                   <Link
                     href="/culture-land#bcw-green-lake-suites"
@@ -571,7 +571,7 @@ export function ImmersiveExperience() {
             : null}
 
             {slide.kind === "intro" ? (
-              <div className="mt-4 flex flex-col gap-2">
+              <div className="mt-3 flex flex-col gap-2">
                 <button
                   type="button"
                   onClick={() => goProject(1)}
