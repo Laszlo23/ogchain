@@ -1,3 +1,4 @@
+import { BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
 import { DEMO_PROPERTY_DETAILS } from "@/lib/demo-properties";
 
 /** On-chain property id used for flagship imagery (Berggasse demo listing). */
@@ -18,8 +19,8 @@ export function getFlagshipHeroImage(): { src: string; alt: string } {
   const slide = demo?.imageGallery?.[0] ?? (demo ? { src: demo.imageSrc, alt: demo.imageAlt } : null);
   return (
     slide ?? {
-      src: "/partners/01berggasse.jpeg",
-      alt: "Building Culture City Berggasse — Servitenviertel (Culture Land preview)",
+      src: BERGGASSE_HERO_STILL,
+      alt: "Building Culture City Berggasse — façade (Culture Land preview)",
     }
   );
 }

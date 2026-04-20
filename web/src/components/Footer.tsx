@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BetaNoticeTrigger } from "@/components/BetaWelcomeModal";
 import { FooterSocialLinks } from "@/components/FooterSocialLinks";
 import { baseExplorerBase } from "@/lib/base-addresses";
+import { REFERENCE_YIELD_BAND_LABEL } from "@/lib/demo-properties";
 
 /** 16×16 stroke icons — match Nav.tsx weight for visual consistency */
 function Fi({
@@ -330,7 +331,7 @@ export function Footer() {
               </a>
             </div>
             <p className="mt-4 max-w-md text-xs leading-relaxed text-zinc-600">
-              Reference figures where marked — economics from issuer materials. Production on Base — contracts on{" "}
+              Planning yield band {REFERENCE_YIELD_BAND_LABEL} p.a. · reference figures where marked — economics from issuer materials. Production on Base — contracts on{" "}
               <a href={baseExplorerBase} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-brand">
                 Basescan
               </a>

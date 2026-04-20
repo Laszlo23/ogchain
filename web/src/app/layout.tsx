@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { SiteChrome } from "@/components/SiteChrome";
+import { REFERENCE_YIELD_BAND_LABEL } from "@/lib/demo-properties";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://buildingculture.capital";
 
@@ -23,20 +24,17 @@ export const metadata: Metadata = {
     apple: [{ url: "/icon.svg" }],
   },
   title: "Building Culture — Cultural real estate on Base",
-  description:
-    "Community funding for coworking, cultural, and housing — tokenized shares and liquidity on Base. Issuer disclosures and Legal hub.",
+  description: `Community funding for coworking, cultural, and housing — tokenized shares on Base. Planning yield band ${REFERENCE_YIELD_BAND_LABEL} p.a. · issuer disclosures and Legal hub.`,
   openGraph: {
     title: "Building Culture — Cultural real estate on Base",
-    description:
-      "Launch and fund community-owned places with tokenized ownership on Base — full economics in issuer materials.",
+    description: `Community-owned cultural real estate on Base — ${REFERENCE_YIELD_BAND_LABEL} planning band · economics in issuer materials.`,
     type: "website",
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
     title: "Building Culture — Cultural real estate on Base",
-    description:
-      "Community funding rounds for cultural real estate — Building Culture on Base.",
+    description: `Cultural real estate on Base — ${REFERENCE_YIELD_BAND_LABEL} planning band · Building Culture.`,
   },
 };
 

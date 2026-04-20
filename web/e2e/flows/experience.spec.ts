@@ -26,9 +26,10 @@ test.describe("/experience interactions", () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/experience");
     await page.getByRole("region", { name: /Immersive stories/i }).click();
-    const firstTab = page.getByRole("tab", { name: /beat 1 of/i }).first();
+    await page.keyboard.press("ArrowRight");
+    const firstTab = page.getByRole("tab", { name: /beat 1 of 4/i }).first();
     await expect(firstTab).toHaveAttribute("aria-selected", "true");
     await page.keyboard.press("ArrowDown");
-    await expect(page.getByRole("tab", { name: /beat 2 of/i }).first()).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByRole("tab", { name: /beat 2 of 4/i }).first()).toHaveAttribute("aria-selected", "true");
   });
 });

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ImmersiveExperience } from "@/components/experience/ImmersiveExperience";
+import { REFERENCE_YIELD_BAND_LABEL } from "@/lib/demo-properties";
 
 /** Avoid stale CDN/HTML cache serving an old immersive shell after deploys. */
 export const dynamic = "force-dynamic";
@@ -8,8 +9,7 @@ const ogImagePath = "/partners/Keutschach-am-See-1b-1.jpg";
 
 export const metadata: Metadata = {
   title: "Immersive story — Building Culture | Community-owned cultural real estate",
-  description:
-    "Full-screen visual story: community-owned cultural assets, curated Culture Land listings, and transparent economics — primary deployment on Base; Legal hub for terms.",
+  description: `Full-screen visual story: City, Land, and Water — ${REFERENCE_YIELD_BAND_LABEL} planning band, curated listings, transparent reference economics on Base — Legal hub for terms.`,
   keywords: [
     "Building Culture",
     "community real estate",
@@ -32,8 +32,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Immersive story — Building Culture",
-    description:
-      "Photography-led narrative of community-owned places, protocol rails, and reference campaign context — explore before you invest time on-chain.",
+    description: `Photography-led stories — ${REFERENCE_YIELD_BAND_LABEL} planning band · community-owned places on Base.`,
     type: "website",
     url: "/experience",
     siteName: "Building Culture",
@@ -50,8 +49,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Immersive story — Building Culture",
-    description:
-      "Own the narrative: community-first capital for cultural real estate — verify metrics on-chain (Base).",
+    description: `City · Land · Water — ${REFERENCE_YIELD_BAND_LABEL} planning band · cultural real estate on Base.`,
     images: [ogImagePath],
   },
 };

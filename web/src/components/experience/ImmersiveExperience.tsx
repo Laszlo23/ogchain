@@ -24,6 +24,11 @@ import { flagshipCampaign, FLAGSHIP_PROPERTY_ID } from "@/lib/flagship-campaign"
 import { getExperienceSlides } from "@/lib/experience-slides";
 import { getIntroPortfolioBeats, getStoryBeatsForProperty } from "@/lib/experience-story-beats";
 import { markIntroSeen } from "@/lib/first-visit-intro";
+import {
+  BUILDING_CULTURE_PILLARS_TAGLINE,
+  getBuildingCulturePillar,
+  getBuildingCulturePillarLabel,
+} from "@/lib/building-culture-pillars";
 
 const BEAT_MS = 11500;
 const BEAT_MS_REDUCED = 21000;
@@ -178,6 +183,9 @@ export function ImmersiveExperience() {
   const showFullStoryChrome = !isMobileViewport || storyDetailsOpen;
   const clDisplay =
     slide.kind === "property" ? getCultureLandDisplayForDemoPropertyId(slide.propertyId) : null;
+  const pillarLabel =
+    slide.kind === "property" ? getBuildingCulturePillarLabel(getBuildingCulturePillar(slide.propertyId)) : null;
+  const isFactsBeat = beat.role === "facts";
 
   const introTotals = slide.kind === "intro" ? slide.totals : null;
   const heroHeadline =
@@ -208,7 +216,7 @@ export function ImmersiveExperience() {
             : "transition-[opacity,filter,-webkit-filter] duration-[2000ms] ease-[cubic-bezier(0.22,0.94,0.36,1)]";
           return (
             <div
-              key={`${slideVisualKey}-${i}-${b.imageSrc}`}
+              key={`${slideVisualKey}-${i}-${b.role}`}
               className={`absolute inset-0 ${layerMotion} ${
                 active
                   ? "z-[1] opacity-100 blur-0"
@@ -298,9 +306,7 @@ export function ImmersiveExperience() {
           <div className="flex w-full min-w-0 flex-col gap-3 pr-[7.25rem] md:block md:w-auto md:max-w-[220px] md:pr-0">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white drop-shadow-md">Building Culture</p>
-              <p className="mt-1 text-[10px] leading-snug text-white/55 drop-shadow">
-                Curated cultural real estate · Culture Land listings
-              </p>
+              <p className="mt-1 text-[10px] leading-snug text-white/55 drop-shadow">{BUILDING_CULTURE_PILLARS_TAGLINE}</p>
             </div>
           </div>
 
@@ -338,10 +344,15 @@ export function ImmersiveExperience() {
           >
             {slide.kind === "intro" ? (
               <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-eco-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
-                Immersive intro · 7–10% reference band
+                Immersive intro · City · Land · Water · 7–10% ref. band
               </p>
             ) : (
               <div className="flex flex-col items-start gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
+                {pillarLabel ? (
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-400/95 drop-shadow">
+                    {pillarLabel}
+                  </p>
+                ) : null}
                 <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-eco-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
                   {beat.roleLabel}
                 </p>
@@ -388,6 +399,19 @@ export function ImmersiveExperience() {
                 <p className="mt-2 max-w-xl text-base leading-relaxed text-white/95 drop-shadow-[0_1px_12px_rgba(0,0,0,0.95)] sm:text-lg">
                   {beat.subtitle}
                 </p>
+                {isFactsBeat && beat.factsRows && beat.factsRows.length > 0 ? (
+                  <dl className="mt-4 grid grid-cols-2 gap-2 sm:gap-3">
+                    {beat.factsRows.map((row) => (
+                      <div
+                        key={row.label}
+                        className="rounded-xl border border-white/15 bg-black/50 px-3 py-2.5 shadow-inner shadow-black/40 backdrop-blur-sm"
+                      >
+                        <dt className="text-[9px] font-medium uppercase tracking-wider text-white/55">{row.label}</dt>
+                        <dd className="mt-1 font-mono text-sm font-semibold tabular-nums text-white sm:text-base">{row.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
                 {beat.partnerLinks && beat.partnerLinks.length > 0 && (
                   <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2">
                     {beat.partnerLinks.map((pl) =>
@@ -542,31 +566,49 @@ export function ImmersiveExperience() {
                 </div>
               </>
             ) : detail ? (
-                <>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Culture Land listing</p>
-                  <p className="mt-1 text-lg font-semibold leading-snug text-white">{detail.headline}</p>
-                  <p className="mt-0.5 text-xs text-zinc-500">{detail.propertyType}</p>
-                  {economicsLine && <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">{economicsLine}</p>}
-                  <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Reference yield band</dt>
-                      <dd className="font-mono text-base text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
-                      <p className="mt-0.5 text-[8px] text-zinc-500">Modelled: {yieldPct.toFixed(1)}% gross</p>
-                    </div>
-                    <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Annual rental income</dt>
-                      <dd className="font-mono text-base text-white">{formatAnnualRentEur(detail.annualRentalIncomeEur)}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Residential units</dt>
-                      <dd className="font-mono text-base text-white">{detail.unitCountLabel ?? detail.units}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Gross floor area</dt>
-                      <dd className="font-mono text-base text-white">{formatSquareMeters(detail.squareMeters)}</dd>
-                    </div>
-                  </dl>
-                </>
+                isFactsBeat ? (
+                  <>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Issuer data room</p>
+                    <p className="mt-1 text-sm leading-relaxed text-zinc-400">
+                      Full terms and filings supersede on-screen reference figures.
+                    </p>
+                    {economicsLine ? (
+                      <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">{economicsLine}</p>
+                    ) : null}
+                    <Link
+                      href={`/properties/${idStr}`}
+                      className="mt-3 inline-flex text-sm font-medium text-gold-400/95 underline underline-offset-2 hover:text-gold-300"
+                    >
+                      Open full brief →
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Culture Land listing</p>
+                    <p className="mt-1 text-lg font-semibold leading-snug text-white">{detail.headline}</p>
+                    <p className="mt-0.5 text-xs text-zinc-500">{detail.propertyType}</p>
+                    {economicsLine && <p className="mt-2 text-[10px] leading-relaxed text-zinc-500">{economicsLine}</p>}
+                    <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Reference yield band</dt>
+                        <dd className="font-mono text-base text-eco-light">{REFERENCE_YIELD_BAND_LABEL} p.a.</dd>
+                        <p className="mt-0.5 text-[8px] text-zinc-500">Modelled: {yieldPct.toFixed(1)}% gross</p>
+                      </div>
+                      <div>
+                        <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Annual rental income</dt>
+                        <dd className="font-mono text-base text-white">{formatAnnualRentEur(detail.annualRentalIncomeEur)}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Residential units</dt>
+                        <dd className="font-mono text-base text-white">{detail.unitCountLabel ?? detail.units}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-[9px] uppercase tracking-wider text-zinc-500">Gross floor area</dt>
+                        <dd className="font-mono text-base text-white">{formatSquareMeters(detail.squareMeters)}</dd>
+                      </div>
+                    </dl>
+                  </>
+                )
               )
             : null}
 

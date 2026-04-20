@@ -23,8 +23,11 @@ export const PROPERTY_GEO_BY_ID: Partial<Record<number, PropertyGeo>> = {
 
 const MAX_GALLERY_FRAMES = 10;
 
-/** Frames per project used for listing cards and `/experience` story beats (photo-first; no plan/PDF art). */
+/** Default photo cap for listing cards and carousels (photo-first; no plan/PDF art). */
 export const IMMERSIVE_PROJECT_FRAMES = 3;
+
+/** Distinct images for `/experience` per property: place, how, facts, partners (no repeated `src`). */
+export const IMMERSIVE_STORY_FRAME_COUNT = 4;
 
 /** @internal exported for tests */
 export function bboxFromCenter(geo: PropertyGeo): { minLon: number; minLat: number; maxLon: number; maxLat: number } {
