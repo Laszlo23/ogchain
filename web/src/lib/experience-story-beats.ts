@@ -4,13 +4,6 @@
  */
 import { getCultureLandDisplayForDemoPropertyId } from "@/lib/culture-land-portfolio";
 import { DEMO_PROPERTY_DETAILS, getDemoImageSlides } from "@/lib/demo-properties";
-import {
-  EUR_USD_TEASER,
-  formatEurReferenceCompact,
-  formatLettableM2Compact,
-  formatUsdTeaserApprox,
-  type ExperiencePortfolioTotals,
-} from "@/lib/experience-portfolio-totals";
 import { IMMERSIVE_PROJECT_FRAMES } from "@/lib/property-geo";
 
 const INTRO_HERO_IMAGE = "/partners/Keutschach-am-See-1b-1.jpg";
@@ -59,38 +52,18 @@ function trunc(s: string, max: number): string {
   return `${t.slice(0, max - 1).trim()}…`;
 }
 
-/** Single beat — paired with economics panel totals; keeps carousel pacing aligned with property slides. */
-export function getIntroPortfolioBeats(totals: ExperiencePortfolioTotals): StoryBeat[] {
-  const usdVal = formatUsdTeaserApprox(totals.sumReferenceValueUsdApprox);
-  const usdRent = formatUsdTeaserApprox(totals.sumAnnualRentUsdApprox);
-  const eurVal = formatEurReferenceCompact(totals.sumReferenceValueEur);
-  const eurRent = formatEurReferenceCompact(totals.sumAnnualRentEur);
-  const combinedM2 = formatLettableM2Compact(totals.combinedLettableM2);
-  const catM2 = formatLettableM2Compact(totals.catalogueLettableM2);
-  const pipeM2 = formatLettableM2Compact(totals.pipelineLettableM2);
-  const pipePur = formatEurReferenceCompact(totals.pipelineIndicativePurchaseEur);
-  const pipeRent = formatEurReferenceCompact(totals.pipelineIndicativeRentEur);
-
+/** Single beat — hook only; live pipeline + catalogue figures stay in the aside panel. */
+export function getIntroPortfolioBeats(): StoryBeat[] {
   return [
     {
       role: "portfolio",
       roleLabel: ROLE_LABELS.portfolio,
-      title: "Start here — reference scale before you choose a story",
-      subtitle: trunc(
-        `${combinedM2} lettable reference (catalogue ${catM2} + partner pipeline ${pipeM2}). ` +
-          `On-chain catalogue: ${usdVal} · ${usdRent} gross rent p.a. (USD illustrative @ ${EUR_USD_TEASER}). ` +
-          `EUR: ${eurVal} value · ${eurRent} rent · ${totals.propertyCount} listings in this carousel. ` +
-          `Pipeline (indicative, not TVL): ${pipePur} purchase · ${pipeRent} rent p.a. — swipe to explore; not investment advice.`,
-        380,
-      ),
+      title: "7–10% ROI reference band — culture real estate at scale.",
+      subtitle:
+        "Live pipeline + catalogue numbers are in the panel. Swipe projects below for stories. Illustrative only; not investment advice or an offer.",
       imageSrc: INTRO_HERO_IMAGE,
       imageAlt:
         "Portfolio teaser — illustrative reference economics across Culture Land listings; partner imagery, not investment advice.",
-      partnerLinks: [
-        { label: "Culture Land & pipeline (PDFs)", href: "/culture-land" },
-        { label: "On-chain listings", href: "/properties" },
-        { label: "Investor hub", href: "/invest" },
-      ],
     },
   ];
 }

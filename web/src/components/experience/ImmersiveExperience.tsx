@@ -48,7 +48,7 @@ export function ImmersiveExperience() {
 
   const slide = projects[projectIndex]!;
   const storyBeats = useMemo(() => {
-    if (slide.kind === "intro") return getIntroPortfolioBeats(slide.totals);
+    if (slide.kind === "intro") return getIntroPortfolioBeats();
     return getStoryBeatsForProperty(slide.propertyId);
   }, [slide]);
   const beat = storyBeats[beatIndex] ?? storyBeats[0]!;
@@ -182,13 +182,11 @@ export function ImmersiveExperience() {
   const introTotals = slide.kind === "intro" ? slide.totals : null;
   const heroHeadline =
     slide.kind === "intro"
-      ? "A deliberate on-ramp — reference scale, then your story."
+      ? beat.title
       : (clDisplay?.title ?? detail?.headline ?? slide.title);
   const heroSupporting =
     slide.kind === "intro" && introTotals
-      ? `${formatLettableM2Compact(introTotals.combinedLettableM2)} combined lettable (catalogue + partner pipeline). ` +
-          `${formatUsdTeaserApprox(introTotals.sumReferenceValueUsdApprox)} catalogue value · ${formatUsdTeaserApprox(introTotals.sumAnnualRentUsdApprox)} rent p.a. (USD @ ${EUR_USD_TEASER}). ` +
-          `Not investment advice — explore listings and pipeline, then decide with issuer docs.`
+      ? beat.subtitle
       : clDisplay
         ? `${clDisplay.region} · ${clDisplay.tagline}`
         : (detail?.location ?? (slide.kind === "property" ? slide.subtitle : ""));
@@ -323,46 +321,66 @@ export function ImmersiveExperience() {
         </header>
 
         {/* Band 3: story + panel — scroll on small screens; opaque story tray on mobile */}
-        <div className="pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:items-end md:justify-between md:overflow-visible md:gap-12">
+        <div
+          className={`pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:justify-between md:gap-10 ${
+            slide.kind === "intro"
+              ? "md:items-start md:overflow-y-auto md:pt-2 md:pb-8"
+              : "md:items-end md:overflow-visible"
+          }`}
+        >
           <div
             key={`story-${slideVisualKey}-${beatIndex}`}
-            className="pointer-events-auto relative z-20 max-w-2xl space-y-3 rounded-2xl bg-black/85 px-3 py-3 shadow-[0_8px_40px_rgba(0,0,0,0.75)] backdrop-blur-md md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none immersive-beat-enter"
+            className={`pointer-events-auto relative z-20 max-w-2xl space-y-3 rounded-2xl immersive-beat-enter ${
+              slide.kind === "intro"
+                ? "bg-black/85 px-4 py-4 shadow-[0_8px_40px_rgba(0,0,0,0.75)] backdrop-blur-md md:bg-black/[0.82] md:px-5 md:py-4 md:shadow-[0_8px_40px_rgba(0,0,0,0.75)] md:ring-1 md:ring-white/10"
+                : "bg-black/85 px-3 py-3 shadow-[0_8px_40px_rgba(0,0,0,0.75)] backdrop-blur-md md:bg-transparent md:px-0 md:py-0 md:shadow-none md:backdrop-blur-none md:ring-0"
+            }`}
           >
-            <div className="flex flex-col items-start gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
-              <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-eco-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
-                {beat.roleLabel}
+            {slide.kind === "intro" ? (
+              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-eco-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
+                Immersive intro · 7–10% reference band
               </p>
-              <span className="hidden text-[10px] text-white/45 sm:inline">·</span>
-              <p className="text-[10px] uppercase tracking-widest text-white/80 drop-shadow sm:text-[10px]">
-                {slide.kind === "intro" ? "Portfolio teaser" : `Property #${idStr}`}
-              </p>
-            </div>
+            ) : (
+              <div className="flex flex-col items-start gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
+                <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-eco-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
+                  {beat.roleLabel}
+                </p>
+                <span className="hidden text-[10px] text-white/45 sm:inline">·</span>
+                <p className="text-[10px] uppercase tracking-widest text-white/80 drop-shadow sm:text-[10px]">
+                  Property #{idStr}
+                </p>
+              </div>
+            )}
 
-            <div className="flex items-center gap-2" role="tablist" aria-label="Story beats">
-              {storyBeats.map((_, i) => (
+            {beatCount > 1 && (
+              <div className="flex items-center gap-2" role="tablist" aria-label="Story beats">
+                {storyBeats.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === beatIndex}
+                    aria-label={`${storyBeats[i]!.roleLabel}, beat ${i + 1} of ${beatCount}`}
+                    onClick={() => setBeatIndex(i)}
+                    className={`h-1 flex-1 max-w-[4rem] rounded-full transition sm:h-1.5 ${i === beatIndex ? "bg-eco-light shadow-[0_0_12px_rgba(63,143,107,0.5)]" : "bg-white/25 hover:bg-white/45"}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className={beatCount > 1 ? "flex items-start gap-2" : ""}>
+              {beatCount > 1 && (
                 <button
-                  key={i}
                   type="button"
-                  role="tab"
-                  aria-selected={i === beatIndex}
-                  aria-label={`${storyBeats[i]!.roleLabel}, beat ${i + 1} of ${beatCount}`}
-                  onClick={() => setBeatIndex(i)}
-                  className={`h-1 flex-1 max-w-[4rem] rounded-full transition sm:h-1.5 ${i === beatIndex ? "bg-eco-light shadow-[0_0_12px_rgba(63,143,107,0.5)]" : "bg-white/25 hover:bg-white/45"}`}
-                />
-              ))}
-            </div>
-
-            <div className="flex items-start gap-2">
-              <button
-                type="button"
-                onClick={() => goBeat(-1)}
-                className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur-sm transition hover:bg-white/10"
-                aria-label="Previous story beat"
-              >
-                <span aria-hidden className="text-sm">
-                  ↑
-                </span>
-              </button>
+                  onClick={() => goBeat(-1)}
+                  className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur-sm transition hover:bg-white/10"
+                  aria-label="Previous story beat"
+                >
+                  <span aria-hidden className="text-sm">
+                    ↑
+                  </span>
+                </button>
+              )}
               <div className="min-w-0 flex-1">
                 <h1 className="text-2xl font-semibold leading-[1.08] tracking-tight text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.9)] sm:text-3xl md:text-4xl lg:text-5xl">
                   {beat.title}
@@ -396,16 +414,18 @@ export function ImmersiveExperience() {
                   </div>
                 )}
               </div>
-              <button
-                type="button"
-                onClick={() => goBeat(1)}
-                className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur-sm transition hover:bg-white/10"
-                aria-label="Next story beat"
-              >
-                <span aria-hidden className="text-sm">
-                  ↓
-                </span>
-              </button>
+              {beatCount > 1 && (
+                <button
+                  type="button"
+                  onClick={() => goBeat(1)}
+                  className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur-sm transition hover:bg-white/10"
+                  aria-label="Next story beat"
+                >
+                  <span aria-hidden className="text-sm">
+                    ↓
+                  </span>
+                </button>
+              )}
             </div>
 
             {detail && (
@@ -416,80 +436,72 @@ export function ImmersiveExperience() {
                 </Link>
               </p>
             )}
-            {slide.kind === "intro" && introTotals && (
-              <p className="text-[11px] text-white/70 drop-shadow">
-                <Link href="/culture-land" className="font-medium text-eco-light/95 underline underline-offset-2 hover:text-white">
-                  Culture Land portfolio
-                </Link>
-                <span className="text-white/40"> · </span>
-                <Link href="/properties" className="font-medium text-white underline underline-offset-2 hover:text-eco-light">
-                  All listings
-                </Link>
-              </p>
-            )}
           </div>
 
           <aside
             key={`panel-${slideVisualKey}`}
-            className="pointer-events-auto relative z-20 mt-0 w-full max-w-md shrink-0 rounded-2xl border border-white/12 bg-black/70 px-5 py-5 shadow-2xl shadow-black/50 backdrop-blur-md immersive-panel-enter md:mt-0 md:w-[min(100%,380px)] md:bg-black/55"
+            className={`pointer-events-auto relative z-20 mt-0 w-full max-w-md shrink-0 rounded-2xl border border-white/12 bg-black/70 px-5 py-5 shadow-2xl shadow-black/50 backdrop-blur-md immersive-panel-enter md:mt-0 md:w-[min(100%,380px)] md:bg-black/55 ${
+              slide.kind === "intro"
+                ? "max-h-[min(520px,calc(100dvh-10.5rem))] overflow-y-auto overscroll-y-contain md:max-h-[min(560px,calc(100dvh-11rem))] md:self-start md:ring-1 md:ring-white/10"
+                : ""
+            }`}
           >
             {slide.kind === "intro" && introTotals ? (
               <>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-action-light/90">
-                  Immersive on-ramp
+                  Reference snapshot
                 </p>
-                <p className="mt-1 text-lg font-semibold text-white">Reference scale — catalogue + pipeline</p>
-                <p className="mt-0.5 text-xs text-zinc-500">
-                  Use this tour to orient — then open listings, diligence PDFs on Culture Land, and issuer verification.
-                  Not a solicitation.
-                </p>
-                <div className="mt-5 rounded-xl border border-eco/20 bg-eco/[0.06] px-4 py-4">
-                  <p className="text-[9px] font-semibold uppercase tracking-wider text-eco-light/90">
-                    Combined lettable area (reference)
+                <p className="mt-1 text-base font-semibold leading-snug text-white">Catalogue + partner pipeline</p>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-gold-500/40 bg-gold-500/[0.1] px-3 py-3 shadow-inner shadow-black/20">
+                    <p className="text-[8px] font-semibold uppercase tracking-wider text-gold-400/95">ROI band</p>
+                    <p className="mt-0.5 font-mono text-xl font-bold tabular-nums text-white">7–10%</p>
+                    <p className="text-[9px] text-zinc-500">p.a. · ref.</p>
+                  </div>
+                  <div className="rounded-xl border border-eco/30 bg-eco/[0.08] px-3 py-3 shadow-inner shadow-black/20">
+                    <p className="text-[8px] font-semibold uppercase tracking-wider text-eco-light/90">Lettable</p>
+                    <p className="mt-0.5 font-mono text-xl font-bold tabular-nums text-white">
+                      {formatLettableM2Compact(introTotals.combinedLettableM2)}
+                    </p>
+                    <p className="text-[9px] text-zinc-500">combined</p>
+                  </div>
+                </div>
+                <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3">
+                  <p className="text-[8px] font-semibold uppercase tracking-wider text-zinc-400">Pipeline (EUR)</p>
+                  <p className="mt-1 font-mono text-base font-semibold leading-tight text-white">
+                    {formatEurReferenceCompact(introTotals.pipelineIndicativePurchaseEur)}
                   </p>
-                  <p className="mt-1 font-mono text-3xl font-semibold tabular-nums tracking-tight text-white sm:text-4xl">
-                    {formatLettableM2Compact(introTotals.combinedLettableM2)}
-                  </p>
-                  <p className="mt-2 text-[11px] leading-relaxed text-zinc-400">
-                    Catalogue (demo): {formatLettableM2Compact(introTotals.catalogueLettableM2)} · Partner pipeline
-                    (indicative): {formatLettableM2Compact(introTotals.pipelineLettableM2)}
+                  <p className="font-mono text-sm font-semibold text-eco-light/95">
+                    {formatEurReferenceCompact(introTotals.pipelineIndicativeRentEur)} p.a.
                   </p>
                 </div>
-                <dl className="mt-5 space-y-4 text-sm">
-                  <div>
-                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">
-                      Pipeline · indicative purchase / rent (EUR)
-                    </dt>
-                    <dd className="mt-1 font-mono text-lg font-semibold text-white">
-                      {formatEurReferenceCompact(introTotals.pipelineIndicativePurchaseEur)} ·{" "}
-                      {formatEurReferenceCompact(introTotals.pipelineIndicativeRentEur)} p.a.
-                    </dd>
-                    <p className="mt-1 text-[10px] text-zinc-500">Partner-sourced; not on-chain TVL.</p>
-                  </div>
-                  <div>
-                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">
-                      On-chain catalogue · reference value (USD approx.)
-                    </dt>
-                    <dd className="mt-1 font-mono text-2xl font-semibold text-white">
+                <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                  <div className="rounded-lg bg-black/30 px-2 py-2">
+                    <dt className="text-[8px] uppercase tracking-wider text-zinc-500">Catalogue value</dt>
+                    <dd className="mt-0.5 font-mono text-sm font-semibold text-white">
                       {formatUsdTeaserApprox(introTotals.sumReferenceValueUsdApprox)}
                     </dd>
-                    <p className="mt-1 text-[10px] text-zinc-500">
-                      EUR: {formatEurReferenceCompact(introTotals.sumReferenceValueEur)} · {introTotals.propertyCount}{" "}
-                      listings in carousel · illustrative {EUR_USD_TEASER} USD/EUR
-                    </p>
                   </div>
-                  <div>
-                    <dt className="text-[9px] uppercase tracking-wider text-zinc-500">
-                      Catalogue gross rent p.a. (USD approx.)
-                    </dt>
-                    <dd className="mt-1 font-mono text-2xl font-semibold text-eco-light">
+                  <div className="rounded-lg bg-black/30 px-2 py-2">
+                    <dt className="text-[8px] uppercase tracking-wider text-zinc-500">Gross rent</dt>
+                    <dd className="mt-0.5 font-mono text-sm font-semibold text-eco-light">
                       {formatUsdTeaserApprox(introTotals.sumAnnualRentUsdApprox)}
                     </dd>
-                    <p className="mt-1 text-[10px] text-zinc-500">
-                      EUR reference: {formatEurReferenceCompact(introTotals.sumAnnualRentEur)}
-                    </p>
                   </div>
                 </dl>
+                <p className="mt-3 text-[10px] leading-snug text-zinc-500">
+                  Cat. {formatLettableM2Compact(introTotals.catalogueLettableM2)} · Pipe{" "}
+                  {formatLettableM2Compact(introTotals.pipelineLettableM2)} · {EUR_USD_TEASER} USD/EUR teaser
+                </p>
+                <p className="mt-2 text-[11px] leading-snug text-zinc-400">
+                  <span className="text-zinc-500">Featured:</span>{" "}
+                  <Link
+                    href="/culture-land#bcw-green-lake-suites"
+                    className="font-medium text-gold-400/95 underline decoration-gold-500/35 underline-offset-2 hover:text-gold-300"
+                  >
+                    GREEN &amp; LAKE · SUITES
+                  </Link>
+                </p>
               </>
             ) : isFlagship ? (
               <>
@@ -559,28 +571,20 @@ export function ImmersiveExperience() {
             : null}
 
             {slide.kind === "intro" ? (
-              <div className="mt-5 flex flex-col gap-2">
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Link
-                    href="/properties"
-                    className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
-                  >
-                    Explore listings
-                  </Link>
-                  <Link
-                    href="/culture-land"
-                    className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-full border border-gold-500/40 bg-gold-500/10 px-4 text-center text-sm font-semibold text-gold-100 shadow-sm backdrop-blur-sm transition hover:bg-gold-500/15"
-                  >
-                    Pipeline & PDFs
-                  </Link>
-                </div>
+              <div className="mt-4 flex flex-col gap-2">
                 <button
                   type="button"
                   onClick={() => goProject(1)}
-                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-white/40 bg-black/35 px-4 text-center text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition hover:bg-black/50"
+                  className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-gradient-to-r from-gold-600 to-gold-500 px-4 text-center text-sm font-semibold text-black shadow-lg transition hover:opacity-95"
                 >
                   Continue to property stories
                 </button>
+                <Link
+                  href="/culture-land"
+                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-gold-500/45 bg-gold-500/10 px-4 text-center text-sm font-semibold text-gold-100 shadow-sm backdrop-blur-sm transition hover:bg-gold-500/15"
+                >
+                  {"Culture Land · listings & PDFs"}
+                </Link>
               </div>
             ) : (
               <div className="mt-5 flex flex-col gap-2 sm:flex-row">
