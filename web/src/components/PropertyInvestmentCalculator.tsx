@@ -93,8 +93,7 @@ export function PropertyInvestmentCalculator({ propertyId, demo, symbol, tradeHr
     <section id="invest" className="glass-card scroll-mt-28 p-6">
       <h2 className="text-lg font-semibold text-white">Investment simulator</h2>
       <p className="mt-1 text-xs text-zinc-500">
-        Educational model only — not an offer, forecast, or tax advice. Actual economics follow issuer documents and
-        on-chain execution. {REFERENCE_YIELD_DISCLAIMER}
+        Planning model — actual economics follow issuer documents and on-chain execution. {REFERENCE_YIELD_DISCLAIMER}
       </p>
 
       <div className="mt-5">

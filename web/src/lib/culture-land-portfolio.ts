@@ -1,6 +1,6 @@
 /**
  * Building Culture Land — partner portfolio copy, editorial English.
- * Reference figures are partner-sourced; verify all numbers with issuer disclosures. Not an offer.
+ * Reference figures are partner-sourced; confirm details in issuer disclosures and the data room.
  */
 
 import { ST_IMMO_HOMEPAGE, ST_IMMO_LAND_PHILOSOPHY } from "@/lib/st-immo-buildings";
@@ -34,7 +34,7 @@ export type CultureLandProject = {
   exploreHref?: string;
 };
 
-/** Partner acquisition pipeline — Vienna, Carinthia, and other tracks; indicative figures. Not an offer. */
+/** Partner acquisition pipeline — Vienna, Carinthia, and other tracks; indicative figures from partner materials. */
 export type BuildingCultureCityPipelineProject = {
   id: string;
   title: string;
@@ -214,7 +214,7 @@ export const CULTURE_LAND_PROJECTS: CultureLandProject[] = [
     region: "Keutschach am See · Carinthia",
     tagline: "Six houses, thirty-four homes, lake panorama",
     narrative: [
-      "Archived partner narrative for the large lakeside programme (not linked to the current on-chain listing slot). On-chain property #3 now carries the Whalewatching coastal reference — verify issuer mapping before investing.",
+      "Archived partner narrative for the large lakeside programme (not linked to the current on-chain listing slot). On-chain property #3 now carries the Whalewatching coastal reference — confirm the live listing mapping in issuer materials.",
       "Water Side on Lake Keutschach: six buildings, thirty-four apartments (roughly 50–247 m²), with wooden façades and large glass walls that sit lightly in the landscape.",
     ],
     factSheet: [

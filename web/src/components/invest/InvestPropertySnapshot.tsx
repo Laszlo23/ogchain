@@ -36,7 +36,7 @@ export function InvestPropertySnapshot({
       <h2 id="invest-snapshot-heading" className="text-lg font-semibold text-white">
         Property snapshot
       </h2>
-      <p className="mt-1 text-xs text-zinc-500">Reference economics — verify issuer filings before investing.</p>
+      <p className="mt-1 text-xs text-zinc-500">Reference economics — issuer filings and Legal for full terms.</p>
       <dl className="mt-6 grid gap-4 sm:grid-cols-2">
         {rows.map(({ k, v, strong, sub }) => (
           <div key={k} className="rounded-xl border border-white/[0.06] bg-black/25 px-4 py-3">

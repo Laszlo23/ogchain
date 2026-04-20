@@ -20,8 +20,8 @@ export function PropertyDealRoomStrip({ propertyIdStr }: Props) {
             Deal room (reference)
           </h2>
           <p className="mt-1 text-xs leading-relaxed text-zinc-400">
-            Issuer-controlled offering documents supersede UI copy. Use these links for structure, risks, and plan artifacts —
-            not investment advice.
+            Issuer-controlled offering documents supersede UI copy. Use these links for structure, risks, and plan artifacts
+            — Legal hub for disclosures.
           </p>
         </div>
       </div>

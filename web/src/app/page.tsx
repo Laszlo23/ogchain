@@ -90,8 +90,11 @@ export default function Home() {
         </p>
 
         <p className="text-xs text-muted">
-          Not investment advice. Primary deployment on Base. Economics are issuer-led — verify disclosures and contracts before allocating
-          capital.
+          Primary deployment on Base. Economics are issuer-led — see disclosures, contracts, and{" "}
+          <Link href="/legal/risk" className="text-eco-light underline-offset-4 hover:text-canvas hover:underline">
+            Legal
+          </Link>{" "}
+          before allocating capital.
         </p>
 
         <div className="mx-auto w-full max-w-3xl space-y-4 text-left text-sm leading-relaxed text-muted sm:text-center">

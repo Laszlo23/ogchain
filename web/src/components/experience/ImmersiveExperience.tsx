@@ -605,10 +605,10 @@ export function ImmersiveExperience() {
 
             <p className="mt-3 text-[10px] leading-relaxed text-zinc-500">
               {slide.kind === "intro"
-                ? "Illustrative sums — catalogue from demo listings; pipeline from partner diligence placeholders — not on-chain TVL or a prospectus. "
+                ? "Catalogue + pipeline figures from listings and partner diligence — on-chain TVL when contracts are live. "
                 : isFlagship
-                  ? "Reference figures — not on-chain TVL. "
-                  : "Reference financials — verify issuer docs. "}
+                  ? "Campaign figures — on-chain TVL when live. "
+                  : "Financials — issuer data room and Legal. "}
               <Link href="/legal/risk" className="underline underline-offset-2 hover:text-zinc-400">
                 Risks
               </Link>

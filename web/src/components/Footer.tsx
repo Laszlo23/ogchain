@@ -330,9 +330,13 @@ export function Footer() {
               </a>
             </div>
             <p className="mt-4 max-w-md text-xs leading-relaxed text-zinc-600">
-              Reference figures where marked; not investment advice. Production on Base — verify contracts on{" "}
+              Reference figures where marked — economics from issuer materials. Production on Base — contracts on{" "}
               <a href={baseExplorerBase} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-brand">
                 Basescan
+              </a>
+              .{" "}
+              <a href="/legal/risk" className="text-zinc-500 hover:text-brand">
+                Legal
               </a>
               .
             </p>

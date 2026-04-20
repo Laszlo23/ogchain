@@ -57,8 +57,8 @@ export function HomeFeaturedProperties() {
               })}
       </div>
       <p className="mt-6 text-[10px] text-muted">
-        Reference economics on cards where marked; not an offer to sell securities. Connect registry for live token
-        reads.
+        Reference economics on cards where marked — full terms in issuer data room and Legal. Connect registry for live
+        token reads.
       </p>
     </section>
   );

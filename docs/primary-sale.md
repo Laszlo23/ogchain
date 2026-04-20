@@ -1,6 +1,6 @@
 # Primary share sale (optional)
 
-The [`PrimaryShareSale`](../src/PrimaryShareSale.sol) contract sells **whole** property share tokens from a treasury address at a fixed **native OG** price per full share (`1e18` token units). Each purchase must be for **at least one full share**, matching the demo economics where one whole share represents **$1,000 notional** (see [`SeedTokenSupply`](../script/SeedTokenSupply.sol)).
+The [`PrimaryShareSale`](../src/PrimaryShareSale.sol) contract sells **whole** property share tokens from a treasury address at a fixed **native currency** price per full share (`1e18` token units), e.g. ETH on Base. Each purchase must be for **at least one full share**, matching the demo economics where one whole share represents **$1,000 notional** (see [`SeedTokenSupply`](../script/SeedTokenSupply.sol)).
 
 - **Secondary / AMM**: Fractional amounts remain possible on the `OgRouter` pools; this contract does not change DEX behavior.
 - **Compliance**: Both treasury (`seller`) and buyer must satisfy [`RestrictedPropertyShareToken`](../src/RestrictedPropertyShareToken.sol) rules (e.g. verified wallets, or testnet KYC bypass).
@@ -26,4 +26,4 @@ The Trade page loads a **Primary (issuer)** panel when you map each property to 
 
 Primary checkout **does not require** an internal AMM pool. Secondary swaps still need a seeded `WETH / share` pair (see [`docs/liquidity-bootstrap.md`](liquidity-bootstrap.md)).
 
-Native-currency [`PrimaryShareSale`](../src/PrimaryShareSale.sol) remains appropriate for 0G testnet demos where checkout is in the chain’s native asset.
+Native-currency [`PrimaryShareSale`](../src/PrimaryShareSale.sol) is appropriate when checkout should be in the chain’s native asset (e.g. ETH on Base); prefer [`PrimaryShareSaleERC20`](#erc-20-checkout-base--settlement-token) when settlement should be USDC or another ERC-20.

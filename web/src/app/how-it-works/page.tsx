@@ -66,7 +66,7 @@ export default function HowItWorksPage() {
       <section className="glass-card border border-amber-500/20 bg-amber-950/10 p-6 sm:p-8">
         <h2 className="text-lg font-semibold text-amber-200/90">Risks</h2>
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-          Smart contracts, oracles, and liquidity can fail. This interface is not investment advice. Read the{" "}
+          Smart contracts, oracles, and liquidity can fail. Read the{" "}
           <Link href="/legal/risk" className="text-brand hover:underline">
             risk disclaimer
           </Link>{" "}

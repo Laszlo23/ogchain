@@ -1,8 +1,8 @@
-# Building Culture — Real estate on 0G
+# Building Culture — Real estate on Base
 
-Solidity (Foundry) + Next.js 15 for a **real-estate-focused** stack on **0G Chain** (EVM): on-chain property registry, compliance-aware share tokens, AMM (OG/WETH ↔ shares), optional lending and prediction markets, **native OG staking** with cooldown, and a production-style web app (WalletConnect, chain switch, investor hub, admin panel).
+Solidity (Foundry) + Next.js 15 for a **real-estate-focused** stack on **Base** (EVM L2): on-chain property registry, compliance-aware share tokens, AMM (WETH ↔ shares), optional lending and prediction markets, **native ETH staking** with cooldown, and a production-style web app (WalletConnect, wrong-chain banner, investor hub, admin panel).
 
-Large artifacts live in **0G Storage** off-chain; the chain stores hashes and commitments. Deeper product and compliance context: [docs/domain-model.md](docs/domain-model.md), [docs/compliance.md](docs/compliance.md), [docs/grants.md](docs/grants.md).
+Off-chain artifacts (documents, rich media) use HTTPS/IPFS-style storage patterns as configured per deployment; hashes and commitments anchor on-chain. Product and compliance context: [docs/domain-model.md](docs/domain-model.md), [docs/compliance.md](docs/compliance.md), [docs/grants.md](docs/grants.md).
 
 ---
 
@@ -31,7 +31,7 @@ Large artifacts live in **0G Storage** off-chain; the chain stores hashes and co
 | **Compliance** | `ComplianceRegistry` — per-wallet KYC status + system-contract allowlist (router, pairs, etc.) |
 | **Shares** | `PropertyShareFactory` → `RestrictedPropertyShareToken` (transfer rules + KYC) |
 | **DeFi** | `WETH9`, `OgFactory` / `OgPair`, `OgRouter`, optional `SimpleLendingPool`, `BinaryPredictionMarket` |
-| **Staking** | `OgStaking` — native OG stake, `notifyRewardAmount` emissions, cooldown unstake |
+| **Staking** | `OgStaking` — native ETH stake (deployment chain), `notifyRewardAmount` emissions, cooldown unstake |
 | **NFT (optional)** | `PropertyShareProof` — soulbound-style certificates tied to holdings |
 | **Web** | Properties, trade, pool, portfolio, `/invest`, `/stake`, `/admin` (role-gated), WalletConnect, wrong-chain banner |
 

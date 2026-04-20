@@ -65,7 +65,7 @@ export default function TransparencyPage() {
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           Fees, treasury policy, and Base contract addresses. Property-level economics follow separate offering documents.
           Liquidity programmes and trading hooks are disclosed per deployment; AI-assisted operations (where enabled) follow human-defined
-          guardrails and audit trails. Nothing here is investment advice.
+          guardrails and audit trails. Full risk context in Legal.
         </p>
       </div>
 

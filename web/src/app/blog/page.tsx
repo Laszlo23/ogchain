@@ -14,7 +14,7 @@ export default function BlogIndexPage() {
         <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-brand-muted">Blog</p>
         <h1 className="text-3xl font-semibold tracking-tight text-white">RWA, liquidity, operations</h1>
         <p className="text-sm leading-relaxed text-zinc-400">
-          Short editorials — not legal or investment advice. For risks and disclosures, see{" "}
+          Short editorials on RWA and operations. For risks and disclosures, see{" "}
           <Link href="/legal/risk" className="text-brand hover:underline">
             Risks &amp; disclaimer
           </Link>

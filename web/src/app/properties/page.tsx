@@ -110,8 +110,12 @@ function PropertiesPageContent() {
         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Investment Opportunities</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
           Compare tokenized places, reference yields, and funding progress — then open a property to diligence or move to{" "}
-          <span className="text-zinc-200">Invest</span> / <span className="text-zinc-200">Trade</span>. Figures are reference
-          unless verified on-chain; not investment advice.{" "}
+          <span className="text-zinc-200">Invest</span> / <span className="text-zinc-200">Trade</span>. Reference figures
+          until reconciled on-chain — economics in issuer materials and{" "}
+          <Link href="/legal/risk" className="text-emerald-400/90 hover:underline">
+            Legal
+          </Link>
+          .{" "}
           <Link href="/how-it-works" className="text-emerald-400/90 hover:underline">
             How shares work →
           </Link>
@@ -300,7 +304,7 @@ export default function PropertiesPage() {
           <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-emerald-500/85">Investment hub</p>
           <h1 className="text-3xl font-bold tracking-tight text-white">Investment Opportunities</h1>
           <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">
-            Loading listings and reference narratives — not investment advice.
+            Loading listings and reference narratives — issuer data room and Legal for terms.
           </p>
         </header>
         <InvestDashboardSkeleton />

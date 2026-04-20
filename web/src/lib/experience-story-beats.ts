@@ -42,7 +42,7 @@ const ROLE_LABELS: Record<StoryBeatRole, string> = {
 };
 
 const PARTNERS_BLURB =
-  "Craft and collaborators from vision to keys — reference narrative; not an endorsement of any security.";
+  "Craft and collaborators from vision to keys — partner narrative for context.";
 
 const HOLZBAUER_PARTNER_URL = "https://holzbauer-partner.at/haus-im-weinviertelniederoesterreich/";
 
@@ -60,10 +60,10 @@ export function getIntroPortfolioBeats(): StoryBeat[] {
       roleLabel: ROLE_LABELS.portfolio,
       title: "7–10% ROI reference band — culture real estate at scale.",
       subtitle:
-        "Live pipeline + catalogue numbers are in the panel. Swipe projects below for stories. Illustrative only; not investment advice or an offer.",
+        "Live pipeline + catalogue numbers are in the panel. Swipe projects below for the next stories. Economics from issuer materials — Legal for terms.",
       imageSrc: INTRO_HERO_IMAGE,
       imageAlt:
-        "Portfolio teaser — illustrative reference economics across Culture Land listings; partner imagery, not investment advice.",
+        "Portfolio — Culture Land and partner programme imagery; economics in listings and data room.",
     },
   ];
 }

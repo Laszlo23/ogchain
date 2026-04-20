@@ -253,7 +253,7 @@ export default function PropertyDetailPage() {
           <div>
             <h2 className="text-lg font-semibold text-white">Financial breakdown (reference)</h2>
             <p className="mt-1 text-xs text-muted">
-              Reference economics for discovery — not an offer. {REFERENCE_YIELD_DISCLAIMER}
+              Reference economics for discovery — full economics in issuer data room and Legal. {REFERENCE_YIELD_DISCLAIMER}
             </p>
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>

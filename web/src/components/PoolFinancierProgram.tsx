@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { REFERENCE_YIELD_BAND_LABEL, REFERENCE_YIELD_DISCLAIMER } from "@/lib/demo-properties";
 
-/** Pool-financier perks and reference return framing — not an offer or guarantee. */
+/** Pool-financier perks and reference return framing — subject to issuer terms. */
 export function PoolFinancierProgram() {
   return (
     <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8">

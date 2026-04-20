@@ -92,7 +92,7 @@ const phases = [
     title: "Yield, pricing, and distribution (roadmap)",
     items: [
       "Rental or cash-flow yield distribution — contract- and issuer-dependent; not guaranteed returns",
-      "Oracle-assisted or AI-assisted pricing signals — reference until audited; not investment advice",
+      "Oracle-assisted or AI-assisted pricing signals — reference until audited; Legal for context",
     ],
   },
   {
@@ -168,7 +168,7 @@ export default function RoadmapPage() {
           </li>
         </ul>
         <p className="mt-4 text-xs leading-relaxed text-zinc-500">
-          This is not investment or legal advice. See{" "}
+          For risks and regulatory context, see{" "}
           <Link href="/legal/risk" className="text-action hover:underline">
             Risks &amp; disclaimer
           </Link>

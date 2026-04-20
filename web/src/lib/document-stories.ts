@@ -43,7 +43,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
       },
     ],
     disclaimer:
-      "Reference context only — not an offering memorandum. Jurisdiction-specific rules apply; consult qualified advisers.",
+      "Reference context — issuer offering documents govern substance; jurisdiction-specific rules apply.",
   },
   "katzelsdorf-studie-auswechslung": {
     id: "katzelsdorf-studie-auswechslung",
@@ -129,7 +129,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
       },
       {
         heading: "What on-chain can prove",
-        body: "Smart contracts can enforce supply caps, transfers, and compliance hooks; PDFs prove what was disclosed off-chain at a point in time. Together: process integrity, not investment performance.",
+        body: "Smart contracts can enforce supply caps, transfers, and compliance hooks; PDFs prove what was disclosed off-chain at a point in time. Together: process integrity, not a forecast of returns.",
       },
       {
         heading: "Next step for production",
@@ -153,7 +153,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
         body: "Use sheet indices and revision dates; cross-check with current land records before any commitment.",
       },
     ],
-    disclaimer: "Supporting documentation — not an offering memorandum.",
+    disclaimer: "Supporting documentation — issuer offering documents govern.",
   },
   "bau-land-kultur-20201113": {
     id: "bau-land-kultur-20201113",
@@ -335,7 +335,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
       },
     ],
     disclaimer:
-      "Marketing brochure — not a securities offering memorandum. Jurisdiction-specific rules apply; consult qualified advisers before any commitment.",
+      "Marketing brochure — economic terms follow issuer offering documents; jurisdiction-specific rules apply.",
   },
   "teaser-biberstrasse-4-1010-wien": {
     id: "teaser-biberstrasse-4-1010-wien",
@@ -353,7 +353,7 @@ export const DOCUMENT_STORIES: Record<PublicDocumentId, DocumentStory> = {
       },
     ],
     disclaimer:
-      "Broker materials are third-party communications — not an offer by Building Culture. Verify confidentiality, timelines, and commission terms independently.",
+      "Third-party broker communications — Building Culture does not adopt them as its own offering. Confirm confidentiality, timelines, and commission terms with the broker.",
   },
 };
 

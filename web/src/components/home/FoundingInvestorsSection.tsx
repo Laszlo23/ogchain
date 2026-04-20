@@ -202,7 +202,7 @@ export function FoundingInvestorsSection() {
           </div>
 
           <p className="text-center text-[10px] text-muted">
-            Not investment advice. Minimums and perks vary by project — read disclosures before you commit.
+            Minimums and perks vary by project — issuer disclosures and Legal before you commit.
           </p>
         </div>
       </div>

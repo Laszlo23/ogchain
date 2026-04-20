@@ -9,7 +9,7 @@ const ogImagePath = "/partners/Keutschach-am-See-1b-1.jpg";
 export const metadata: Metadata = {
   title: "Immersive story — Building Culture | Community-owned cultural real estate",
   description:
-    "Full-screen visual story: community-owned cultural assets, curated Culture Land listings, and transparent reference financials — primary deployment on Base; not investment advice.",
+    "Full-screen visual story: community-owned cultural assets, curated Culture Land listings, and transparent economics — primary deployment on Base; Legal hub for terms.",
   keywords: [
     "Building Culture",
     "community real estate",

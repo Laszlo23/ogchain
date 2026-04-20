@@ -145,9 +145,8 @@ export function ProblemSolutionSection() {
       </div>
 
       <p className="mt-8 text-center text-[10px] text-muted">
-        Not investment advice.{" "}
         <Link href="/legal/risk" className="underline underline-offset-2 hover:text-canvas">
-          Read risks
+          Risks &amp; disclosures
         </Link>
         .
       </p>

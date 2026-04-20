@@ -16,7 +16,7 @@ import { ButtonLink } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "Building Culture Land — Portfolio",
   description:
-    "Partner portfolio: acquisition pipeline (Vienna, Carinthia / GREEN & LAKE, and other tracks), revitalised villages, lakefront living, and landmarks — reference economics and sustainability notes. Not investment advice.",
+    "Partner portfolio: acquisition pipeline (Vienna, Carinthia / GREEN & LAKE, and other tracks), revitalised villages, lakefront living, and landmarks — reference economics and sustainability notes; Legal hub for terms.",
 };
 
 export default function CultureLandPage() {
@@ -214,8 +214,12 @@ export default function CultureLandPage() {
 
       <footer className="mx-auto mt-20 max-w-2xl space-y-4 border-t border-white/[0.06] pt-12 text-center">
         <p className="text-xs leading-relaxed text-zinc-500">
-          Partner materials for discussion. Not a prospectus or investment advice. Sustainability and financial claims
-          require issuer verification and local disclosure rules.
+          Partner materials for discussion — sustainability and financial claims follow issuer verification and local
+          disclosure rules. See{" "}
+          <Link href="/legal/offerings" className="text-zinc-400 hover:text-white">
+            Legal / offerings
+          </Link>
+          .
         </p>
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           <Link href="/mission" className="text-zinc-400 hover:text-white">

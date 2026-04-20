@@ -47,7 +47,7 @@ export function SocialProofBand({ funding, platform }: Props) {
         </div>
       </div>
       <p className="mx-auto mt-6 max-w-2xl text-center text-[10px] leading-relaxed text-muted">
-        Reference metrics where marked — verify issuer disclosures before any commitment.
+        Reference metrics where marked — issuer disclosures and Legal before any commitment.
       </p>
       <PartnerLogoStrip />
     </section>

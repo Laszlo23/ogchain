@@ -1,7 +1,8 @@
 /**
  * Curated listing narratives for registered properties (chain metadata may still use placeholder URIs).
- * Not financial advice. Sustainability claims in copy should match verifiable operations and audit data.
+ * Economics and sustainability claims should match issuer data room and verifiable operations.
  * Long-form narrative aligns with ST-IMMO / BuildingCulture partner briefs (`st-immo-buildings.ts`).
+ * Reference KP / Miete / m²: April 2026 partner fact sheet — confirm in data room.
  */
 import { BERGGASSE_HERO_STILL } from "@/lib/bergasse-assets";
 import { demoWholeTokenSupply } from "@/lib/demo-investment-math";
@@ -9,11 +10,11 @@ import type { PublicDocumentId } from "@/lib/public-documents";
 import { IMMERSIVE_PROJECT_FRAMES } from "@/lib/property-geo";
 import { getStImmoBuildingForDemoPropertyId } from "@/lib/st-immo-buildings";
 
-/** Target yield band shown on listings — not a guarantee (see disclaimer). */
+/** Target yield band shown on listings — planning reference (see Legal). */
 export const REFERENCE_YIELD_BAND_LABEL = "7–10%";
 
 export const REFERENCE_YIELD_DISCLAIMER =
-  "Target band for orientation only — not guaranteed. Actual results depend on issuer terms, occupancy, leverage, taxes, currency, and market conditions.";
+  "Planning band — outcomes follow issuer terms, occupancy, leverage, taxes, currency, and market conditions. See Legal for details.";
 
 export type DemoImageSlide = { src: string; alt: string };
 
@@ -83,7 +84,7 @@ export type DemoPropertyDetail = {
   unitCountLabel?: string;
   /** Sustainability / stewardship bullets (partner “Green Print”) */
   greenPrint?: string[];
-  /** Third-party brokerage / data-room text — verify independently; not an offer by Building Culture */
+  /** Third-party brokerage / data-room text — quoted for orientation; confirm with broker */
   brokerOrDataRoomNotice?: string;
   /** One emotional line under the hero title (place-first hook). */
   emotionalHero?: string;
@@ -93,7 +94,7 @@ export type DemoPropertyDetail = {
   assetStructureBullets?: string[];
   /** Investor economics: distributions, governance hooks, transfer rules — bullets. */
   investorRightsBullets?: string[];
-  /** Exit paths — illustrative; not guaranteed (secondary, refinance, sale). */
+  /** Exit paths — subject to issuer and market (secondary, refinance, sale). */
   exitOptionsBullets?: string[];
   /** Optional trust row overrides next to the invest column. */
   trustStrip?: {
@@ -103,7 +104,7 @@ export type DemoPropertyDetail = {
   };
   /** Simulator presets currency (defaults to USD-style labels if unset). */
   simulatorCurrency?: "EUR" | "USD";
-  /** Invest page: liquidity / lock / buyback framing — illustrative; issuer terms override. */
+  /** Invest page: liquidity / lock / buyback framing — issuer program terms override. */
   liquidityRulesBullets?: string[];
 };
 
@@ -147,7 +148,7 @@ export function formatIllustrativeEconomics(d: DemoPropertyDetail): string | nul
   if (s != null) {
     parts.push(`~$${s.toLocaleString("en-US")} / share`);
   }
-  return `Reference economics: ${parts.join(" · ")} (not an offer — verify issuer docs).`;
+  return `Economics: ${parts.join(" · ")} — issuer data room and Legal.`;
 }
 
 /** Reference value in EUR for listings (field name is legacy “Usd”). */
@@ -178,14 +179,14 @@ const DEMO_JAGDSCHLOSSGASSE_81: DemoPropertyDetail = {
   emotionalHero:
     "Nine homes opposite the Werkbundsiedlung — new Viennese housing in conversation with modernist heritage.",
   buildingStory:
-    "Cubist forms, generous glazing, and terraces face greenery on all sides. Heat pumps and solar anchor operating costs while the building courts tenants who value design and proximity to recreation.\n\nFigures in partner briefs are reference only — verify acquisition, rent roll, and SPV structure with the issuer.",
+    "Cubist forms, generous glazing, and terraces face greenery on all sides. Heat pumps and solar anchor operating costs while the building courts tenants who value design and proximity to recreation.\n\nFigures in partner briefs — confirm acquisition, rent roll, and SPV structure in the issuer data room.",
   assetStructureBullets: [
     "Title and debt live in issuer SPVs off-chain; tokens represent contractual economic exposure.",
     "Share token transfers may be restricted — check ComplianceRegistry and offering terms.",
     "Rent and capex flow through issuer-controlled accounts — waterfall in disclosure.",
   ],
   investorRightsBullets: [
-    "Cash-flow participation only when declared by the issuer — not a guaranteed coupon.",
+    "Cash-flow participation when declared by the issuer — per waterfall in offering documents.",
     "Governance follows issuer articles and any token-side hooks described in documents.",
     "Liquidity via permitted secondary venues or OTC — pool depth varies.",
   ],
@@ -201,9 +202,9 @@ const DEMO_JAGDSCHLOSSGASSE_81: DemoPropertyDetail = {
   },
   simulatorCurrency: "EUR",
   liquidityRulesBullets: [
-    "Investment lock period — reference 30 days after purchase (verify issuer program).",
-    "Sell / buyback request cooldown — reference 7 days before buyback execution (if offered).",
-    "Buyback capacity — reference up to 15% of treasury processed per cycle (program cap; verify issuer).",
+    "Investment lock period — typically 30 days after purchase (issuer program).",
+    "Sell / buyback request cooldown — typically 7 days before buyback execution (if offered).",
+    "Buyback capacity — up to 15% of treasury per cycle where the program allows.",
     "Secondary trading — when AMM pools exist and rules allow (depth varies).",
   ],
   investorCardTitle: "Building Culture City Jagdschlossgasse 81",
@@ -227,7 +228,7 @@ const DEMO_JAGDSCHLOSSGASSE_81: DemoPropertyDetail = {
   ],
   creditLines: ["Partner reference (verify): ca. €8.3M acquisition · ca. €187k p.a. rent"],
   targetRange: "Reference rental income after takeover.",
-  riskNote: "Liquidity and interest-rate risk — not investment advice.",
+  riskNote: "Liquidity and interest-rate risk — see Legal for risk factors.",
   illustrativePropertyValueUsd: 8_300_000,
   illustrativeShareUsd: 1000,
   /** Lettable reference m² — Apr 2026 fact sheet (terrace/garden in partner brief). */
@@ -240,7 +241,7 @@ const DEMO_JAGDSCHLOSSGASSE_81: DemoPropertyDetail = {
   architectureNarrative: st2.architecturalValue,
   communityUsers: ["Residents", "Design-conscious tenants", "Commuters near recreation"],
   ownershipModel: "SPV + tokenized shares for fractional exposure; distributions per issuer waterfall.",
-  fundingRoundNote: "Reference figures — not an offer.",
+  fundingRoundNote: "Economics from partner brief — confirm in issuer data room.",
   documentIds: ["bau-land-kultur-20201113"],
 };
 
@@ -263,8 +264,8 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     ],
     exitOptionsBullets: [
       "Secondary: swap or OTC when ComplianceRegistry and liquidity allow — see Trade after you hold shares.",
-      "Issuer-led events: potential refinance or portfolio sale — timelines and gates are disclosure-specific (not guaranteed).",
-      "No guaranteed buy-back — treat tokens as long-duration exposure unless issuer terms say otherwise.",
+      "Issuer-led events: potential refinance or portfolio sale — timelines and gates are disclosure-specific.",
+      "Buy-back terms — align horizon with issuer offering documents.",
     ],
     trustStrip: {
       issuerDisplayName: "Issuer SPV (reference — verify in offering docs)",
@@ -273,9 +274,9 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     },
     simulatorCurrency: "EUR",
     liquidityRulesBullets: [
-      "Investment lock period — reference 30 days after purchase (verify issuer program).",
-      "Sell / buyback request cooldown — reference 7 days before buyback execution (if offered).",
-      "Buyback capacity — reference up to 15% of treasury processed per cycle (program cap; verify issuer).",
+      "Investment lock period — typically 30 days after purchase (issuer program).",
+      "Sell / buyback request cooldown — typically 7 days before buyback execution (if offered).",
+      "Buyback capacity — up to 15% of treasury per cycle where the program allows.",
       "Secondary trading — when AMM pools exist and rules allow (depth varies).",
     ],
     investorCardTitle: "Building Culture City Berggasse",
@@ -312,7 +313,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     ],
     creditLines: ["Fact sheet (Apr 2026): €15.917M KP · €25k p.a. gross rent — Berggasse reference"],
     targetRange: "Reference in-place economics — issuer model governs distributions.",
-    riskNote: "Currency, rate, and occupancy risk. Not investment advice — verify issuer materials.",
+    riskNote: "Currency, rate, and occupancy risk — see Legal for risk factors.",
     illustrativePropertyValueUsd: 15_917_000,
     illustrativeShareUsd: 1000,
     squareMeters: 730,
@@ -325,7 +326,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     communityUsers: ["Tenants", "Local operators", "Investors tracking portfolio yield"],
     ownershipModel:
       "Assets held in issuer structures off-chain; economic exposure via on-chain share tokens — revenue rules are issuer-specific.",
-    fundingRoundNote: "Reference metrics — not a live securities offering.",
+    fundingRoundNote: "On-platform discovery — final terms in issuer offering and data room.",
     documentIds: ["berggasse-brochure-en"],
   },
   2: DEMO_JAGDSCHLOSSGASSE_81,
@@ -355,9 +356,9 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
       "Teaser PDF (Biberstraße, Vienna) is third-party brokerage diligence — unrelated geography to the Canadian lodge narrative.",
     ],
     creditLines: ["Partner reference (verify): ca. €2.9M acquisition · ca. €100k p.a. gross rent"],
-    targetRange: "Reference in-place rents — verify issuer model.",
+    targetRange: "In-place rents — confirm with issuer model.",
     riskNote:
-      "Mixed collateral narrative (Canada lodge vs Austria brokerage PDF). Not Keutschach. Verify legal descriptions and issuer mapping. Not an offering.",
+      "Distinct narratives: Canada lodge vs Austria brokerage PDF (Biberstraße teaser). Not Keutschach — confirm geography and mapping in disclosures.",
     illustrativePropertyValueUsd: 2_900_000,
     illustrativeShareUsd: 1000,
     /** Fact sheet lettable m²; terrace/garden on Culture Land card. */
@@ -371,7 +372,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     communityUsers: ["Guests", "Operators", "Community investors (reference)"],
     ownershipModel:
       "SPV / issuer structures off-chain; token represents economic exposure per disclosure — revenue rules are issuer-specific.",
-    fundingRoundNote: "Reference economics — reconcile with on-chain reads and issuer filings.",
+    fundingRoundNote: "Economics — reconcile on-chain reads with issuer filings.",
     documentIds: ["teaser-biberstrasse-4-1010-wien"],
     greenPrint: [
       "Large green yards that help cool the microclimate",
@@ -379,7 +380,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
       "No unnecessary sealing of valuable land",
     ],
     brokerOrDataRoomNotice:
-      "The following excerpt reproduces third-party brokerage correspondence for orientation alongside the teaser PDF. It is not an offer by Building Culture; dates and procedures may change — verify with the appointed broker and counsel.\n\nLadies and Gentlemen,\n\nWe respectfully inform you that our company has been appointed by the owner as the exclusive agent for the sale of the following property:\n\n1010 Vienna, Biberstraße 4\n\nAfter submitting the confidentiality agreement (Appendix B) to o.friedrich@friedrich.at, you will be granted access to the data room without delay.\n\nA binding purchase offer (Appendix C), including a financing confirmation or proof of capital from an Austrian bank specifically for this property, must be sent by registered mail or email to the appointed real estate agent Otto Friedrich & Partner Immobilientreuhand GmbH, Krotenthallergasse 6, 1080 Vienna, no later than Thursday, May 7, 2026.\n\nFor a personal consultation and information, please contact Mr. Otto Friedrich by telephone at 0664/340 87 66 or by email at o.friedrich@friedrich.at.\n\nIn the event of a purchase, the broker's commission is 3% of the transaction value plus statutory VAT.\n\nThe seller will bear the costs of drawing up the purchase agreement, including its registration in the land register.\n\nMr. RA Dr. Georg Braunegg, Elisabethstraße 15, 1010 Vienna, has been commissioned with the preparation of the purchase agreement, the assumption of escrow and the implementation in the land register.\n\nThe general terms and conditions apply in accordance with the brokerage regulations also attached as an attachment (Appendix D).",
+      "Quoted third-party brokerage correspondence (orientation alongside the teaser PDF). Dates and procedures may change — confirm with the broker and counsel.\n\nLadies and Gentlemen,\n\nWe respectfully inform you that our company has been appointed by the owner as the exclusive agent for the sale of the following property:\n\n1010 Vienna, Biberstraße 4\n\nAfter submitting the confidentiality agreement (Appendix B) to o.friedrich@friedrich.at, you will be granted access to the data room without delay.\n\nA binding purchase offer (Appendix C), including a financing confirmation or proof of capital from an Austrian bank specifically for this property, must be sent by registered mail or email to the appointed real estate agent Otto Friedrich & Partner Immobilientreuhand GmbH, Krotenthallergasse 6, 1080 Vienna, no later than Thursday, May 7, 2026.\n\nFor a personal consultation and information, please contact Mr. Otto Friedrich by telephone at 0664/340 87 66 or by email at o.friedrich@friedrich.at.\n\nIn the event of a purchase, the broker's commission is 3% of the transaction value plus statutory VAT.\n\nThe seller will bear the costs of drawing up the purchase agreement, including its registration in the land register.\n\nMr. RA Dr. Georg Braunegg, Elisabethstraße 15, 1010 Vienna, has been commissioned with the preparation of the purchase agreement, the assumption of escrow and the implementation in the land register.\n\nThe general terms and conditions apply in accordance with the brokerage regulations also attached as an attachment (Appendix D).",
   },
   4: {
     ...DEMO_JAGDSCHLOSSGASSE_81,
@@ -416,7 +417,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     ],
     creditLines: ["Partner reference (verify): ca. €10.9M acquisition · ca. €350k p.a. rent"],
     targetRange: "Reference blended residential and commercial rent.",
-    riskNote: "More complex operations — not advice; verify operator plans.",
+    riskNote: "More complex operations — confirm operator plans in diligence.",
     illustrativePropertyValueUsd: 10_900_000,
     illustrativeShareUsd: 1000,
     /** Fact sheet programme lettable m². */
@@ -430,7 +431,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     communityUsers: ["Residents", "Retail tenants", "Coworking operators", "Commuters"],
     ownershipModel:
       "Tokenized fractional ownership with issuer-managed SPV; revenue split by lease type.",
-    fundingRoundNote: "Reference economics — verify issuer statements.",
+    fundingRoundNote: "Economics — confirm in issuer statements and data room.",
     documentIds: ["land-mark-bernhardsthal-20210625", "bernhardsthal-plans"],
     greenPrint: [
       "Geothermal heat and cooling",
@@ -479,7 +480,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     communityUsers: ["Locals", "Remote workers", "Operators seeking character stock"],
     ownershipModel:
       "SPV holds title; tokens represent economic interests; revenue per issuer waterfall.",
-    fundingRoundNote: "Reference raise — verify legal docs.",
+    fundingRoundNote: "Raise terms — confirm in legal docs and data room.",
     documentIds: ["katzelsdorf-studie-auswechslung", "katzelsdorf-studie-encoded"],
     greenPrint: [
       "Air-source heat pump and solar",
@@ -515,7 +516,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     ],
     creditLines: ["Partner reference (verify): ca. €850k acquisition · ca. €50k p.a. rent"],
     targetRange: "Reference blended rent and hospitality income.",
-    riskNote: "Operational and renovation risk. Not investment advice.",
+    riskNote: "Operational and renovation risk — see Legal for risk factors.",
     illustrativePropertyValueUsd: 850_000,
     illustrativeShareUsd: 1000,
     squareMeters: 400,
@@ -528,7 +529,7 @@ export const DEMO_PROPERTY_DETAILS: Partial<Record<number, DemoPropertyDetail>> 
     communityUsers: ["Village residents", "Café patrons", "Townhouse occupants"],
     ownershipModel:
       "Tokenized fractional ownership; diversified micro-income streams — issuer-dependent.",
-    fundingRoundNote: "Reference campaign — verify issuer docs; not live TVL.",
+    fundingRoundNote: "Campaign economics — confirm in issuer docs; on-chain TVL when live.",
     documentIds: ["altes-kaufhaus-prater", "bernhardsthal-plans"],
     greenPrint: [
       "Air-source heat pump and solar",

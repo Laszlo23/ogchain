@@ -24,11 +24,11 @@ export const metadata: Metadata = {
   },
   title: "Building Culture — Cultural real estate on Base",
   description:
-    "Community funding for coworking, cultural, and housing — tokenized shares and liquidity on Base. Verify issuer disclosures before any commitment.",
+    "Community funding for coworking, cultural, and housing — tokenized shares and liquidity on Base. Issuer disclosures and Legal hub.",
   openGraph: {
     title: "Building Culture — Cultural real estate on Base",
     description:
-      "Launch and fund community-owned places with tokenized ownership — not investment advice.",
+      "Launch and fund community-owned places with tokenized ownership on Base — full economics in issuer materials.",
     type: "website",
     url: "/",
   },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Building Culture — Cultural real estate on Base",
     description:
-      "Community funding rounds for cultural real estate — not investment advice.",
+      "Community funding rounds for cultural real estate — Building Culture on Base.",
   },
 };
 

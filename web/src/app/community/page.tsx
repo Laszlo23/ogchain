@@ -137,7 +137,7 @@ function CommunityPageInner() {
         <p className="text-sm leading-relaxed text-zinc-400">
           Stay informed, complete light tasks, and share your referral link. Profiles and tasks are optional and
           off-chain — require a database and{" "}
-          <span className="font-mono text-zinc-300">SESSION_SECRET</span> for sign-in. Not investment advice.
+          <span className="font-mono text-zinc-300">SESSION_SECRET</span> for sign-in. Separate from on-chain offerings.
         </p>
       </header>
 

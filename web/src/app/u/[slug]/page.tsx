@@ -95,7 +95,7 @@ export default function PublicProfilePage() {
         ))}
         {profile.show_holdings && (
           <p className="text-xs text-zinc-500">
-            Holder has indicated they are comfortable showing wallet addresses. Estimates are not investment advice.{" "}
+            Holder has indicated they are comfortable showing wallet addresses. Estimates are illustrative — see issuer terms.{" "}
             <Link href="/portfolio" className="text-brand hover:underline">
               Your portfolio
             </Link>{" "}
