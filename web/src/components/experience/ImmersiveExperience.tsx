@@ -48,6 +48,7 @@ export function ImmersiveExperience() {
   const [storyDetailsOpen, setStoryDetailsOpen] = useState(true);
 
   const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
   const goProjectRef = useRef<(d: number) => void>(() => {});
   const innerAdvanceRef = useRef<number | undefined>(undefined);
 
@@ -143,16 +144,23 @@ export function ImmersiveExperience() {
   }, [projectIndex, beatIndex, beatCount, n, reduceMotion, storyDetailsOpen, isMobileViewport, collapseMobileHero]);
 
   const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.changedTouches[0]?.clientX ?? null;
+    const t = e.changedTouches[0];
+    touchStartX.current = t?.clientX ?? null;
+    touchStartY.current = t?.clientY ?? null;
   };
 
   const onTouchEnd = (e: React.TouchEvent) => {
-    const start = touchStartX.current;
+    const startX = touchStartX.current;
+    const startY = touchStartY.current;
     touchStartX.current = null;
-    const end = e.changedTouches[0]?.clientX;
-    if (start == null || end == null) return;
-    const dx = end - start;
-    if (Math.abs(dx) < 50) return;
+    touchStartY.current = null;
+    const t = e.changedTouches[0];
+    const endX = t?.clientX;
+    const endY = t?.clientY;
+    if (startX == null || startY == null || endX == null || endY == null) return;
+    const dx = endX - startX;
+    const dy = endY - startY;
+    if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy)) return;
     if (dx < 0) goProject(1);
     else goProject(-1);
   };
@@ -250,7 +258,7 @@ export function ImmersiveExperience() {
         })}
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-[2] isolate flex min-h-[100dvh] flex-col gap-4 overflow-y-auto overscroll-y-contain p-4 pb-36 sm:p-8 md:min-h-0 md:overflow-visible md:gap-6 md:pb-40 md:pl-10 md:pr-10 md:pt-8">
+      <div className="pointer-events-auto absolute inset-0 z-[2] isolate flex min-h-[100dvh] flex-col gap-4 overflow-y-auto overscroll-y-contain p-4 pb-[max(9rem,calc(env(safe-area-inset-bottom)+7rem))] sm:p-8 md:min-h-0 md:overflow-visible md:gap-6 md:pb-40 md:pl-10 md:pr-10 md:pt-8">
         <div className="pointer-events-auto fixed top-3 right-3 z-[50] md:hidden">
           <ExperienceSocialLinks size="compact" />
         </div>
@@ -331,7 +339,7 @@ export function ImmersiveExperience() {
           className={
             slide.kind === "intro"
               ? "pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-x-hidden md:flex-row md:justify-between md:gap-10 md:items-start md:overflow-visible md:pt-2 md:pb-6"
-              : "pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:justify-between md:gap-10 md:items-end md:overflow-visible"
+              : "pointer-events-auto flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:justify-between md:gap-10 md:items-end md:overflow-visible"
           }
         >
           <div
@@ -660,7 +668,7 @@ export function ImmersiveExperience() {
         </div>
       </div>
 
-      <div className="pointer-events-auto absolute bottom-6 left-0 right-0 z-[3] flex flex-col items-center gap-3 sm:bottom-8">
+      <div className="pointer-events-auto absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-0 right-0 z-[3] flex flex-col items-center gap-3 sm:bottom-8">
         <p className="text-[9px] uppercase tracking-widest text-zinc-600">Swipe · Projects</p>
         <div className="flex items-center gap-2">
           <button
