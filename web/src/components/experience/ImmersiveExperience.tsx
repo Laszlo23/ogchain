@@ -258,13 +258,13 @@ export function ImmersiveExperience() {
         })}
       </div>
 
-      <div className="pointer-events-auto absolute inset-0 z-[2] isolate flex min-h-[100dvh] flex-col gap-4 overflow-y-auto overscroll-y-contain p-4 pb-[max(9rem,calc(env(safe-area-inset-bottom)+7rem))] sm:p-8 md:min-h-0 md:overflow-visible md:gap-6 md:pb-40 md:pl-10 md:pr-10 md:pt-8">
+      <div className="pointer-events-auto absolute inset-0 z-[2] isolate flex min-h-0 flex-col gap-4 overflow-hidden p-4 max-md:h-[100dvh] sm:p-8 md:min-h-0 md:overflow-visible md:gap-6 md:pb-40 md:pl-10 md:pr-10 md:pt-8">
         <div className="pointer-events-auto fixed top-3 right-3 z-[50] md:hidden">
           <ExperienceSocialLinks size="compact" />
         </div>
 
         {isMobileViewport && !storyDetailsOpen && (
-          <div className="pointer-events-auto flex min-h-0 flex-1 flex-col justify-end gap-4 pb-4">
+          <div className="pointer-events-auto flex min-h-0 min-w-0 flex-1 flex-col justify-end gap-4 pb-3">
             <div className="rounded-2xl border border-white/20 bg-white/5 px-4 py-5 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-md">
               <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-white/80">Immersive story</p>
               <h1 className="mt-2 text-3xl font-semibold leading-[1.1] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
@@ -304,7 +304,7 @@ export function ImmersiveExperience() {
 
         <div
           id="immersive-story-details"
-          className={`flex min-h-0 min-w-0 flex-1 flex-col gap-4 md:gap-6 ${showFullStoryChrome ? "" : "hidden"}`}
+          className={`flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden max-md:min-h-0 md:gap-6 ${showFullStoryChrome ? "" : "hidden"}`}
           aria-hidden={!showFullStoryChrome}
           role="region"
           aria-label="Story details"
@@ -334,12 +334,12 @@ export function ImmersiveExperience() {
           </div>
         </header>
 
-        {/* Band 3: story + panel — scroll only on property slides (mobile overflow); intro has no nested scroll */}
+        {/* Band 3: story + panel — on mobile only this region scrolls (app shell: fixed header + bottom chrome) */}
         <div
           className={
             slide.kind === "intro"
-              ? "pointer-events-none flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-x-hidden md:flex-row md:justify-between md:gap-10 md:items-start md:overflow-visible md:pt-2 md:pb-6"
-              : "pointer-events-auto flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:justify-between md:gap-10 md:items-end md:overflow-visible"
+              ? "pointer-events-auto touch-pan-y flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-y-contain md:flex-row md:justify-between md:gap-10 md:items-start md:overflow-visible md:pt-2 md:pb-6"
+              : "pointer-events-auto touch-pan-y flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden overscroll-y-contain md:flex-row md:justify-between md:gap-10 md:items-end md:overflow-visible"
           }
         >
           <div
@@ -666,9 +666,8 @@ export function ImmersiveExperience() {
           </aside>
         </div>
         </div>
-      </div>
 
-      <div className="pointer-events-auto absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-0 right-0 z-[3] flex flex-col items-center gap-3 sm:bottom-8">
+      <div className="pointer-events-auto relative z-[3] flex w-full shrink-0 flex-col items-center gap-3 max-md:pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] md:absolute md:bottom-8 md:left-0 md:right-0 md:pb-3">
         <p className="text-[9px] uppercase tracking-widest text-zinc-600">Swipe · Projects</p>
         <div className="flex items-center gap-2">
           <button
@@ -735,6 +734,7 @@ export function ImmersiveExperience() {
             Home
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );
